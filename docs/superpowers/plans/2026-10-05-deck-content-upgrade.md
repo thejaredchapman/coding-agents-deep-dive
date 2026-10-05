@@ -10,6 +10,17 @@
 
 Spec: `docs/superpowers/specs/2026-10-05-deck-upgrade-design.md`
 
+**Last updated:** 2026-10-05
+**Target completion:** Wednesday 2026-10-07 (Stage 1)
+
+| Day | Tasks |
+|---|---|
+| Mon 2026-10-05 | Plan and spec written (done) |
+| Tue 2026-10-06 | Tasks 1-2 (check script, facts incl. Codex and Cursor), then Tasks 3-5 if time allows |
+| Wed 2026-10-07 | Tasks 6-8, new Task 8b (Codex and Cursor bridge), Tasks 9-10, final check and render |
+
+If time runs short on Wednesday, cut slides from Task 8b before cutting any verification.
+
 ## Global Constraints
 
 - Only Node standard library in scripts; no `package.json` dependencies.
@@ -17,6 +28,7 @@ Spec: `docs/superpowers/specs/2026-10-05-deck-upgrade-design.md`
 - Model ID `claude-sonnet-5-5` replaces `claude-sonnet-4-6` everywhere. Current models: Fable 5.1 (`claude-fable-5-1`), Opus 5.5 (`claude-opus-5-5`), Sonnet 5.5 (`claude-sonnet-5-5`), Haiku 4.5 (`claude-haiku-4-5-20251001`).
 - Academy links use `https://academy.claude.com/courses/<slug>`; `platform.claude.com/docs/en/resources/courses` redirects there.
 - Companion projects `../claude-code-updates` and `../4d-orchestrator-mcp` are out of scope.
+- Audience includes Codex and Cursor users, in both directions. Comparisons are neutral and only use facts verified from each tool's current official docs, with source URL and date in `facts.md`. If a tool has no equivalent, say so.
 - Every corrected or new factual claim must appear in `docs/superpowers/facts.md` with a source URL and the date checked.
 - Commit messages end with `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
 
@@ -61,6 +73,8 @@ const REQUIRED = [
   ['deck.md', 'Remote Control'], ['deck.md', 'Agent SDK'],
   ['deck.md', 'Managed Agents'], ['deck.md', 'plugin'],
   ['deck.md', 'headless'], ['deck.md', 'academy.claude.com'],
+  ['deck.md', 'Codex'], ['deck.md', 'Cursor'],
+  ['deck.md', 'AGENTS.md'], ['deck.md', 'compared as of'],
 ];
 
 const failures = [];
@@ -152,6 +166,8 @@ Use the `claude-code-guide` agent (or WebFetch on `https://code.claude.com/docs/
 | Plugins | What a plugin bundles; install/enable commands; `claude plugin eval`. |
 | Permissions, settings, headless | Permission modes; allow/deny rule syntax; settings file locations and precedence; the non-interactive flag (`-p`) and output formats. |
 | Academy | Fetch `https://academy.claude.com/courses`; confirm each slug in the Task 9 table. |
+| Codex | For each Rosetta row in the spec (instructions file, subagents, skills/workflows, MCP config location, hooks, permissions/sandbox, headless/CI, remote/cloud): the equivalent, its file or command, or "no equivalent". Whether `AGENTS.md` is read, and whether Claude Code can reuse it. Use the official OpenAI Codex docs. |
+| Cursor | Same rows: project rules location and format, subagents/agents, reusable commands, MCP config location, hooks, permissions, headless/CLI, background or cloud agents. Use the official Cursor docs. |
 
 - [ ] **Step 2: Write `docs/superpowers/facts.md`**
 
@@ -425,6 +441,52 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 ---
 
+### Task 8b: Coming from, or going to, Codex and Cursor
+
+**Files:**
+- Modify: `deck.md` (insert a new section `# Coming from, or going to, Codex and Cursor` after Task 8's slides)
+- Modify: `exercises/01..05-*.md` (one-line note each)
+
+**Interfaces:**
+- Consumes: Codex and Cursor rows in `docs/superpowers/facts.md`.
+
+- [ ] **Step 1: Run the check**
+
+Run: `node scripts/check-deck.mjs`
+Expected: FAIL lines for `Codex`, `Cursor`, `AGENTS.md`, `compared as of`.
+
+- [ ] **Step 2: Write the section (about 8 slides)**
+
+Wording only from facts.md; neutral tone; "no equivalent" where verified:
+
+1. Title and mental model: where the three tools overlap and differ.
+2-3. The Rosetta table from the spec (Claude Code, Codex, Cursor columns; eight rows), split over two slides if it overflows.
+4. Moving a project in: carry one project's instructions and MCP config from Codex or Cursor into Claude Code, with exact file names and commands, and whether `AGENTS.md` can be reused (per docs).
+5. Moving a project out: the reverse, from Claude Code into Codex or Cursor.
+6. Using more than one tool in a team: which files are shared, which are tool-specific.
+7. Gotchas in each direction: approval and sandbox defaults, config formats, where context persists.
+8. Footer slide or line on every comparison slide: `compared as of <date>` using the date the facts were checked.
+
+- [ ] **Step 3: Add the exercise notes**
+
+Append to each exercise a line: `Coming from Codex or Cursor: <equivalent file or command from facts.md>`. Use "no equivalent" where facts.md says so.
+
+- [ ] **Step 4: Run the check**
+
+Run: `node scripts/check-deck.mjs`
+Expected: no FAIL lines for `Codex`, `Cursor`, `AGENTS.md` or `compared as of`.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add deck.md exercises
+git commit -m "feat: add Codex and Cursor bridge section
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
+```
+
+---
+
 ### Task 9: Claude Academy section and exercise links
 
 **Files:**
@@ -514,6 +576,6 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 ## Self-review
 
-- **Spec coverage:** 1a is Tasks 3-6; 1b is Task 7; 1c is Task 8; 1d is Task 9; 1e is Task 10; the facts-before-claims rule is Task 2; the testing section is Task 1 plus the exercise runs and the render in Task 10. The slide-count and README items are in Tasks 1 and 10. Stage 2 is deliberately excluded and gets its own plan.
+- **Spec coverage:** 1a is Tasks 3-6; 1b is Task 7; 1c is Task 8; 1d is Task 9; 1e (Codex and Cursor bridge) is Task 8b; 1f is Task 10; the facts-before-claims rule is Task 2; the testing section is Task 1 plus the exercise runs and the render in Task 10. The slide-count and README items are in Tasks 1 and 10. Stage 2 is deliberately excluded and gets its own plan.
 - **Placeholders:** Slide wording that depends on docs is sourced from `facts.md`, which Task 2 creates from named URLs and questions; the required fields and shapes are listed per task.
 - **Consistency:** Banned and required strings in Task 1 match the strings each later task names. If Task 2 changes a required string, the same commit updates the script.

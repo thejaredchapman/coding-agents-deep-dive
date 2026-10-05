@@ -1,7 +1,16 @@
 # Claude Code Deep Dive Deck: Upgrade Design
 
 Date: 2026-10-05
+Last updated: 2026-10-05
+Target completion: Wednesday 2026-10-07 (Stage 1). Stage 2 is planned after Stage 1 lands.
 Status: Approved design, pending spec review
+
+## Audience
+
+Engineers who already use an AI coding tool. Two groups, both served:
+
+- **Claude Code users** who want to go deeper (the original audience).
+- **Codex and Cursor users** moving to Claude Code, and **Claude Code users** moving to Codex or Cursor (for example, a team using more than one). Each extension point gets a side-by-side mapping in both directions.
 
 ## Goal
 
@@ -71,7 +80,34 @@ The closing section gains a "which product for what" table beside the existing e
 
 Each exercise page gets a "go deeper" link to its matching course. The remaining catalog (AI Fluency for educators, nonprofits, students, and so on) gets one pointer slide with the catalog link. Course URLs follow `https://academy.claude.com/courses/<slug>`; confirm each slug resolves before publishing.
 
-### 1e. Housekeeping
+### 1e. New section: Coming from, or going to, Codex and Cursor (about 8 slides)
+
+A bidirectional "Rosetta stone". Every row reads the same in both directions. The tone is neutral: describe differences, don't rank tools.
+
+| Extension point | Claude Code | Codex | Cursor |
+|---|---|---|---|
+| Standing instructions | CLAUDE.md | (verified equivalent, e.g. AGENTS.md) | (verified equivalent, e.g. project rules) |
+| Subagents | `.claude/agents/*.md` | (verified) | (verified) |
+| Skills / reusable workflows | `skills/<name>/SKILL.md` | (verified) | (verified) |
+| MCP | `claude mcp add`, `.mcp.json` | (verified config location) | (verified config location) |
+| Hooks / lifecycle automation | settings `hooks` | (verified, or "no equivalent") | (verified, or "no equivalent") |
+| Permissions and sandboxing | permission modes, allow/deny rules | (verified) | (verified) |
+| Headless / CI | `claude -p` | (verified) | (verified) |
+| Remote / cloud | Remote Control, cloud sessions | (verified) | (verified) |
+
+The cells marked "verified" are filled only from current official docs for each tool, with source URL and date in `facts.md`. Where a tool has no equivalent, the cell says so rather than guessing.
+
+Slides:
+
+1. Mental model: where the three tools overlap and where they differ.
+2. The Rosetta table above (may split over two slides).
+3. Moving a project: a worked example that carries one project's instructions and MCP config from Codex or Cursor into Claude Code, and the reverse, including whether an `AGENTS.md` can be reused (per docs).
+4. Using more than one tool in a team: which files are shared, which are tool-specific.
+5. Gotchas in each direction (approval and sandbox defaults, config formats, where context persists).
+
+Each exercise page gets a one-line "Coming from Codex or Cursor" note with the equivalent file or command.
+
+### 1f. Housekeeping
 
 Update `README.md`: real slide count, new topic table rows, new exercises or links.
 
@@ -101,4 +137,6 @@ Update `README.md`: real slide count, new topic table rows, new exercises or lin
 
 - Docs may disagree with each other or change; record the doc URL and date next to each corrected claim.
 - Product names (Cowork, Tag, Managed Agents) come from the Academy catalog and environment, so each gets a docs check before it gets a slide.
+- Codex and Cursor change quickly. Each comparison cell records its source URL and date, and the slide footer says "compared as of 2026-10-07" (or the actual completion date). Competitor claims I can't verify are left out.
+- Date risk: the 2026-10-07 target covers Stage 1 only; the added section makes it the largest task, so cut slides from 1e before cutting verification.
 - The Artifact build adds a toolchain; keep the script dependency-free (Node standard library) so the repo stays easy to run.
