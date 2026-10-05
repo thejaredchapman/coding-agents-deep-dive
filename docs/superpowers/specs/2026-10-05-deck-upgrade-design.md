@@ -2,7 +2,7 @@
 
 Date: 2026-10-05
 Last updated: 2026-10-05
-Target completion: Wednesday 2026-10-07 (Stage 1). Stage 2 is planned after Stage 1 lands.
+Target completion: Stage 1A (fixes, Claude ecosystem, Academy, README) Wednesday 2026-10-07. Stage 1B (in-depth Codex, Cursor and Gemini CLI sections, shortcuts for all four tools) Friday 2026-10-09. Stage 2 is planned after Stage 1 lands.
 Status: Approved design, pending spec review
 
 ## Audience
@@ -10,7 +10,7 @@ Status: Approved design, pending spec review
 Engineers who already use an AI coding tool. Two groups, both served:
 
 - **Claude Code users** who want to go deeper (the original audience).
-- **Codex and Cursor users** moving to Claude Code, and **Claude Code users** moving to Codex or Cursor (for example, a team using more than one). Each extension point gets a side-by-side mapping in both directions.
+- **Codex, Cursor and Gemini CLI users** moving to Claude Code, and **Claude Code users** moving to any of those (for example, a team using more than one). Each extension point gets a side-by-side mapping in every direction, and each tool gets its own in-depth section.
 
 ## Goal
 
@@ -80,32 +80,42 @@ The closing section gains a "which product for what" table beside the existing e
 
 Each exercise page gets a "go deeper" link to its matching course. The remaining catalog (AI Fluency for educators, nonprofits, students, and so on) gets one pointer slide with the catalog link. Course URLs follow `https://academy.claude.com/courses/<slug>`; confirm each slug resolves before publishing.
 
-### 1e. New section: Coming from, or going to, Codex and Cursor (about 8 slides)
+### 1e. New section: Claude Code alongside Codex, Cursor and Gemini CLI
 
-A bidirectional "Rosetta stone". Every row reads the same in both directions. The tone is neutral: describe differences, don't rank tools.
+"Google's version" is taken to mean **Gemini CLI**, its direct counterpart. While verifying, also check Google's other coding products (for example Jules, Antigravity, Gemini Code Assist) and mention any that matter in one pointer slide; no deep dive unless asked.
 
-| Extension point | Claude Code | Codex | Cursor |
-|---|---|---|---|
-| Standing instructions | CLAUDE.md | (verified equivalent, e.g. AGENTS.md) | (verified equivalent, e.g. project rules) |
-| Subagents | `.claude/agents/*.md` | (verified) | (verified) |
-| Skills / reusable workflows | `skills/<name>/SKILL.md` | (verified) | (verified) |
-| MCP | `claude mcp add`, `.mcp.json` | (verified config location) | (verified config location) |
-| Hooks / lifecycle automation | settings `hooks` | (verified, or "no equivalent") | (verified, or "no equivalent") |
-| Permissions and sandboxing | permission modes, allow/deny rules | (verified) | (verified) |
-| Headless / CI | `claude -p` | (verified) | (verified) |
-| Remote / cloud | Remote Control, cloud sessions | (verified) | (verified) |
+**1e-1. Overview (about 8 slides): the Rosetta stone.** Every row reads the same in every direction. The tone is neutral: describe differences, don't rank tools.
 
-The cells marked "verified" are filled only from current official docs for each tool, with source URL and date in `facts.md`. Where a tool has no equivalent, the cell says so rather than guessing.
+| Extension point | Claude Code | Codex | Cursor | Gemini CLI |
+|---|---|---|---|---|
+| Standing instructions | CLAUDE.md | (verified, e.g. AGENTS.md) | (verified, e.g. project rules) | (verified, e.g. GEMINI.md) |
+| Subagents | `.claude/agents/*.md` | (verified) | (verified) | (verified) |
+| Skills / reusable workflows | `skills/<name>/SKILL.md` | (verified) | (verified) | (verified) |
+| MCP | `claude mcp add`, `.mcp.json` | (verified) | (verified) | (verified) |
+| Hooks / lifecycle automation | settings `hooks` | (verified or "no equivalent") | (verified or "no equivalent") | (verified or "no equivalent") |
+| Permissions and sandboxing | permission modes, allow/deny rules | (verified) | (verified) | (verified) |
+| Headless / CI | `claude -p` | (verified) | (verified) | (verified) |
+| Remote / cloud | Remote Control, cloud sessions | (verified) | (verified) | (verified) |
+| Shortcuts | see 1e-2 | see 1e-2 | see 1e-2 | see 1e-2 |
 
-Slides:
+Cells marked "verified" are filled only from current official docs for each tool, with source URL and date in `facts.md`. Where a tool has no equivalent, the cell says so.
 
-1. Mental model: where the three tools overlap and where they differ.
-2. The Rosetta table above (may split over two slides).
-3. Moving a project: a worked example that carries one project's instructions and MCP config from Codex or Cursor into Claude Code, and the reverse, including whether an `AGENTS.md` can be reused (per docs).
-4. Using more than one tool in a team: which files are shared, which are tool-specific.
-5. Gotchas in each direction (approval and sandbox defaults, config formats, where context persists).
+Overview slides: mental model; the table (split as needed); moving a project in; moving a project out (including whether an instructions file such as `AGENTS.md` can be reused, per docs); using more than one tool in a team; gotchas in each direction.
 
-Each exercise page gets a one-line "Coming from Codex or Cursor" note with the equivalent file or command.
+**1e-2. In-depth section per tool (about 8 slides each, four tools).** Each section has the same shape so readers can compare:
+
+1. What it is and where it runs (terminal, IDE, cloud), install and sign-in.
+2. Instructions and context files: location, format, precedence, how to generate one.
+3. Extensibility: subagents or agents, skills or custom commands, plugins or extensions, each with a minimal working example.
+4. MCP: config location, add command, a working example.
+5. Hooks and automation: events, config, one example, or "no equivalent".
+6. Permissions, sandboxing and approval modes, with defaults.
+7. Headless and CI use, with one runnable example.
+8. **Shortcuts reference**: keyboard shortcuts, slash commands and CLI flags that matter day to day, grouped (navigation, editing, mode switching, session control, context management). For Claude Code this section also replaces any shortcut mentions currently scattered through the deck.
+
+Each tool's section ends with a "coming from <other tools>" box. The Claude Code section is the existing deck plus the new shortcuts slide; the Codex, Cursor and Gemini CLI sections are new.
+
+Each exercise page gets a one-line "Coming from Codex, Cursor or Gemini CLI" note with the equivalent file or command.
 
 ### 1f. Housekeeping
 
@@ -137,6 +147,7 @@ Update `README.md`: real slide count, new topic table rows, new exercises or lin
 
 - Docs may disagree with each other or change; record the doc URL and date next to each corrected claim.
 - Product names (Cowork, Tag, Managed Agents) come from the Academy catalog and environment, so each gets a docs check before it gets a slide.
-- Codex and Cursor change quickly. Each comparison cell records its source URL and date, and the slide footer says "compared as of 2026-10-07" (or the actual completion date). Competitor claims I can't verify are left out.
-- Date risk: the 2026-10-07 target covers Stage 1 only; the added section makes it the largest task, so cut slides from 1e before cutting verification.
+- Codex, Cursor and Gemini CLI change quickly. Each comparison cell records its source URL and date, and the slide footer says "compared as of 2026-10-07" (or the actual completion date). Competitor claims I can't verify are left out.
+- Date risk: adding three in-depth tool sections and four shortcuts references roughly doubles the deck's new content. Stage 1 is split so the Claude-only fixes still land Wednesday 2026-10-07 and the in-depth tool sections land Friday 2026-10-09. If Friday slips, cut slides from 1e-2 before cutting verification; shortcuts slides are the last to cut because they are the most-requested reference.
+- Shortcuts change often and differ by terminal and OS; each shortcuts slide states the OS it was checked on and the docs version or date.
 - The Artifact build adds a toolchain; keep the script dependency-free (Node standard library) so the repo stays easy to run.
