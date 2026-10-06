@@ -12,6 +12,18 @@ Method note: WebFetch summaries can be wrong. The hooks page summary claimed the
 | Claude Tag installs with `/install-slack-app` | Not in the official docs. Install from the Slack Marketplace, `/invite @Claude`, `@Claude connect`, paste pairing code. |
 | "headless" is the docs' term | The docs page is titled "Run Claude Code programmatically" and says non-interactive mode / `claude -p`. "Headless" stays as a searchable keyword only. |
 
+## Claude Code: CLAUDE.md and AGENTS.md
+
+Source: https://code.claude.com/docs/en/memory (docs, full text; saved locally)
+
+| Claim | Verified text |
+|---|---|
+| Reads AGENTS.md | Yes, from Claude Code v2.1.277. By default it reads `AGENTS.md` only when there is no `CLAUDE.md`, `.claude/CLAUDE.md` or `CLAUDE.local.md` in the working directory or above. If both exist, only the `CLAUDE.md` files load. |
+| Use both | Import it from `CLAUDE.md` with an `@AGENTS.md` import, or set **Project instructions** (via `/config`) to `claude-md-and-agents-md`. Other values: `claude-md-or-agents-md` (default), `claude-md`, `managed-only`. |
+| Not read | `AGENTS.local.md`, `AGENTS.override.md`, anything under `.agents/`. |
+| Other memory features | `.claude/rules/` path-scoped rules; auto memory (Claude writes its own notes; first 200 lines or 25KB load each session); `@path` imports; `CLAUDE.local.md` for uncommitted personal instructions. |
+| Caveat | In some sessions `AGENTS.md` support is unavailable; the docs say to import it from a `CLAUDE.md` there. |
+
 ## Claude Code: skills
 
 Source: https://code.claude.com/docs/en/skills (docs, full text)
@@ -252,7 +264,6 @@ Gemini CLI shortcuts (full page, https://geminicli.com/docs/reference/keyboard-s
 ## Open items (not yet verified; nothing below may go in a slide yet)
 
 - Codex CLI slash commands and keyboard shortcuts (no official CLI list reached; Codex is not installed locally).
-- Whether Claude Code reads `AGENTS.md` (the spec's "reuse `AGENTS.md`" slide depends on this).
 - Gemini CLI remote or cloud story; Jules, Antigravity, Gemini Code Assist.
 - Claude Cowork official page; Claude in Chrome; Artifacts; Agent SDK; Managed Agents; fast mode page; cross-session messaging; plugin-evals page; Claude Code slash command cheat sheet (full page saved locally at `~/.claude/projects/.../tool-results/toolu_017svwJm6WmgBJe5eDuebWjx.txt`).
 - Cursor permission rules (allow/deny) and Windows/Linux IDE shortcuts.
