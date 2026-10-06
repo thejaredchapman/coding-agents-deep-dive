@@ -144,7 +144,7 @@ Use the `claude-code-guide` agent (or WebFetch on `https://code.claude.com/docs/
 | Hooks | Full event list; settings JSON shape with `matcher` and nested `hooks`; real tool names for matchers; stdin payload fields for PreToolUse, PostToolUse, Stop; exit code behavior (0, 2, other) per event; where usage data comes from for a Stop hook. |
 | Subagents | `.claude/agents/*.md` format and frontmatter; project vs user location; how to invoke. |
 | MCP | `claude mcp add` syntax; scopes (local, project, user); `.mcp.json` location; transports (stdio, HTTP, whether SSE is deprecated); current TypeScript SDK server class. |
-| Claude Tag | What it is; install via `/install-slack-app`; plan/availability requirements. |
+| Claude Tag | What it is; setup steps from the official docs (Slack Marketplace, `/invite @Claude`, `@Claude connect`); plan and availability requirements. Note: `/install-slack-app` is not in the official docs. |
 | Claude Cowork | What it is; where it fits; availability. |
 | Remote Control | `claude remote-control`, `--remote-control`/`--rc`, `/remote-control`/`/rc`; plan requirements; cloud sessions difference; cross-session messaging. Start from `https://code.claude.com/docs/en/remote-control`. |
 | Surfaces | CLI, desktop app, web, VS Code, JetBrains; fast mode (`/fast`). |
@@ -371,7 +371,7 @@ One slide each, wording only from facts.md:
 1. Section title slide `# 6. The Claude ecosystem`.
 2. Claude Code surfaces (CLI, desktop, web, VS Code, JetBrains, fast mode).
 3. Remote Control vs cloud sessions: a two-column table with the three start commands and plan requirements; one line on cross-session messaging.
-4. Claude Tag (Claude in Slack): what it is, `/install-slack-app`, when to choose it over the CLI.
+4. Claude Tag (Claude in Slack): what it is, setup steps per facts.md (Slack Marketplace, `/invite @Claude`, `@Claude connect`), and the earlier Claude Code in Slack for Pro and Max.
 5. Claude Cowork: what it is and where it fits.
 6. Agent SDK and Claude API: Messages API, tool use, prompt caching, Managed Agents; a table mapping "extension point" to "SDK equivalent" (subagents, hooks, MCP, skills).
 7. Claude in Chrome, Artifacts and Claude Docs: one line each.

@@ -26,7 +26,7 @@ Stage 1 ships first because it changes slide counts and layout. Each stage gets 
 | Area | Problem |
 |---|---|
 | Skills slides | Teach flat `skills/foo.md` files and `{{args}}`. Current skills are `skills/<name>/SKILL.md` with YAML frontmatter, and arguments use `$ARGUMENTS`. |
-| Hooks slides | Registration JSON lacks the nested `matcher` / `hooks` structure. `write_file` is not a real tool name (real: `Write`, `Edit`, `Bash`). The Stop payload shown has no `usage` field; Stop hooks receive a `transcript_path`, so usage must be read from the transcript. Events missing: SessionStart, UserPromptSubmit, SubagentStop, PreCompact. Exit code 2 blocks on more than PreToolUse. |
+| Hooks slides | Registration JSON lacks the nested `matcher` / `hooks` structure. `write_file` is not a real tool name (real: `Write`, `Edit`, `Bash`). The Stop payload shown has no `usage` field; Verified empirically on Claude Code 2.1.290: the Stop payload carries `transcript_path` and `last_assistant_message` but no usage fields, so usage must be read from the transcript. Events missing: SessionStart, UserPromptSubmit, SubagentStop, PreCompact. Exit code 2 blocks on more than PreToolUse. |
 | Subagents slides | No mention of custom subagents defined in `.claude/agents/*.md`. |
 | MCP slides | `~/.claude/mcp.json` is the wrong location. Missing `claude mcp add`, scopes, `.mcp.json`, and HTTP transport replacing SSE. Server example uses the low-level `Server` class; `McpServer` is preferred. |
 | Model ID | `claude-sonnet-4-6` appears in slides and exercise 5. Current ID is `claude-sonnet-5-5`. |
@@ -45,7 +45,7 @@ Correct each finding above in `deck.md` and in the matching `exercises/0N-*.md`.
 
 | Product | Coverage |
 |---|---|
-| Claude Tag | Claude in Slack: what it is, install with `/install-slack-app`, when to use it instead of the CLI. |
+| Claude Tag | Claude in Slack: what it is (public beta, Team and Enterprise only), setup (Slack Marketplace install, `/invite @Claude`, `@Claude connect` pairing), and how it differs from the earlier Claude Code in Slack that Pro and Max still use. |
 | Claude Cowork | What it is and where it fits; has its own Academy course. |
 | Claude Code surfaces | CLI, desktop app (Mac/Windows), web app at claude.ai/code, VS Code and JetBrains extensions; fast mode (`/fast`). |
 | Remote Control and cloud sessions | Remote Control (`claude remote-control`, `--remote-control` / `--rc`, `/remote-control` / `/rc`) drives a session that keeps running locally from claude.ai/code or the iOS/Android app. Cloud sessions (Claude Code on the web) run on Anthropic infrastructure. Contrast the two. Cover cross-session messaging. Remote Control needs a Pro, Max, Team or Enterprise plan. |
