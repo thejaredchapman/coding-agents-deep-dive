@@ -197,28 +197,32 @@ Time: 15 minutes
 
 ## What is a Skill?
 
-A Skill is a markdown file that defines a reusable workflow. When you type `/my-skill`, Claude Code reads the skill file and executes the instructions inside it.
+A Skill is a folder with a `SKILL.md` file that defines a reusable workflow. Type `/my-skill` and Claude Code loads the instructions inside it. Claude can also load a skill on its own when its `description` matches what you're doing.
 
-Skills live in `.claude/skills/` (project) or `~/.claude/skills/` (global).
+Skills live in `.claude/skills/` (project) or `~/.claude/skills/` (personal).
 
 ```
 ~/.claude/skills/
-  deploy-check.md     → /deploy-check
-  standup.md          → /standup
-  review.md           → /review
+  deploy-check/SKILL.md   → /deploy-check
+  standup/SKILL.md        → /standup
 
 .claude/skills/
-  seed-db.md          → /seed-db (project-only)
+  seed-db/SKILL.md        → /seed-db (project-only)
 ```
+
+A skill folder can also hold extra files (`reference.md`, `scripts/`) that `SKILL.md` points to.
 
 ---
 
 ## Anatomy of a Skill
 
 ```markdown
-# Deploy Checklist
+---
+name: deploy-check
+description: Runs the pre-deploy verification sequence and reports READY or BLOCKED
+---
 
-A skill that runs a pre-deploy verification sequence.
+# Deploy Checklist
 
 ## Steps
 
@@ -235,6 +239,21 @@ Report format:
 **Last commit:** (hash + message)
 ```
 
+The block between the `---` lines is YAML frontmatter. `description` is what Claude reads to decide when the skill applies.
+
+---
+
+## Frontmatter fields worth knowing
+
+| Field | What it does |
+|-------|-------------|
+| `name` | Command name. Defaults to the folder name |
+| `description` | When Claude should use the skill |
+| `argument-hint` | Autocomplete hint, e.g. `[issue-number]` |
+| `disable-model-invocation` | `true` = only you can run it with `/name` |
+| `allowed-tools` | Tools pre-approved while the skill runs |
+| `context: fork` | Run the skill in an isolated subagent |
+
 ---
 
 ## Skills vs. CLAUDE.md
@@ -250,23 +269,30 @@ Report format:
 
 ## Passing arguments to Skills
 
-Arguments after the slash command are available in the skill as `{{args}}`:
+Everything you type after the skill name is available as `$ARGUMENTS`:
 
 ```
 /review src/auth/session.ts
 ```
 
 ```markdown
+---
+name: review
+description: Reviews a file or diff for security, error handling and test gaps
+argument-hint: "[file]"
+---
+
 # Code Review Skill
 
-Review the file or diff provided in {{args}}.
+Review the file or diff provided in $ARGUMENTS.
 
 Focus on:
 - Security vulnerabilities
 - Error handling gaps
 - Test coverage
-...
 ```
+
+Positional arguments are `$0`, `$1`, and so on. A line starting with `` !`git diff HEAD` `` runs the command first and injects its output.
 
 ---
 
