@@ -1,0 +1,248 @@
+{
+  "checked": "2026-10-07",
+  "providers": [
+    {
+      "id": "claude",
+      "name": "Anthropic",
+      "product": "Claude Code",
+      "summary": "Claude Code runs in your terminal, in the Claude desktop app, on the web, and as VS Code and JetBrains extensions.",
+      "links": [
+        {
+          "label": "Claude Code",
+          "url": "https://claude.com/product/claude-code",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://code.claude.com/docs",
+          "kind": "docs"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/anthropics/claude-code",
+          "kind": "code"
+        },
+        {
+          "label": "Anthropic",
+          "url": "https://www.anthropic.com",
+          "kind": "company"
+        }
+      ]
+    },
+    {
+      "id": "codex",
+      "name": "OpenAI",
+      "product": "Codex",
+      "summary": "Codex runs as a terminal CLI and as a desktop app, which can also run chats in the cloud.",
+      "links": [
+        {
+          "label": "Codex documentation",
+          "url": "https://developers.openai.com/codex",
+          "kind": "docs"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/openai/codex",
+          "kind": "code"
+        },
+        {
+          "label": "OpenAI",
+          "url": "https://openai.com",
+          "kind": "company"
+        }
+      ]
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "product": "Cursor",
+      "summary": "A desktop editor with an Agent panel, a command-line agent (the agent command), and Cloud Agents that run in isolated VMs.",
+      "links": [
+        {
+          "label": "Cursor",
+          "url": "https://cursor.com",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://cursor.com/docs",
+          "kind": "docs"
+        },
+        {
+          "label": "Cursor CLI",
+          "url": "https://cursor.com/cli",
+          "kind": "product"
+        }
+      ]
+    },
+    {
+      "id": "gemini",
+      "name": "Google",
+      "product": "Gemini CLI",
+      "summary": "An open-source terminal agent that brings Gemini models directly into your terminal.",
+      "links": [
+        {
+          "label": "Gemini CLI",
+          "url": "https://geminicli.com",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://geminicli.com/docs/",
+          "kind": "docs"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/google-gemini/gemini-cli",
+          "kind": "code"
+        }
+      ]
+    }
+  ],
+  "learning": [
+    {
+      "provider": "claude",
+      "title": "Claude Academy",
+      "url": "https://academy.claude.com/courses",
+      "cost": "The site describes these as free courses, tutorials and use cases from Anthropic's education team.",
+      "summary": "Self-paced courses from Anthropic on Claude Code, the Claude API, MCP, subagents and skills, plus an AI Fluency track on working with AI well. 27 courses were listed when this was checked.",
+      "items": [
+        {
+          "title": "Claude Code 101",
+          "url": "https://academy.claude.com/courses/claude-code-101"
+        },
+        {
+          "title": "Claude Code in action",
+          "url": "https://academy.claude.com/courses/claude-code-in-action"
+        },
+        {
+          "title": "Introduction to subagents",
+          "url": "https://academy.claude.com/courses/introduction-to-subagents"
+        },
+        {
+          "title": "Introduction to agent skills",
+          "url": "https://academy.claude.com/courses/introduction-to-agent-skills"
+        },
+        {
+          "title": "Introduction to Model Context Protocol",
+          "url": "https://academy.claude.com/courses/introduction-to-model-context-protocol"
+        },
+        {
+          "title": "Model Context Protocol: Advanced topics",
+          "url": "https://academy.claude.com/courses/model-context-protocol-advanced-topics"
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "title": "OpenAI Academy",
+      "url": "https://academy.openai.com",
+      "cost": "OpenAI's help center describes the courses as free with a ChatGPT account. That is not stated on the Academy home page itself, so confirm there.",
+      "summary": "OpenAI's learning hub, with course pathways, live events and communities. Its Build with AI pathway teaches Codex across the software development lifecycle, or building with the OpenAI API.",
+      "items": [
+        {
+          "title": "Apply AI at Work: prompting and review habits, repeatable workflows, directing work with agents"
+        },
+        {
+          "title": "Build with AI: Codex across the software development lifecycle, or the OpenAI API"
+        },
+        {
+          "title": "Lead AI Adoption: a roadmap and an initial AI strategy draft"
+        },
+        {
+          "title": "Teach and learn with AI: teaching, academic work and career preparation"
+        }
+      ]
+    },
+    {
+      "provider": "cursor",
+      "title": "Cursor Learn",
+      "url": "https://cursor.com/learn",
+      "cost": "No price is stated on the page. The lessons are public on cursor.com.",
+      "summary": "Official tutorials for developers who write software with AI models and tools. It covers how models work, coding with agents, and reviewing and testing AI-written code, with examples in Cursor that apply to any model or product.",
+      "items": [
+        {
+          "title": "How AI models work",
+          "url": "https://cursor.com/learn/how-ai-models-work"
+        },
+        {
+          "title": "Hallucination and limitations",
+          "url": "https://cursor.com/learn/hallucination-limitations"
+        },
+        {
+          "title": "Tokens and pricing",
+          "url": "https://cursor.com/learn/tokens-pricing"
+        },
+        {
+          "title": "Context",
+          "url": "https://cursor.com/learn/context"
+        },
+        {
+          "title": "Tool calling",
+          "url": "https://cursor.com/learn/tool-calling"
+        },
+        {
+          "title": "Agents",
+          "url": "https://cursor.com/learn/agents"
+        },
+        {
+          "title": "Working with agents",
+          "url": "https://cursor.com/learn/working-with-agents"
+        },
+        {
+          "title": "Understanding your codebase",
+          "url": "https://cursor.com/learn/understanding-your-codebase"
+        },
+        {
+          "title": "Creating features",
+          "url": "https://cursor.com/learn/creating-features"
+        },
+        {
+          "title": "Finding and fixing bugs",
+          "url": "https://cursor.com/learn/finding-fixing-bugs"
+        },
+        {
+          "title": "Reviewing and testing",
+          "url": "https://cursor.com/learn/reviewing-testing"
+        },
+        {
+          "title": "Customizing agents",
+          "url": "https://cursor.com/learn/customizing-agents"
+        },
+        {
+          "title": "Putting it together",
+          "url": "https://cursor.com/learn/putting-it-together"
+        }
+      ]
+    },
+    {
+      "provider": "gemini",
+      "title": "Hands-on with Gemini CLI (Google Codelab)",
+      "url": "https://codelabs.developers.google.com/gemini-cli-hands-on",
+      "cost": "No price is stated on the page. You need a Gmail account and the Chrome browser.",
+      "summary": "A guided codelab for users and developers of all levels, including beginners. You install and configure Gemini CLI, explore its tools, built-in commands and MCP servers, customize it with a GEMINI.md file, and try developer and non-developer use cases.",
+      "items": []
+    },
+    {
+      "provider": "gemini",
+      "title": "Gemini CLI: Code & Create with an Open-Source Agent (DeepLearning.AI)",
+      "url": "https://www.deeplearning.ai/courses/gemini-cli-code-and-create-with-an-open-source-agent",
+      "cost": "Price not listed on the page. Sign-up is required, and the graded assignment needs a PRO membership.",
+      "summary": "A beginner course taught by a Google developer advocate and hosted by DeepLearning.AI: 1 hour 23 minutes, 11 video lessons and a graded assignment. You use Gemini CLI with MCP and extensions to build web features and dashboards and to create content.",
+      "items": []
+    },
+    {
+      "provider": "gemini",
+      "title": "Google Skills",
+      "url": "https://www.skills.google",
+      "cost": "The site offers free and paid options. The price of the Gemini CLI course below was not confirmed.",
+      "summary": "Google's learning platform for AI, with skill badges, certificates and hands-on labs. A course listed there, Accelerate App Development with Gemini CLI, is aimed at app developers and DevOps engineers.",
+      "items": [
+        {
+          "title": "Accelerate App Development with Gemini CLI",
+          "url": "https://www.skills.google/paths/1282/course_templates/1448"
+        }
+      ]
+    }
+  ]
+}

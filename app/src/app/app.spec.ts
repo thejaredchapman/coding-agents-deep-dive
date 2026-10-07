@@ -4,6 +4,9 @@ import { App } from './app';
 import { DeckData } from './deck.model';
 import { DeckService } from './deck.service';
 import { ExplorerService } from './explorer';
+import { PageService } from './page.service';
+import { ProvidersData } from './providers.model';
+import { ProvidersService } from './providers.service';
 import { ToolService } from './tool.service';
 import { UiService } from './ui.service';
 
@@ -20,6 +23,23 @@ const data: DeckData = {
       title: 'Compare',
       html: '<table><thead><tr><th></th><th>Claude Code</th><th>Codex</th><th>Cursor</th></tr></thead><tbody><tr><td>MCP</td><td>claude mcp add</td><td>codex mcp add</td><td>mcp.json</td></tr></tbody></table>',
     },
+  ],
+};
+
+const providers: ProvidersData = {
+  checked: '2026-10-07',
+  providers: [
+    { id: 'claude', name: 'Anthropic', product: 'Claude Code', summary: 'Terminal agent.', links: [{ label: 'Docs', url: 'https://code.claude.com/docs', kind: 'docs' }, { label: 'GitHub', url: 'https://github.com/anthropics/claude-code', kind: 'code' }] },
+    { id: 'codex', name: 'OpenAI', product: 'Codex', summary: 'Terminal and app.', links: [{ label: 'Docs', url: 'https://developers.openai.com/codex', kind: 'docs' }] },
+    { id: 'cursor', name: 'Cursor', product: 'Cursor', summary: 'Editor and CLI.', links: [{ label: 'Cursor', url: 'https://cursor.com', kind: 'product' }] },
+    { id: 'gemini', name: 'Google', product: 'Gemini CLI', summary: 'Open-source agent.', links: [{ label: 'Docs', url: 'https://geminicli.com/docs/', kind: 'docs' }] },
+  ],
+  learning: [
+    { provider: 'claude', title: 'Claude Academy', url: 'https://academy.claude.com/courses', cost: 'The site describes these as free.', summary: 'Courses on Claude Code and MCP.', items: [{ title: 'Claude Code 101', url: 'https://academy.claude.com/courses/claude-code-101' }] },
+    { provider: 'codex', title: 'OpenAI Academy', url: 'https://academy.openai.com', cost: 'Confirm on the site.', summary: 'Pathways including Build with AI.', items: [{ title: 'Build with AI' }] },
+    { provider: 'cursor', title: 'Cursor Learn', url: 'https://cursor.com/learn', cost: 'No price stated.', summary: 'Lessons on agents.', items: [] },
+    { provider: 'gemini', title: 'Hands-on with Gemini CLI', url: 'https://codelabs.developers.google.com/gemini-cli-hands-on', cost: 'No price stated.', summary: 'A codelab.', items: [] },
+    { provider: 'gemini', title: 'Google Skills', url: 'https://www.skills.google', cost: 'Free and paid options.', summary: 'Courses and labs.', items: [] },
   ],
 };
 
@@ -42,6 +62,7 @@ describe('App', () => {
     document.documentElement.removeAttribute('data-theme');
     deck = TestBed.inject(DeckService);
     deck.load(data);
+    TestBed.inject(ProvidersService).data.set(providers);
     await render();
   });
 
@@ -67,6 +88,34 @@ describe('App', () => {
     deck.goTo(1);
     await fixture.whenStable();
     expect(document.title).toBe('A1 · Coding Agents — Deep Dive');
+  });
+
+  it('shows an editor-style mode in the statusline', async () => {
+    const mode = () => el.querySelector('.statusline .mode')?.textContent?.trim();
+    expect(mode()).toBe('NORMAL');
+    press('/');
+    await fixture.whenStable();
+    expect(mode()).toBe('SEARCH');
+    press('Escape', {}, el.querySelector('input[role="combobox"]')!);
+    await fixture.whenStable();
+    expect(mode()).toBe('NORMAL');
+    press('e');
+    await fixture.whenStable();
+    expect(mode()).toBe('EXPLORE');
+  });
+
+  it('shows the chosen agent in the statusline', async () => {
+    expect(el.querySelector('.statusline .tool')?.textContent?.trim()).toBe('all agents');
+    TestBed.inject(ToolService).select('cursor');
+    await fixture.whenStable();
+    expect(el.querySelector('.statusline .tool')?.textContent).toContain('Cursor');
+  });
+
+  it('shows a file-path breadcrumb for the slide', async () => {
+    expect(el.querySelector('.crumb')?.textContent?.trim()).toBe('~/deep-dive/intro/coding-agents-deep-dive.md');
+    deck.goTo(4);
+    await fixture.whenStable();
+    expect(el.querySelector('.crumb')?.textContent?.trim()).toBe('~/deep-dive/09-codex/compare.md');
   });
 
   it('updates the progress bar', async () => {
@@ -342,6 +391,109 @@ describe('App', () => {
       expect(caption()).toMatch(/code 2/i);
       expect(el.querySelector('.node.skipped')).not.toBeNull();
       expect(el.querySelector('.stepper svg text.danger')?.textContent).toContain('blocked');
+    });
+  });
+
+  describe('providers and free learning pages', () => {
+    it('has links to the pages in the tab line, with the current one marked', async () => {
+      const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('nav.pages a'));
+      expect(links.map((a) => a.textContent?.trim())).toEqual(['slides', 'providers', 'free learning']);
+      expect(links[0].getAttribute('aria-current')).toBe('page');
+      expect(links[1].getAttribute('href')).toBe('#/providers');
+      expect(links[2].getAttribute('href')).toBe('#/learn');
+    });
+
+    it('shows a card per provider with its official links in a new tab', async () => {
+      TestBed.inject(PageService).show('providers');
+      await fixture.whenStable();
+      const cards = el.querySelectorAll('.card');
+      expect(cards.length).toBe(4);
+      expect(el.querySelector('h1')?.textContent).toBe('Providers');
+      const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('.card a[href^="https://"]'));
+      expect(links.length).toBe(5);
+      for (const a of links) {
+        expect(a.getAttribute('target')).toBe('_blank');
+        expect(a.getAttribute('rel')).toContain('noopener');
+        expect(a.querySelector('.sr-only')?.textContent).toContain('new tab');
+      }
+      expect(el.querySelector('nav.pages a[aria-current="page"]')?.textContent?.trim()).toBe('providers');
+      expect(el.querySelector('.sidebar')).toBeNull();
+    });
+
+    it('lists every provider\'s learning programs with cost, summary and a program page link', async () => {
+      TestBed.inject(PageService).show('learn');
+      await fixture.whenStable();
+      const programs = Array.from(el.querySelectorAll('.program'));
+      expect(programs.length).toBe(5);
+      for (const p of programs) {
+        expect(p.querySelector('.cost')?.textContent?.length).toBeGreaterThan(8);
+        expect(p.querySelector('.blurb')?.textContent?.length).toBeGreaterThan(5);
+        const cta = p.querySelector<HTMLAnchorElement>('a.cta')!;
+        expect(cta.getAttribute('href')).toMatch(/^https:\/\//);
+        expect(cta.getAttribute('rel')).toContain('noopener');
+      }
+      expect(el.querySelectorAll('.group').length).toBe(4);
+      // programs that list items offer a disclosure; items with a url are links
+      expect(el.querySelectorAll('details').length).toBe(2);
+      expect(el.querySelector('details a[href="https://academy.claude.com/courses/claude-code-101"]')).not.toBeNull();
+    });
+
+    it('marks the reader\'s own agent on both pages', async () => {
+      TestBed.inject(ToolService).select('gemini');
+      TestBed.inject(PageService).show('providers');
+      await fixture.whenStable();
+      expect(el.querySelector('.card.mine h2')?.textContent).toContain('Gemini CLI');
+      TestBed.inject(PageService).show('learn');
+      await fixture.whenStable();
+      expect(el.querySelector('.group.mine h2')?.textContent).toContain('Gemini CLI');
+    });
+
+    it('switches with the P, L and D keys and from the palette', async () => {
+      press('p');
+      await fixture.whenStable();
+      expect(el.querySelector('app-providers-page')).not.toBeNull();
+      press('l');
+      await fixture.whenStable();
+      expect(el.querySelector('app-learn-page')).not.toBeNull();
+      press('d');
+      await fixture.whenStable();
+      expect(el.querySelector('app-slide-view')).not.toBeNull();
+
+      press('/');
+      await fixture.whenStable();
+      const input = el.querySelector<HTMLInputElement>('input[role="combobox"]')!;
+      input.value = 'free learning';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+      press('Enter', {}, input);
+      await fixture.whenStable();
+      expect(el.querySelector('app-learn-page')).not.toBeNull();
+    });
+
+    it('does not move through slides with the arrow keys while on a page, and Back to slides returns', async () => {
+      TestBed.inject(PageService).show('providers');
+      await fixture.whenStable();
+      press('ArrowRight');
+      expect(deck.index()).toBe(0);
+      const back = Array.from(el.querySelectorAll<HTMLButtonElement>('footer button')).find((b) => b.textContent?.includes('back to slides'))!;
+      back.click();
+      await fixture.whenStable();
+      expect(el.querySelector('app-slide-view')).not.toBeNull();
+    });
+
+    it('returns to the deck when a slide is chosen from search', async () => {
+      TestBed.inject(PageService).show('learn');
+      await fixture.whenStable();
+      deck.goTo(2);
+      await fixture.whenStable();
+      expect(el.querySelector('app-slide-view')).not.toBeNull();
+    });
+
+    it('says so, instead of showing a blank page, when the data did not load', async () => {
+      TestBed.inject(ProvidersService).data.set(null);
+      TestBed.inject(PageService).show('providers');
+      await fixture.whenStable();
+      expect(el.querySelector('.muted')?.textContent).toContain('did not load');
     });
   });
 

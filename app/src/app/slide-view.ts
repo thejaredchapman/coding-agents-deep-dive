@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, afte
 import { ChecklistService } from './checklist.service';
 import { DeckService } from './deck.service';
 import { DiagramEcosystem, DiagramFlow, DiagramHooks, DiagramSubagents } from './diagrams';
+import { slidePath } from './slug';
 import { enhanceTables } from './table-enhancer';
 import { ToolPicker } from './tool-picker';
 
@@ -18,10 +19,10 @@ export class SlideView {
   protected readonly checklist = inject(ChecklistService);
   private readonly content = viewChild<ElementRef<HTMLElement>>('content');
 
-  /** Section number such as "05", shown large behind the slide. */
-  protected readonly sectionNumber = computed(() => {
-    const match = /^(\d+)\./.exec(this.deck.currentSection());
-    return match ? match[1].padStart(2, '0') : '';
+  /** A file-path style breadcrumb such as ~/deep-dive/05-hooks/what-are-hooks.md. */
+  protected readonly path = computed(() => {
+    const slide = this.deck.current();
+    return slide ? slidePath(slide.section, slide.title) : '';
   });
 
   constructor() {

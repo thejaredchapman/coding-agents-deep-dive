@@ -19,6 +19,11 @@ describe('buildIndex', () => {
     expect(e.title).toBe('Anatomy of a Skill');
     expect(e.section).toBe('3. Skills');
   });
+  it('leaves the slide heading out of the body text', () => {
+    const [e] = buildIndex([{ id: 1, section: 's', title: 'Hook exit codes', html: '<h2>Hook exit codes</h2><p>Exit 2 blocks.</p>' }]);
+    expect(e.text).toBe('Exit 2 blocks.');
+  });
+
   it('decodes entities', () => {
     const [e] = buildIndex([{ id: 1, section: 's', title: 't', html: '<p>a &amp; b &lt;c&gt;</p>' }]);
     expect(e.text).toBe('a & b <c>');

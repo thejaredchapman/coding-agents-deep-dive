@@ -60,7 +60,7 @@ export class DiagramSubagents {
         <path d="M580 74 C 580 140, 336 140, 336 80" class="line dashed" marker-end="url(#hk-arrow)" />
         <text x="458" y="132" class="label small">repeat for each tool call</text>
         <path d="M640 74 L 640 168" class="line" marker-end="url(#hk-arrow)" />
-        <text x="650" y="125" class="label small left">turn ends</text>
+        <text x="630" y="125" class="label small right">turn ends</text>
         @for (s of boxes; track s.id) {
           <g class="node" [class]="'node ' + life.stateOf(s.id)">
             <rect [attr.x]="s.x" [attr.y]="s.y" width="112" height="54" rx="3" class="box" />

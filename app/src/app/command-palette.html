@@ -1,5 +1,6 @@
 <div class="overlay-backdrop" (click)="ui.paletteOpen.set(false)"></div>
-<div #dialog class="palette" role="dialog" aria-modal="true" aria-label="Search and commands" (keydown)="onKey($event, dialog)">
+<div #dialog class="palette window" role="dialog" aria-modal="true" aria-label="Search and commands" (keydown)="onKey($event, dialog)">
+  <p class="title" aria-hidden="true">search</p>
   <div class="field">
     <span class="prompt" aria-hidden="true">›</span>
     <input
@@ -10,14 +11,14 @@
       aria-controls="palette-list"
       aria-autocomplete="list"
       aria-label="Search slides or type a command"
-      placeholder="Search slides, or type a command…"
+      placeholder="search slides or run a command"
       autocomplete="off"
       spellcheck="false"
       [attr.aria-activedescendant]="rows().length ? 'opt-' + active() : null"
       [value]="query()"
       (input)="onInput($any($event.target).value)"
     />
-    <kbd>Esc</kbd>
+    <kbd>esc</kbd>
   </div>
 
   <ul id="palette-list" role="listbox" aria-label="Results">
@@ -42,6 +43,6 @@
     }
   </ul>
 
-  <p class="foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>Enter</kbd> go</p>
+  <p class="foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>enter</kbd> go</p>
   <div class="sr-only" aria-live="polite">{{ rows().length }} results</div>
 </div>

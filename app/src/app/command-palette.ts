@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, afterNextRender, comput
 import { DeckService } from './deck.service';
 import { useDialogFocus } from './dialog-focus';
 import { buildIndex, search } from './search';
+import { PageService } from './page.service';
 import { ThemeService } from './theme.service';
 import { ToolService } from './tool.service';
 import { UiService } from './ui.service';
@@ -25,6 +26,7 @@ export class CommandPalette {
   private readonly deck = inject(DeckService);
   private readonly tool = inject(ToolService);
   private readonly theme = inject(ThemeService);
+  private readonly pages = inject(PageService);
   protected readonly ui = inject(UiService);
   private readonly trap = useDialogFocus();
 
@@ -37,6 +39,9 @@ export class CommandPalette {
   private readonly actions = computed<Row[]>(() => {
     const rows: Row[] = [
       { kind: 'action', key: 'a-theme', label: `Switch to ${this.theme.theme() === 'dark' ? 'light' : 'dark'} theme`, hint: 'T', run: () => this.theme.toggle() },
+      { kind: 'action', key: 'a-providers', label: 'Open the providers page: official links for each tool', hint: 'P', run: () => this.pages.show('providers') },
+      { kind: 'action', key: 'a-learn', label: 'Open the free learning page', hint: 'L', run: () => this.pages.show('learn') },
+      { kind: 'action', key: 'a-slides', label: 'Back to the slides', hint: 'D', run: () => this.pages.show('deck') },
       { kind: 'action', key: 'a-explorer', label: 'Open the shortcut and command explorer', hint: 'E', run: () => this.ui.openExplorer() },
       { kind: 'action', key: 'a-help', label: 'Show keyboard shortcuts for this app', hint: '?', run: () => this.ui.openHelp() },
     ];

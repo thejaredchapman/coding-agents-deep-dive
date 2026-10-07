@@ -1,31 +1,34 @@
-.picker { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.picker { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 0.45em;
-  font: 600 0.72rem/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase;
-  padding: 0.5em 0.8em; border: 1.5px solid var(--rule); border-radius: 2px;
-  background: transparent; color: var(--ink); cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  font: 500 0.78rem/1 var(--mono); padding: 0.5em 0.75em; border: 1px solid var(--rule); border-radius: 6px;
+  background: transparent; color: var(--ink); cursor: pointer; transition: background 0.12s ease, border-color 0.12s ease;
 }
-.chip:hover { border-color: var(--ink); transform: translateY(-1px); }
+.chip:hover { border-color: var(--muted); background: var(--hover); }
 .glyph { font-size: 0.95em; }
-
 .chip[data-t='claude'] .glyph { color: var(--c-claude); }
 .chip[data-t='codex'] .glyph { color: var(--c-codex); }
 .chip[data-t='cursor'] .glyph { color: var(--c-cursor); }
 .chip[data-t='gemini'] .glyph { color: var(--c-gemini); }
 
-.chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.chip[aria-pressed='true'][data-t='claude'] { background: var(--c-claude); border-color: var(--c-claude); color: var(--on-accent); }
-.chip[aria-pressed='true'][data-t='codex'] { background: var(--c-codex); border-color: var(--c-codex); color: var(--on-accent); }
-.chip[aria-pressed='true'][data-t='cursor'] { background: var(--c-cursor); border-color: var(--c-cursor); color: var(--on-accent); }
-.chip[aria-pressed='true'][data-t='gemini'] { background: var(--c-gemini); border-color: var(--c-gemini); color: var(--on-accent); }
-.chip[aria-pressed='true'] .glyph { color: inherit; }
-.chip.all { border-style: dashed; }
-.chip.all[aria-pressed='true'] { border-style: solid; }
+/* Selected: a tinted tab with a bar underneath, in the tool's colour. */
+.chip[aria-pressed='true'] { background: color-mix(in srgb, var(--accent) 16%, transparent); border-color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
+.chip[aria-pressed='true'][data-t='claude'] { --accent: var(--c-claude); }
+.chip[aria-pressed='true'][data-t='codex'] { --accent: var(--c-codex); }
+.chip[aria-pressed='true'][data-t='cursor'] { --accent: var(--c-cursor); }
+.chip[aria-pressed='true'][data-t='gemini'] { --accent: var(--c-gemini); }
 
-.picker.large { gap: 0.6rem; }
-.picker.large .chip { font-size: 0.9rem; padding: 0.8em 1.15em; }
+/* Large: an interactive prompt menu, like a command-line "select" question. */
+.picker.large { flex-direction: column; align-items: stretch; gap: 0.1rem; }
+.picker.large .chip {
+  border: 0; border-radius: 6px; padding: 0.55em 0.7em 0.55em 1.8rem; font-size: 0.98rem; position: relative; background: transparent; box-shadow: none;
+}
+.picker.large .chip::before { content: ''; position: absolute; left: 0.6rem; color: var(--accent); font-weight: 700; }
+.picker.large .chip:hover::before, .picker.large .chip:focus-visible::before { content: '❯'; color: var(--muted); }
+.picker.large .chip[aria-pressed='true'] { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.picker.large .chip[aria-pressed='true']::before { content: '❯'; color: var(--accent); }
+.picker.large .chip.all { color: var(--muted); }
 
 @media (max-width: 800px) {
   .picker:not(.large) { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }

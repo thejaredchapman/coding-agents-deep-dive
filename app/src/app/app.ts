@@ -2,6 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@a
 import { CommandPalette } from './command-palette';
 import { DeckService } from './deck.service';
 import { ExplorerView } from './explorer-view';
+import { LearnPage } from './learn-page';
+import { PageService } from './page.service';
+import { ProvidersPage } from './providers-page';
 import { Sidebar } from './sidebar';
 import { SlideView } from './slide-view';
 import { ThemeService } from './theme.service';
@@ -14,7 +17,7 @@ const BRAND = 'Coding Agents — Deep Dive';
 
 @Component({
   selector: 'app-root',
-  imports: [Sidebar, SlideView, ToolPicker, CommandPalette, ExplorerView],
+  imports: [Sidebar, SlideView, ToolPicker, CommandPalette, ExplorerView, ProvidersPage, LearnPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -25,18 +28,31 @@ export class App {
   protected readonly theme = inject(ThemeService);
   protected readonly tool = inject(ToolService);
   protected readonly ui = inject(UiService);
+  protected readonly pages = inject(PageService);
 
   protected readonly percent = computed(() => Math.round(this.deck.progress() * 100));
-  protected readonly announcement = computed(() =>
-    this.deck.current() ? `Slide ${this.deck.index() + 1} of ${this.deck.total()}: ${this.deck.current().title}` : '',
+  /** Shown in the statusline, like an editor's mode indicator. */
+  protected readonly mode = computed(() =>
+    this.ui.paletteOpen() ? 'SEARCH' : this.ui.explorerOpen() ? 'EXPLORE' : this.ui.helpOpen() ? 'HELP' : 'NORMAL',
+  );
+  protected readonly announcement = computed(() => {
+    if (this.pages.page() === 'providers') return 'Providers page';
+    if (this.pages.page() === 'learn') return 'Free learning page';
+    return this.deck.current() ? `Slide ${this.deck.index() + 1} of ${this.deck.total()}: ${this.deck.current().title}` : '';
+  });
+  protected readonly pageLabel = computed(() =>
+    this.pages.page() === 'providers' ? 'providers' : this.pages.page() === 'learn' ? 'free learning' : this.deck.currentSection(),
   );
 
   private swipeStart: { x: number; y: number } | null = null;
 
   constructor() {
     effect(() => {
+      const page = this.pages.page();
       const slide = this.deck.current();
-      document.title = !slide || slide.title === BRAND ? BRAND : `${slide.title} · ${BRAND}`;
+      if (page === 'providers') document.title = `Providers · ${BRAND}`;
+      else if (page === 'learn') document.title = `Free learning · ${BRAND}`;
+      else document.title = !slide || slide.title === BRAND ? BRAND : `${slide.title} · ${BRAND}`;
     });
   }
 
@@ -58,6 +74,12 @@ export class App {
     const target = event.target as HTMLElement;
     if (target.matches('input, textarea, select, [contenteditable]')) return;
     const onControl = !!target.closest('button, a');
+
+    // Page shortcuts work everywhere; slide keys only make sense on the deck, so other pages scroll normally.
+    if (event.key === 'p') return this.pages.show('providers');
+    if (event.key === 'l') return this.pages.show('learn');
+    if (event.key === 'd') return this.pages.show('deck');
+    if (this.pages.page() !== 'deck' && ['ArrowRight', 'ArrowLeft', 'PageDown', 'PageUp', ' ', 'm'].includes(event.key)) return;
 
     switch (event.key) {
       case 'ArrowRight':

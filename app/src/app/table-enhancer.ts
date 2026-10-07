@@ -7,6 +7,8 @@ import { TOOLS, ToolId, toolFromHeader } from './tools';
  */
 export function enhanceTables(root: HTMLElement): void {
   root.querySelectorAll('table').forEach((table) => {
+    const wrap = wrapTable(table);
+    table.querySelectorAll('td code, th code').forEach(addSoftBreaks);
     if (table.hasAttribute('data-enhanced')) return;
     const headerCells = Array.from(table.querySelectorAll('thead th'));
     const columnTools = headerCells.map((th) => toolFromHeader(th.textContent ?? ''));
@@ -25,7 +27,7 @@ export function enhanceTables(root: HTMLElement): void {
       columnTools.forEach((tool, i) => tag(row.children[i], tool));
     });
 
-    if (toolColumns.length >= 3) table.before(buildControls(table, toolColumns));
+    if (toolColumns.length >= 3) wrap.before(buildControls(table, toolColumns));
   });
 }
 
@@ -72,4 +74,32 @@ function buildControls(table: HTMLTableElement, tools: ToolId[]): HTMLElement {
   });
   box.appendChild(search);
   return box;
+}
+
+/** Puts the table in a keyboard-scrollable region so a wide table scrolls inside the slide, not the page. */
+function wrapTable(table: HTMLTableElement): HTMLElement {
+  const existing = table.parentElement;
+  if (existing?.classList.contains('table-wrap')) return existing;
+  const wrap = document.createElement('div');
+  wrap.className = 'table-wrap';
+  wrap.tabIndex = 0;
+  wrap.setAttribute('role', 'region');
+  wrap.setAttribute('aria-label', 'Table. Scroll sideways if it is wider than the screen.');
+  table.replaceWith(wrap);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+/** Lets long paths such as .cursor/rules/*.mdc wrap at natural points instead of in the middle of a word. */
+function addSoftBreaks(code: Element): void {
+  if (code.hasAttribute('data-wbr') || code.children.length > 0) return;
+  code.setAttribute('data-wbr', '');
+  // Break after / _ - and after a dot that follows a letter or digit, so .claude and *.md stay whole.
+  const parts = (code.textContent ?? '').split(/(?<=[/_-]|[A-Za-z0-9]\.)/);
+  if (parts.length < 2) return;
+  code.textContent = '';
+  parts.forEach((part, i) => {
+    if (i > 0) code.appendChild(document.createElement('wbr'));
+    code.appendChild(document.createTextNode(part));
+  });
 }

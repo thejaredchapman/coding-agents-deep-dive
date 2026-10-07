@@ -1,12 +1,7 @@
 <div class="overlay-backdrop" (click)="ui.explorerOpen.set(false)"></div>
-<div #dialog class="explorer" role="dialog" aria-modal="true" aria-labelledby="explorer-title" (keydown)="onKey($event, dialog)">
-  <header>
-    <div>
-      <p class="kicker">Reference</p>
-      <h2 id="explorer-title">Shortcuts and commands</h2>
-    </div>
-    <button type="button" class="close" (click)="ui.explorerOpen.set(false)" aria-label="Close explorer">Close</button>
-  </header>
+<div #dialog class="explorer window" role="dialog" aria-modal="true" aria-labelledby="explorer-title" (keydown)="onKey($event, dialog)">
+  <h2 id="explorer-title" class="title">shortcuts &amp; commands</h2>
+  <button type="button" class="close" (click)="ui.explorerOpen.set(false)" aria-label="Close explorer">close</button>
 
   <div class="controls">
     <div class="group" role="group" aria-label="Filter by tool">
@@ -17,11 +12,11 @@
       }
     </div>
     <div class="group" role="group" aria-label="Filter by type">
-      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'all'" (click)="kind.set('all')">All</button>
-      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'shortcut'" (click)="kind.set('shortcut')">Shortcuts</button>
-      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'command'" (click)="kind.set('command')">Commands</button>
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'all'" (click)="kind.set('all')">all</button>
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'shortcut'" (click)="kind.set('shortcut')">shortcuts</button>
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'command'" (click)="kind.set('command')">commands</button>
     </div>
-    <input #search type="search" placeholder="Filter, e.g. “mode” or “ctrl”" aria-label="Filter shortcuts and commands" [value]="query()" (input)="query.set($any($event.target).value)" />
+    <input #search type="search" placeholder="Filter, e.g. mode" aria-label="Filter shortcuts and commands" [value]="query()" (input)="query.set($any($event.target).value)" />
   </div>
 
   <p class="count" aria-live="polite">

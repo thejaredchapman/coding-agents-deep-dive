@@ -1,0 +1,48 @@
+<article class="page">
+  <p class="crumb">~/deep-dive/free-learning.md</p>
+  <h1>Free learning</h1>
+  <p class="lead">
+    Each provider's own learning programs. We say what a page states about cost, and where it does not, we say that too,
+    so check the price on the program page before you start.
+    <span class="checked">Checked <time [attr.datetime]="data.checked()">{{ data.checked() }}</time>.</span>
+  </p>
+
+  @if (data.providers().length === 0) {
+    <p class="muted">The learning list did not load. Reload the page to try again.</p>
+  } @else {
+    @for (p of data.providers(); track p.id) {
+      <section class="group" [attr.data-t]="p.id" [class.mine]="tool.selected() === p.id" [attr.aria-labelledby]="'learn-' + p.id">
+        <h2 [id]="'learn-' + p.id"><span aria-hidden="true">{{ glyph(p.id) }}</span> {{ p.product }} <span class="by">by {{ p.name }}</span>@if (tool.selected() === p.id) { <span class="you">your agent</span> }</h2>
+
+        @for (program of programs(p.id); track program.url) {
+          <article class="program window" [attr.data-t]="p.id">
+            <h3 class="title">{{ program.title }}</h3>
+            <p class="cost"><span class="pill">cost</span>{{ program.cost }}</p>
+            <p class="blurb">{{ program.summary }}</p>
+
+            @if (program.items.length > 0) {
+              <details>
+                <summary>{{ program.items.length }} {{ program.items.length === 1 ? 'item' : 'items' }} in this program</summary>
+                <ul class="items">
+                  @for (item of program.items; track $index) {
+                    <li>
+                      @if (item.url) {
+                        <a [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.title }}<span class="ext" aria-hidden="true"> ↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                      } @else {
+                        {{ item.title }}
+                      }
+                    </li>
+                  }
+                </ul>
+              </details>
+            }
+
+            <a class="cta" [href]="program.url" target="_blank" rel="noopener noreferrer">
+              Open the program page <span class="ext" aria-hidden="true">↗</span><span class="sr-only">: {{ program.title }} (opens in a new tab)</span>
+            </a>
+          </article>
+        }
+      </section>
+    }
+  }
+</article>

@@ -1,54 +1,55 @@
-/* Terminal-native field manual: warm paper and ink, mono labels, one accent that follows your tool. */
+/* Terminal workbench: flat panes, a tab line, a statusline and a command line.
+   Sans body for reading, lowercase mono for the chrome. One accent that follows your tool. */
 
 :root {
-  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
-  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
+  /* day */
   color-scheme: light;
-  --bg: #f1ebdd;
-  --paper: #faf7ef;
-  --ink: #1c1a16;
-  --muted: #5d574b;
-  --rule: #cdc3ae;
-  --hover: #ebe3d0;
-  --code-bg: #ede6d3;
-  --code-text: #44381f;
+  --bg: #e9ecf2;
+  --paper: #ffffff;
+  --raised: #f4f6fa;
+  --ink: #141a26;
+  --muted: #536078;
+  --rule: #d3d9e5;
+  --hover: #edf0f6;
+  --code-bg: #f1f4f9;
+  --code-text: #8a4b00;
   --focus: #0b57d0;
   --danger: #b3261e;
-  --grid: rgb(60 50 30 / 0.06);
-  --noise-opacity: 0.35;
+  --shadow: 0 18px 50px rgb(20 26 38 / 0.18);
 
-  /* Neutral until a tool is chosen. */
-  --accent: #0f6e66;
+  --accent: #8a5600;
   --on-accent: #ffffff;
-
-  /* One hue per tool; text-safe on paper (4.5:1 or better). */
-  --c-claude: #a8321a;
+  --c-claude: #b3341a;
   --c-codex: #1d55b8;
   --c-cursor: #6236b8;
-  --c-gemini: #137a57;
+  --c-gemini: #0d7250;
 }
 
 :root[data-theme='dark'] {
+  /* night */
   color-scheme: dark;
-  --bg: #11100d;
-  --paper: #181611;
-  --ink: #efe9da;
-  --muted: #a69e8c;
-  --rule: #38332a;
-  --hover: #221f18;
-  --code-bg: #201d16;
-  --code-text: #e3c99a;
+  --bg: #0a0d12;
+  --paper: #11161f;
+  --raised: #182030;
+  --ink: #dbe2ee;
+  --muted: #8d99ae;
+  --rule: #252f42;
+  --hover: #1a2231;
+  --code-bg: #0c1118;
+  --code-text: #f0c36a;
   --focus: #7ab7ff;
   --danger: #ff8a80;
-  --grid: rgb(255 240 210 / 0.045);
-  --noise-opacity: 0.5;
-  --accent: #5fd0c3;
-  --on-accent: #0d0c0a;
-  --c-claude: #ff9275;
-  --c-codex: #86adff;
-  --c-cursor: #b89cff;
-  --c-gemini: #5fd8ac;
+  --shadow: 0 24px 70px rgb(0 0 0 / 0.6);
+
+  --accent: #f0b94d;
+  --on-accent: #14100a;
+  --c-claude: #ff8d6b;
+  --c-codex: #62aeff;
+  --c-cursor: #b9a0ff;
+  --c-gemini: #4adba6;
 }
 
 :root[data-tool='claude'] { --accent: var(--c-claude); }
@@ -61,41 +62,27 @@ html, body { min-height: 100%; }
 
 body {
   margin: 0;
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: var(--bg);
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: 18px;
+  font-family: var(--sans);
+  font-size: 16px;
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Paper grain, inline so the app stays offline. */
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--noise-opacity);
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-:root[data-theme='dark'] body::before { mix-blend-mode: screen; }
-
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 ::selection { background: var(--accent); color: var(--on-accent); }
 
 button {
-  font: 600 0.74rem/1 var(--mono);
-  letter-spacing: 0.04em;
+  font: 500 0.78rem/1 var(--mono);
   color: var(--ink);
-  background: transparent;
-  border: 1.5px solid var(--rule);
-  border-radius: 2px;
-  padding: 0.55em 0.85em;
+  background: var(--raised);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.5em 0.8em;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
-  &:hover:not(:disabled) { border-color: var(--ink); background: var(--hover); transform: translateY(-1px); }
-  &:active:not(:disabled) { transform: translateY(0); }
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  &:hover:not(:disabled) { border-color: var(--muted); background: var(--hover); }
   &:disabled { opacity: 0.4; cursor: default; }
 }
 
@@ -105,17 +92,25 @@ button {
 }
 
 kbd {
-  font: 600 0.78em var(--mono);
-  padding: 0.12em 0.5em; border: 1.5px solid var(--rule); border-bottom-width: 3px;
-  border-radius: 3px; background: var(--paper); color: var(--ink); white-space: nowrap;
+  font: 500 0.78em var(--mono);
+  padding: 0.1em 0.5em; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--raised); color: var(--ink); white-space: nowrap;
 }
 
 .overlay-backdrop {
-  position: fixed; inset: 0; z-index: 40; background: rgb(15 12 6 / 0.55); backdrop-filter: blur(3px);
-  animation: fade 0.2s ease both;
+  position: fixed; inset: 0; z-index: 40; background: rgb(4 6 10 / 0.6); backdrop-filter: blur(2px);
+  animation: fade 0.15s ease both;
 }
-
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* A framed window with its title set into the top border, like a floating editor window. */
+.window {
+  position: relative; background: var(--paper); border: 1px solid var(--muted); border-radius: 10px; box-shadow: var(--shadow);
+}
+.window > .title {
+  position: absolute; top: -0.7em; left: 1rem; margin: 0; padding: 0 0.5rem; background: var(--paper);
+  font: 500 0.78rem/1.4 var(--mono); color: var(--accent);
+}
 
 /* ---------- Tables that compare tools ---------- */
 .tc[data-t='claude'] { --col: var(--c-claude); }
@@ -138,7 +133,7 @@ tr[hidden] { display: none; }
 
 /* ---------- Diagrams ---------- */
 .diagram { display: block; width: 100%; max-width: 700px; height: auto; margin: 0.25rem 0 0.75rem; }
-.diagram .box { fill: var(--paper); stroke: var(--rule); stroke-width: 1.5; transition: fill 0.25s ease, stroke 0.25s ease; }
+.diagram .box { fill: var(--raised); stroke: var(--rule); stroke-width: 1.5; transition: fill 0.25s ease, stroke 0.25s ease; }
 .diagram .box.accent { fill: var(--accent); stroke: var(--accent); }
 .diagram .label { fill: var(--ink); font: 600 13px var(--mono); text-anchor: middle; transition: fill 0.25s ease; }
 .diagram .label.small { font-weight: 400; font-size: 11px; fill: var(--muted); }
@@ -172,9 +167,10 @@ tr[hidden] { display: none; }
 .stepper-controls input { accent-color: var(--accent); width: 1.05rem; height: 1.05rem; }
 
 /* ---------- Motion ---------- */
-@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slide-in { from { opacity: 0; transform: translateX(var(--dx, 24px)); } to { opacity: 1; transform: translateX(0); } }
-@keyframes sweep { to { background-size: 100% 0.14em; } }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* A block is "written" left to right, like text appearing in a buffer. */
+@keyframes write { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes blink { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

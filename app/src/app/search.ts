@@ -19,7 +19,9 @@ export interface Hit {
 export function buildIndex(slides: Slide[]): IndexEntry[] {
   const parser = new DOMParser();
   return slides.map((s) => {
-    const text = (parser.parseFromString(s.html, 'text/html').body.textContent ?? '').replace(/\s+/g, ' ').trim();
+    const body = parser.parseFromString(s.html, 'text/html').body;
+    body.querySelector('h1, h2, h3')?.remove(); // the title is indexed separately
+    const text = (body.textContent ?? '').replace(/\s+/g, ' ').trim();
     return {
       id: s.id,
       title: s.title,

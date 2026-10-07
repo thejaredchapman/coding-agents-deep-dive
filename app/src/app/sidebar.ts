@@ -8,11 +8,12 @@ import { TOOLS } from './tools';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ul>
-      @for (s of deck.sections(); track s.name) {
+      @for (s of deck.sections(); track s.name; let last = $last) {
         <li>
           <button type="button" [class.active]="s.name === deck.currentSection()" [class.mine]="isMine(s.name)" [attr.aria-current]="s.name === deck.currentSection() ? 'true' : null" (click)="pick(s.name)">
+            <span class="branch" aria-hidden="true">{{ last ? '└' : '├' }}</span>
             <span class="num">{{ number(s.name) }}</span>
-            <span class="name">{{ label(s.name) }}@if (isMine(s.name)) { <span class="you" aria-label="your tool">{{ tool.info()!.glyph }}</span> }</span>
+            <span class="name">{{ label(s.name) }}@if (isMine(s.name)) { <span class="you" aria-label="your agent">{{ tool.info()!.glyph }}</span> }</span>
             <span class="count">{{ s.count }}</span>
           </button>
         </li>
@@ -20,17 +21,18 @@ import { TOOLS } from './tools';
     </ul>
   `,
   styles: `
-    ul { list-style: none; margin: 0; padding: 0; }
+    ul { list-style: none; margin: 0; padding: 0 0.4rem; }
     button {
-      display: grid; grid-template-columns: 1.9rem 1fr auto; gap: 0.4rem; width: 100%; align-items: baseline;
-      padding: 0.5rem 1rem 0.5rem 0.9rem; border: 0; border-left: 4px solid transparent; border-radius: 0; background: none;
-      color: var(--ink); font: 0.95rem var(--serif); letter-spacing: 0; text-align: left; transform: none;
+      display: grid; grid-template-columns: 0.9rem 1.5rem 1fr auto; gap: 0.3rem; width: 100%; align-items: baseline;
+      padding: 0.42rem 0.55rem; border: 0; border-radius: 6px; background: none; color: var(--ink);
+      font: 0.88rem var(--sans); text-align: left;
     }
-    button:hover { background: var(--hover); transform: none; }
-    button.active { border-left-color: var(--accent); background: var(--hover); font-weight: 700; }
-    .num { font: 600 0.68rem var(--mono); color: var(--muted); letter-spacing: 0.04em; }
-    .count { font: 0.68rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-    .you { margin-left: 0.4em; color: var(--accent); font-size: 0.8em; }
+    button:hover { background: var(--hover); }
+    button.active { background: color-mix(in srgb, var(--accent) 15%, transparent); font-weight: 600; }
+    button.active .branch { color: var(--accent); }
+    .branch, .num, .count { font: 0.7rem var(--mono); color: var(--muted); }
+    .count { font-variant-numeric: tabular-nums; }
+    .you { margin-left: 0.4em; color: var(--accent); font-size: 0.85em; }
     button.mine .name { color: var(--accent); }
   `,
 })

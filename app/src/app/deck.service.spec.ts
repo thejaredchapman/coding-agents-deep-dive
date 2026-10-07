@@ -106,6 +106,25 @@ describe('DeckService', () => {
     expect(deck.currentSection()).toBe('1. Alpha');
   });
 
+  it('leaves the slide alone when the hash points at another page', () => {
+    deck.load(data);
+    deck.goTo(3);
+    window.location.hash = '#/providers';
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    expect(deck.index()).toBe(3);
+    window.location.hash = '#/2';
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    expect(deck.index()).toBe(1);
+  });
+
+  it('counts navigations', () => {
+    deck.load(data);
+    const before = deck.navigations();
+    deck.next();
+    deck.goTo(0);
+    expect(deck.navigations()).toBe(before + 2);
+  });
+
   it('tracks the direction of travel', () => {
     deck.load(data);
     deck.goTo(3);

@@ -87,11 +87,42 @@ describe('enhanceTables', () => {
     expect(rows.every((r) => !r.hidden)).toBe(true);
   });
 
+  it('wraps every table in a labelled, keyboard-scrollable region', () => {
+    root.innerHTML = plain + rosetta;
+    enhanceTables(root);
+    const wraps = root.querySelectorAll('.table-wrap');
+    expect(wraps.length).toBe(2);
+    for (const w of Array.from(wraps)) {
+      expect(w.getAttribute('role')).toBe('region');
+      expect(w.getAttribute('aria-label')).toBeTruthy();
+      expect(w.getAttribute('tabindex')).toBe('0');
+      expect(w.querySelector('table')).not.toBeNull();
+    }
+  });
+
+  it('adds soft break points to long paths without changing their text', () => {
+    root.innerHTML = '<table><thead><tr><th>Codex</th></tr></thead><tbody><tr><td><code>.agents/skills/&lt;name&gt;/SKILL.md</code></td></tr></tbody></table>';
+    enhanceTables(root);
+    const code = root.querySelector('td code')!;
+    expect(code.textContent).toBe('.agents/skills/<name>/SKILL.md');
+    expect(code.querySelectorAll('wbr').length).toBeGreaterThanOrEqual(3);
+    enhanceTables(root);
+    expect(root.querySelector('td code')!.querySelectorAll('wbr').length).toBe(code.querySelectorAll('wbr').length);
+  });
+
+  it('does not detach a leading dot from its name', () => {
+    root.innerHTML = '<table><thead><tr><th>Codex</th></tr></thead><tbody><tr><td><code>.claude/agents/*.md</code></td></tr></tbody></table>';
+    enhanceTables(root);
+    const chunks = Array.from(root.querySelector('td code')!.childNodes).filter((n) => n.nodeType === Node.TEXT_NODE).map((n) => n.textContent);
+    expect(chunks).toEqual(['.claude/', 'agents/', '*.md']);
+  });
+
   it('is idempotent', () => {
     root.innerHTML = rosetta;
     enhanceTables(root);
     enhanceTables(root);
     expect(root.querySelectorAll('.table-tools').length).toBe(1);
+    expect(root.querySelectorAll('.table-wrap').length).toBe(1);
   });
 
   it('labels the controls for assistive tech', () => {
