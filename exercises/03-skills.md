@@ -113,3 +113,9 @@ Add this to the frontmatter so Claude never runs the skill on its own and only `
 - What other repetitive workflows in your day could become skills?
 - What's the right level of detail in a skill file vs. in a CLAUDE.md?
 - When would you set `disable-model-invocation: true`?
+
+---
+
+**Go deeper:** [Introduction to agent skills](https://academy.claude.com/courses/introduction-to-agent-skills) on Claude Academy.
+
+**Coming from another tool?** Codex and Cursor use the same `SKILL.md` folder in `.agents/skills/`; Gemini CLI reads `.agents/skills/` too, and has TOML custom commands in `.gemini/commands/`.

@@ -152,3 +152,9 @@ To remove a server: `claude mcp remove <name>`.
 - What's the difference between an MCP tool and a Bash command Claude runs directly?
 - When would you build a custom MCP server vs. using a pre-built one?
 - Which of your servers belong in the project scope, and which in your user scope?
+
+---
+
+**Go deeper:** [Introduction to Model Context Protocol](https://academy.claude.com/courses/introduction-to-model-context-protocol) on Claude Academy.
+
+**Coming from another tool?** Codex: `codex mcp add` or `config.toml`; Cursor: `.cursor/mcp.json`; Gemini CLI: `gemini mcp add`.

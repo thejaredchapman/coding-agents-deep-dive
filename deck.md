@@ -1629,13 +1629,48 @@ Turn ends      → Stop hook fires, logs cost + tokens
 
 ---
 
+# Keep learning
+## Claude Academy
+
+---
+
+## Courses that match this deck
+
+Free courses from Anthropic at [academy.claude.com](https://academy.claude.com/courses).
+
+| Deck section | Course |
+|--------------|--------|
+| Foundations | [Claude Code 101](https://academy.claude.com/courses/claude-code-101), [Claude Code in action](https://academy.claude.com/courses/claude-code-in-action) |
+| Subagents | [Introduction to subagents](https://academy.claude.com/courses/introduction-to-subagents) |
+| Skills | [Introduction to agent skills](https://academy.claude.com/courses/introduction-to-agent-skills) |
+| MCP | [Introduction to Model Context Protocol](https://academy.claude.com/courses/introduction-to-model-context-protocol), then [MCP: Advanced topics](https://academy.claude.com/courses/model-context-protocol-advanced-topics) |
+| Claude Tag | [Introduction to Claude Tag](https://academy.claude.com/courses/introduction-to-claude-tag) |
+| Cowork | [Introduction to Claude Cowork](https://academy.claude.com/courses/introduction-to-claude-cowork) |
+| API and SDK | [Building with the Claude API](https://academy.claude.com/courses/building-with-the-claude-api), [Claude Platform 101](https://academy.claude.com/courses/claude-platform-101) |
+| Team practice | [The AI-native SDLC playbook](https://academy.claude.com/courses/ai-native-sdlc-playbook), [AI Fluency for builders](https://academy.claude.com/courses/ai-fluency-for-builders) |
+| Cloud providers | [Claude with Amazon Bedrock](https://academy.claude.com/courses/claude-with-amazon-bedrock), [Claude with Google Cloud's Vertex AI](https://academy.claude.com/courses/claude-with-google-cloud-s-vertex-ai) |
+
+---
+
+## The rest of the catalog
+
+The Academy has 28 courses. Beyond the ones above, there is a whole **AI Fluency** track on working with AI well (the "4D" framework: Delegation, Description, Discernment, Diligence), with versions for builders, educators, students, small businesses and nonprofits.
+
+Browse everything: [academy.claude.com/courses](https://academy.claude.com/courses)
+
+For the other tools in this deck, use each vendor's own docs (linked on the Resources slide). The Academy teaches Claude's products.
+
+---
+
 ## Resources
 
-- **Claude Code docs:** claude.ai/docs/claude-code
+- **Claude Code docs:** [code.claude.com/docs](https://code.claude.com/docs)
 - **MCP SDK:** github.com/modelcontextprotocol/typescript-sdk
 - **MCP server registry:** github.com/modelcontextprotocol/servers
-- **Cost tracker hook:** (this repo) `../claude-code-updates/`
-- **4D Orchestrator MCP:** (this repo) `../4d-orchestrator-mcp/`
+- **Codex docs:** [learn.chatgpt.com/docs](https://learn.chatgpt.com/docs)
+- **Cursor docs:** [cursor.com/docs](https://cursor.com/docs)
+- **Gemini CLI docs:** [geminicli.com/docs](https://geminicli.com/docs/)
+- **Claude Academy:** [academy.claude.com](https://academy.claude.com/courses)
 
 ---
 

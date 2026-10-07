@@ -72,3 +72,9 @@ Compare the before/after. Note what improved and what's still missing.
 - What did Claude misunderstand before that it now gets right?
 - What didn't make it into CLAUDE.md that you thought would matter?
 - What would you add after running a real task?
+
+---
+
+**Go deeper:** [Claude Code 101](https://academy.claude.com/courses/claude-code-101) on Claude Academy.
+
+**Coming from another tool?** Codex reads `AGENTS.md`; Cursor reads `.cursor/rules/*.mdc` and `AGENTS.md`; Gemini CLI reads `GEMINI.md`.

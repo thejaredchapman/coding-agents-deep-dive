@@ -96,3 +96,9 @@ Or make the whole session run as the reviewer: `claude --agent reviewer`.
 - What's the difference between asking Claude inline vs. spawning a subagent?
 - When would you want the subagent to have its own CLAUDE.md instructions?
 - What structured output format makes it easiest to synthesize multiple subagent results?
+
+---
+
+**Go deeper:** [Introduction to subagents](https://academy.claude.com/courses/introduction-to-subagents) on Claude Academy.
+
+**Coming from another tool?** Codex uses `.codex/agents/*.toml`; Cursor uses `.cursor/agents/*.md` (and also reads `.claude/agents/`); Gemini CLI uses `.gemini/agents/*.md`.

@@ -149,3 +149,9 @@ Expected: the `Blocked` message, then `exit code: 2`.
 - Why did the usage hook read the transcript instead of stdin?
 - Exit code 2 blocks on `PreToolUse`. What does it do on `Stop`, and on `PostToolUse`?
 - Which other lifecycle events (`SessionStart`, `UserPromptSubmit`, `PreCompact`, `SubagentStop`) would be useful in your workflow?
+
+---
+
+**Go deeper:** [Claude Code in action](https://academy.claude.com/courses/claude-code-in-action) on Claude Academy.
+
+**Coming from another tool?** Codex hooks use the same `matcher` plus nested `hooks` JSON in `hooks.json`; Cursor uses `.cursor/hooks.json` with camelCase events; Gemini CLI puts hooks in `settings.json` with events like `BeforeTool`.
