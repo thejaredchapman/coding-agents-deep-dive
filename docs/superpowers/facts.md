@@ -168,6 +168,24 @@ Source: https://code.claude.com/docs/en/interactive-mode (docs, full text). macO
 
 Slash commands: full list at https://code.claude.com/docs/en/commands (fetched, saved locally; condense before the cheat-sheet slide).
 
+## Claude ecosystem (Task 7 sources)
+
+Checked 2026-10-07. Docs (full text) unless noted.
+
+| Topic | Verified text | Source |
+|---|---|---|
+| Models (current) | Fable 5.1 `claude-fable-5-1` ($10/$50 per MTok, "demanding reasoning and long-horizon agentic work"); Opus 5.5 `claude-opus-5-5` ($4/$20, "long-running agentic coding and knowledge work"; the docs' suggested starting point); Sonnet 5.5 `claude-sonnet-5-5` ($2/$10, "best combination of speed and intelligence"); Haiku 5.5 `claude-haiku-5-5` (from $0.10/$0.50, "high-volume, latency-sensitive tasks"). All 1M context, 128K max output. Haiku 4.5 (`claude-haiku-4-5-20251001`) is now legacy. Correction: the earlier plan and spec listed Haiku 4.5 as current. | https://platform.claude.com/docs/en/about-claude/models/overview |
+| Fast mode | Claude Opus with a faster API configuration, up to 2.5x faster at higher cost; not a different model. Toggle `/fast` (CLI) or `Option+O` / `Alt+O`. Supported on Opus 5.5, Opus 5, Opus 4.8; not on Sonnet or Haiku. Opus 5.5 fast pricing $8/$40. Needs usage credits on subscription plans; Team and Enterprise Owners must enable it. Research preview. | https://code.claude.com/docs/en/fast-mode |
+| Agent SDK | "Claude Code as a library": the same tools, agent loop and context management, in Python and TypeScript. Capabilities: built-in tools, hooks, subagents, MCP, permissions, sessions, skills/commands/memory, plugins. To use from another language, run the CLI with `-p --output-format json`. Third parties may not offer claude.ai login for SDK-based products; use API keys. | https://code.claude.com/docs/en/agent-sdk/overview |
+| SDK vs CLI vs API vs Managed Agents | Agent SDK = Claude Code's agent in your own process; CLI = interactive terminal use; Client SDK = call the Claude API directly (you write the tool loop, or use the beta tool runner); Managed Agents = Anthropic hosts the agent harness with sessions in a managed cloud sandbox (or your own self-hosted sandbox). | same |
+| Managed Agents | Pre-configured agent harness on managed infrastructure for long-running, asynchronous work. Concepts: Agent, Environment, Session, Events. Built-in tools: Bash, file operations, web search and fetch, MCP servers. Beta; requests need the `managed-agents-2026-04-01` beta header (from a search summary; confirm on the page). | https://platform.claude.com/docs/en/managed-agents/overview |
+| Claude in Chrome | Extension plus Claude Code: `claude --chrome`, `/chrome` to check or reconnect, "Enabled by default" option. Opens tabs in your logged-in browser; pauses for logins and CAPTCHAs. Works with Chrome, Edge and other Chromium browsers; not WSL. Needs a direct Anthropic plan (Pro, Max, Team, Enterprise), the extension (1.0.36+) and a `/login` session (not API-key auth). Uses: test local web apps, read console logs, fill forms, extract data, record GIFs. | https://code.claude.com/docs/en/chrome |
+| Cowork | Same agentic architecture as Claude Code, no terminal; describe an outcome and get finished work (documents, organized files, research). Runs in the cloud (beta on Team and Enterprise); Desktop (macOS, Windows), web, mobile, Chrome side panel; Pro, Max, Team, Enterprise with per-surface differences. | https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork |
+| Surfaces | Claude Code runs in the terminal CLI, the Claude Desktop app (Code tab), the web at claude.ai/code (cloud sessions), the VS Code extension and JetBrains IDEs. A plugin installed at user scope in the terminal, desktop local sessions or VS Code is available in the other two; cloud sessions do not load local plugins. | https://code.claude.com/docs/en/plugins |
+| Computer use | Claude Code can control native macOS apps when a task cannot be done in a browser (page exists; not read). | https://code.claude.com/docs/en/computer-use |
+
+Not verified, so left out of slides: Artifacts and Claude Docs details.
+
 ## Codex (OpenAI)
 
 Checked 2026-10-05. Docs moved: `developers.openai.com/codex/...` URLs return 308 redirects to `learn.chatgpt.com/docs/...` (an OpenAI-owned host; followed and noted). All rows are docs (summary) unless noted; re-read the page before a slide quotes a field name.
