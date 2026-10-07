@@ -1,0 +1,28 @@
+@let slide = deck.current();
+<article class="slide" [class.hide-first-code]="slide.diagram && slide.diagram !== 'ecosystem'">
+  <p class="eyebrow">{{ slide.section }}</p>
+
+  @switch (slide.diagram) {
+    @case ('subagents') { <app-diagram-subagents /> }
+    @case ('hooks') { <app-diagram-hooks /> }
+    @case ('flow') { <app-diagram-flow /> }
+    @case ('ecosystem') { <app-diagram-ecosystem /> }
+  }
+
+  <div #content class="slide-content" [innerHTML]="slide.html" (click)="onContentClick($event)"></div>
+
+  @if (slide.checklist?.length) {
+    <fieldset class="checklist">
+      <legend>
+        Your progress: {{ checklist.doneCount(slide.title) }} of {{ slide.checklist!.length }} done
+      </legend>
+      @for (item of slide.checklist; track $index) {
+        <label>
+          <input type="checkbox" [checked]="checklist.isChecked(slide.title, $index)" (change)="checklist.toggle(slide.title, $index)" />
+          <span>{{ item }}</span>
+        </label>
+      }
+      <button type="button" class="link" (click)="checklist.reset(slide.title)">Reset</button>
+    </fieldset>
+  }
+</article>

@@ -1,0 +1,61 @@
+<a class="skip" href="#slide">Skip to slide</a>
+
+<div class="progress" role="progressbar" aria-label="Deck progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="percent()">
+  <div class="bar" [style.width.%]="percent()"></div>
+</div>
+
+<header class="top">
+  <button type="button" class="menu" (click)="sidebarOpen.set(!sidebarOpen())" [attr.aria-expanded]="sidebarOpen()" aria-controls="sections">
+    Sections
+  </button>
+  <p class="brand">Coding Agents — Deep Dive</p>
+  <div class="actions">
+    <button type="button" (click)="helpOpen.set(true)">Shortcuts</button>
+    <button type="button" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'">
+      {{ theme.theme() === 'dark' ? 'Light' : 'Dark' }} mode
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="sections" class="sidebar" [class.open]="sidebarOpen()" aria-label="Sections">
+    <app-sidebar (picked)="sidebarOpen.set(false)" />
+  </nav>
+
+  <main id="slide" tabindex="-1" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
+    @if (deck.error(); as error) {
+      <p class="error" role="alert">{{ error }}</p>
+    } @else if (deck.current()) {
+      <app-slide-view />
+    } @else {
+      <p class="muted">Loading slides…</p>
+    }
+  </main>
+</div>
+
+<footer class="bottom">
+  <button type="button" (click)="deck.prev()" [disabled]="deck.index() === 0" aria-label="Previous slide">← Prev</button>
+  <span class="counter">{{ deck.index() + 1 }} / {{ deck.total() }}</span>
+  <button type="button" (click)="deck.next()" [disabled]="deck.index() >= deck.total() - 1" aria-label="Next slide">Next →</button>
+  <span class="updated">Last updated <time [attr.datetime]="deck.updated()">{{ deck.updated() }}</time></span>
+</footer>
+
+<div class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement() }}</div>
+
+@if (helpOpen()) {
+  <div class="backdrop" (click)="helpOpen.set(false)"></div>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <h2 id="help-title">Keyboard shortcuts</h2>
+    <dl>
+      <dt><kbd>→</kbd> <kbd>Space</kbd> <kbd>PageDown</kbd></dt><dd>Next slide</dd>
+      <dt><kbd>←</kbd> <kbd>Shift</kbd>+<kbd>Space</kbd> <kbd>PageUp</kbd></dt><dd>Previous slide</dd>
+      <dt><kbd>Home</kbd> / <kbd>End</kbd></dt><dd>First / last slide</dd>
+      <dt><kbd>S</kbd></dt><dd>Show or hide sections</dd>
+      <dt><kbd>T</kbd></dt><dd>Switch light and dark</dd>
+      <dt><kbd>?</kbd></dt><dd>This help</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+    </dl>
+    <p class="muted">On a touch screen, swipe left or right.</p>
+    <button type="button" (click)="helpOpen.set(false)" autofocus>Close</button>
+  </div>
+}

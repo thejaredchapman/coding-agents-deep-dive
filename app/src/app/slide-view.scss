@@ -1,0 +1,45 @@
+.slide { max-width: 62rem; }
+.eyebrow { margin: 0 0 0.25rem; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+.slide-content {
+  h1 { color: var(--accent); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.15; margin: 0.2em 0 0.3em; }
+  h2 { color: var(--accent); font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.2; margin: 0.2em 0 0.5em; }
+  h3 { color: var(--accent); font-size: 1.15rem; }
+  p, li { font-size: clamp(1rem, 1.6vw, 1.15rem); }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  strong { font-weight: 700; }
+  hr { border: 0; border-top: 1px solid var(--border); }
+  blockquote { margin: 1rem 0; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
+
+  code {
+    font: 0.88em ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg); color: var(--code-text); padding: 0.1em 0.35em; border-radius: 4px;
+  }
+  pre {
+    position: relative; margin: 1rem 0; padding: 1rem 1rem 1rem 1.1rem; overflow-x: auto;
+    background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 0.9rem;
+    code { background: none; color: var(--text); padding: 0; font-size: 1em; }
+  }
+  pre .copy {
+    position: absolute; top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.5rem; font-size: 0.75rem;
+    opacity: 0.85;
+  }
+  pre:hover .copy, pre .copy:focus-visible { opacity: 1; }
+
+  /* Wide tables scroll inside the slide, never the page. */
+  table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  th { background: var(--accent); color: var(--on-accent); text-align: left; padding: 0.45rem 0.8rem; white-space: nowrap; }
+  td { padding: 0.4rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--hover); }
+  .small { font-size: 0.8rem; color: var(--muted); }
+}
+
+.hide-first-code .slide-content pre:first-of-type { display: none; }
+
+.checklist {
+  margin: 1.5rem 0 0; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface);
+  legend { padding: 0 0.4rem; font-weight: 600; }
+  label { display: flex; gap: 0.6rem; align-items: baseline; padding: 0.3rem 0; cursor: pointer; }
+  input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+  .link { border: 0; background: none; color: var(--muted); text-decoration: underline; padding: 0.4rem 0 0; }
+}
