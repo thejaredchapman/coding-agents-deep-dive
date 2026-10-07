@@ -726,6 +726,77 @@ All four have a 1M-token context window. Switch in a session with `/model`, or `
 
 ---
 
+## Plugins
+
+A **plugin** packages skills, subagents, hooks and MCP servers as one installable unit. Use one to share a setup with your team; use the individual pieces on their own when you don't need to.
+
+```
+my-plugin/
+  .claude-plugin/plugin.json   ← manifest (name, version)
+  skills/review/SKILL.md       → /my-plugin:review
+  agents/reviewer.md           ← subagent
+  hooks/hooks.json             ← lifecycle hooks
+  .mcp.json                    ← MCP servers
+```
+
+- Browse and install: `/plugin` in a session. Disable from the shell with `claude plugin disable`
+- A **marketplace** is a catalog (`.claude-plugin/marketplace.json`). Install by name: `commit-commands@claude-plugins-official`
+- Try one from a folder with `--plugin-dir`
+- Test one with `claude plugin eval`. Check its files with `claude plugin validate`
+
+A plugin can run code as you. Review one before you install it.
+
+---
+
+## Permissions
+
+Every tool call is checked. You choose how much Claude can do without asking.
+
+| Mode | What happens |
+|------|-------------|
+| `default` (Manual) | Asks the first time each tool is used |
+| `acceptEdits` | Auto-accepts file edits and simple filesystem commands |
+| `plan` | Reads and explores, but doesn't edit |
+| `auto` | A classifier reviews actions instead of you |
+| `dontAsk` | Denies anything that would prompt. Good for CI |
+| `bypassPermissions` | Skips prompts. Use only in a sandbox |
+
+Cycle modes with `Shift+Tab`. Set a default with `defaultMode` in settings.
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(npm run test *)", "Read"],
+    "deny": ["Read(./.env)", "Bash(rm *)"]
+  }
+}
+```
+
+A deny rule at **any** level beats an allow rule. Managed (organization) settings sit at the top and can't be overridden.
+
+---
+
+## Non-interactive (headless) mode
+
+`claude -p` runs one prompt and exits. It works in scripts and CI.
+
+```bash
+claude -p "Find and fix the bug in auth.py" --allowedTools "Read,Edit,Bash"
+cat build-error.txt | claude -p "explain the root cause" > output.txt
+```
+
+| Flag | What it does |
+|------|-------------|
+| `--output-format text\|json\|stream-json` | Plain text, one JSON object, or a stream. JSON includes `total_cost_usd` |
+| `--allowedTools "Read,Edit"` | Pre-approve tools so nothing waits on a prompt |
+| `--permission-mode dontAsk` | Deny everything not pre-approved |
+| `--continue`, `--resume <id>` | Continue an earlier conversation |
+| `--bare` | Skip hooks, plugins, MCP and CLAUDE.md for a reproducible CI run. Needs `ANTHROPIC_API_KEY` |
+
+The same engine is available as a Python and TypeScript library: the Agent SDK.
+
+---
+
 # Putting it together
 
 ---
@@ -758,6 +829,22 @@ Turn ends      → Stop hook fires, logs cost + tokens
 | Need to run something before/after tool calls | **Hook** |
 | Task is too big for one context window | **Subagent** |
 | Review + implementation in parallel | **Subagents** |
+| Share a whole setup with a team | **Plugin** |
+| Run Claude in CI or a script | **Non-interactive mode** (`claude -p`) |
+
+---
+
+## Which product for what?
+
+| You want to | Use |
+|-------------|-----|
+| Code in a terminal or IDE | **Claude Code** (CLI, desktop, VS Code, JetBrains) |
+| Continue a session from your phone | **Remote Control** |
+| Ask Claude in your team's Slack | **Claude Tag** (Team and Enterprise) |
+| Do non-coding knowledge work, no terminal | **Cowork** |
+| Drive a real browser | **Claude in Chrome** |
+| Build your own agent in code | **Agent SDK** |
+| Have Anthropic host an agent | **Managed Agents** |
 
 ---
 
