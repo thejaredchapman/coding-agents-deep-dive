@@ -7,7 +7,12 @@ style: |
     font-family: 'Inter', -apple-system, sans-serif;
     background: #0f0f0f;
     color: #f0f0f0;
+    font-size: 23px;
+    padding: 40px 56px;
   }
+  pre { font-size: 0.78em; }
+  table { font-size: 0.82em; }
+  p { margin: 0.5em 0; }
   h1 { color: #d97757; font-size: 2.2rem; }
   h2 { color: #d97757; font-size: 1.6rem; }
   h3 { color: #e8a87c; }
@@ -16,8 +21,8 @@ style: |
   pre code { background: transparent; color: #d4d4d4; }
   strong { color: #e8a87c; }
   table { border-collapse: collapse; width: 100%; }
-  th { background: #d97757; color: #fff; padding: 8px 12px; }
-  td { padding: 8px 12px; border-bottom: 1px solid #333; }
+  th { background: #d97757; color: #fff; padding: 5px 10px; }
+  td { padding: 4px 10px; border-bottom: 1px solid #333; }
   .small { font-size: 0.8rem; color: #aaa; }
 ---
 
@@ -41,6 +46,8 @@ Built for engineers who already use an AI coding agent and want to go further.
 | **Hooks** | Shell scripts that fire on Claude Code lifecycle events |
 
 Each section: concept → how it works → hands-on exercise.
+
+Then: the Claude ecosystem, a side-by-side of **Claude Code, Codex, Cursor and Gemini CLI** with a shortcuts reference for each, and where to keep learning.
 
 ---
 
