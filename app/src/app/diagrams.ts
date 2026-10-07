@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { HOOK_STEPS, HookLifecycle } from './hook-lifecycle';
+import { TOOLS } from './tools';
 
 // Inline SVG diagrams. Colors come from the theme's CSS variables so they work in light and dark.
 
@@ -43,44 +45,83 @@ export class DiagramSubagents {
   selector: 'app-diagram-hooks',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <svg viewBox="0 0 700 240" role="img" aria-labelledby="hk-t hk-d" class="diagram">
-      <title id="hk-t">Hook lifecycle</title>
-      <desc id="hk-d">
-        A session starts, you submit a prompt, then for each tool call PreToolUse runs, the tool runs, and PostToolUse runs. The loop repeats for each tool call until Claude finishes the turn, then Stop runs. PreToolUse can block a call with exit code 2.
-      </desc>
-      <defs>
-        <marker id="hk-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0 0L10 5L0 10z" class="arrowhead" />
-        </marker>
-      </defs>
-      @for (s of steps; track s.x; let i = $index) {
-        <rect [attr.x]="s.x" y="20" width="112" height="54" rx="10" class="box" [class.accent]="s.hook" />
-        <text [attr.x]="s.x + 56" y="43" class="label strong tight" [class.on]="s.hook">{{ s.a }}</text>
-        <text [attr.x]="s.x + 56" y="61" class="label small" [class.on]="s.hook">{{ s.b }}</text>
-        @if (i < steps.length - 1) {
-          <path [attr.d]="'M' + (s.x + 112) + ' 47 L ' + (s.x + 135) + ' 47'" class="line" marker-end="url(#hk-arrow)" />
+    <figure class="stepper">
+      <svg viewBox="0 0 700 250" role="img" aria-labelledby="hk-t hk-d" class="diagram">
+        <title id="hk-t">Hook lifecycle, interactive</title>
+        <desc id="hk-d">
+          A session starts, you submit a prompt, then for each tool call PreToolUse runs, the tool runs, and PostToolUse runs. When Claude finishes the turn, Stop runs. Use the controls below to step through. A hook that exits with code 2 at PreToolUse blocks the tool call.
+        </desc>
+        <defs>
+          <marker id="hk-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0L10 5L0 10z" class="arrowhead" />
+          </marker>
+        </defs>
+        <path d="M122 47 L 145 47 M257 47 L 280 47 M392 47 L 415 47 M527 47 L 550 47" class="line" marker-end="url(#hk-arrow)" />
+        <path d="M580 74 C 580 140, 336 140, 336 80" class="line dashed" marker-end="url(#hk-arrow)" />
+        <text x="458" y="132" class="label small">repeat for each tool call</text>
+        <path d="M640 74 L 640 168" class="line" marker-end="url(#hk-arrow)" />
+        <text x="630" y="125" class="label small right">turn ends</text>
+        @for (s of boxes; track s.id) {
+          <g class="node" [class]="'node ' + life.stateOf(s.id)">
+            <rect [attr.x]="s.x" [attr.y]="s.y" width="112" height="54" rx="3" class="box" />
+            <text [attr.x]="s.x + 56" [attr.y]="s.y + 23" class="label strong tight">{{ s.label }}</text>
+            <text [attr.x]="s.x + 56" [attr.y]="s.y + 41" class="label small">{{ s.note }}</text>
+          </g>
         }
-      }
-      <path d="M580 74 C 580 140, 336 140, 336 80" class="line dashed" marker-end="url(#hk-arrow)" />
-      <text x="458" y="132" class="label small">repeat for each tool call</text>
-      <path d="M640 74 L 640 168" class="line" marker-end="url(#hk-arrow)" />
-      <text x="650" y="125" class="label small left">turn ends</text>
-      <rect x="560" y="170" width="112" height="54" rx="10" class="box accent" />
-      <text x="616" y="193" class="label strong on">Stop</text>
-      <text x="616" y="211" class="label small on">turn finished</text>
-      <text x="10" y="196" class="label small left">Exit code 2 from PreToolUse</text>
-      <text x="10" y="212" class="label small left">blocks the tool call.</text>
-    </svg>
+        @if (life.blocked() && life.stateOf('PreToolUse') !== 'todo') {
+          <text x="336" y="14" class="label danger">✕ exit code 2: blocked</text>
+        }
+      </svg>
+
+      <p class="caption" aria-live="polite"><strong>{{ life.activeStep().label }}.</strong> {{ life.caption() }}</p>
+
+      <div class="stepper-controls">
+        <button type="button" (click)="life.prev(); stop()" [disabled]="life.atStart()">← Back</button>
+        <button type="button" (click)="life.next(); stop()" [disabled]="life.atEnd()">Step →</button>
+        <button type="button" (click)="togglePlay()" [attr.aria-pressed]="playing()">{{ playing() ? 'Pause' : 'Play' }}</button>
+        <button type="button" (click)="restart()">Restart</button>
+        <label class="check">
+          <input type="checkbox" [checked]="life.blocked()" (change)="life.setBlocked($any($event.target).checked)" />
+          <span>Hook exits with code 2 at PreToolUse</span>
+        </label>
+      </div>
+    </figure>
   `,
 })
 export class DiagramHooks {
-  protected readonly steps = [
-    { x: 10, a: 'SessionStart', b: 'session begins', hook: true },
-    { x: 145, a: 'UserPromptSubmit', b: 'you send a prompt', hook: true },
-    { x: 280, a: 'PreToolUse', b: 'can block', hook: true },
-    { x: 415, a: 'Tool runs', b: 'Bash, Edit, MCP', hook: false },
-    { x: 550, a: 'PostToolUse', b: 'after success', hook: true },
-  ];
+  protected readonly life = new HookLifecycle();
+  protected readonly playing = signal(false);
+  private timer: ReturnType<typeof setInterval> | null = null;
+
+  protected readonly boxes = HOOK_STEPS.map((s) => ({
+    ...s,
+    ...({ SessionStart: { x: 10, y: 20 }, UserPromptSubmit: { x: 145, y: 20 }, PreToolUse: { x: 280, y: 20 }, Tool: { x: 415, y: 20 }, PostToolUse: { x: 550, y: 20 }, Stop: { x: 550, y: 170 } } as const)[s.id],
+  }));
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.stop());
+  }
+
+  protected togglePlay(): void {
+    if (this.playing()) return this.stop();
+    if (this.life.atEnd()) this.life.reset();
+    this.playing.set(true);
+    this.timer = setInterval(() => {
+      if (this.life.atEnd()) return this.stop();
+      this.life.next();
+    }, 1500);
+  }
+
+  protected restart(): void {
+    this.stop();
+    this.life.reset();
+  }
+
+  protected stop(): void {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    this.playing.set(false);
+  }
 }
 
 @Component({
@@ -128,21 +169,21 @@ export class DiagramFlow {
       <desc id="ec-d">
         A grid with five rows (instructions, subagents, skills, MCP, hooks) and four columns (Claude Code, Codex, Cursor, Gemini CLI). Every cell is marked: all four tools have all five ideas, with different file names and formats.
       </desc>
-      @for (c of tools; track c; let ci = $index) {
-        <text [attr.x]="230 + ci * 105" y="22" class="label strong">{{ c }}</text>
+      @for (c of tools; track c.id; let ci = $index) {
+        <text [attr.x]="230 + ci * 105" y="22" [class]="'label strong t-' + c.id">{{ c.glyph }} {{ c.name }}</text>
       }
       @for (r of rows; track r; let ri = $index) {
         <text x="20" [attr.y]="58 + ri * 36" class="label left">{{ r }}</text>
         <line x1="20" x2="620" [attr.y1]="42 + ri * 36" [attr.y2]="42 + ri * 36" class="grid" />
-        @for (c of tools; track c; let ci = $index) {
-          <circle [attr.cx]="230 + ci * 105" [attr.cy]="54 + ri * 36" r="9" class="dot" />
+        @for (c of tools; track c.id; let ci = $index) {
+          <circle [attr.cx]="230 + ci * 105" [attr.cy]="54 + ri * 36" r="9" [class]="'dot t-' + c.id" />
         }
       }
     </svg>
   `,
 })
 export class DiagramEcosystem {
-  protected readonly tools = ['Claude Code', 'Codex', 'Cursor', 'Gemini CLI'];
+  protected readonly tools = TOOLS;
   protected readonly rows = ['Instructions file', 'Subagents', 'Skills', 'MCP', 'Hooks'];
 }
 

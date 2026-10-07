@@ -1,6 +1,13 @@
 @let slide = deck.current();
-<article class="slide" [class.hide-first-code]="slide.diagram && slide.diagram !== 'ecosystem'">
-  <p class="eyebrow">{{ slide.section }}</p>
+<article
+  class="slide"
+  [class.cover]="slide.id === 1"
+  [class.hide-first-code]="slide.diagram && slide.diagram !== 'ecosystem' && slide.diagram !== 'hooks'"
+>
+  @if (slide.id === 1) {
+    <p class="session" aria-hidden="true"><span class="ps">$</span> agents --deep-dive <span class="cursor"></span></p>
+  }
+  <p class="crumb" [attr.aria-label]="'Section: ' + slide.section">{{ path() }}</p>
 
   @switch (slide.diagram) {
     @case ('subagents') { <app-diagram-subagents /> }
@@ -10,6 +17,17 @@
   }
 
   <div #content class="slide-content" [innerHTML]="slide.html" (click)="onContentClick($event)"></div>
+
+  @if (slide.id === 1) {
+    <section class="cover-picker window" aria-labelledby="pick-title">
+      <h2 id="pick-title" class="title">? which agent do you use</h2>
+      <app-tool-picker [large]="true" label="Pick your coding agent to personalize this deck" />
+      <p class="hint">
+        Your choice tints the deck, highlights your column in every comparison, and lists your shortcuts first.
+        Press <kbd>/</kbd> to search, <kbd>e</kbd> for the shortcut explorer.
+      </p>
+    </section>
+  }
 
   @if (slide.checklist?.length) {
     <fieldset class="checklist">
@@ -22,7 +40,7 @@
           <span>{{ item }}</span>
         </label>
       }
-      <button type="button" class="link" (click)="checklist.reset(slide.title)">Reset</button>
+      <button type="button" class="link" (click)="checklist.reset(slide.title)">reset</button>
     </fieldset>
   }
 </article>

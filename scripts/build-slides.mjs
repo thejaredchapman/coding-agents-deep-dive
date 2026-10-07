@@ -75,6 +75,92 @@ export function checklistFor(exerciseNumber, exercisesDir) {
   return [...stripFences(text).matchAll(/^## ((?:Part|Option) [A-Z][^\n]*)$/gm)].map((m) => plain(m[1]));
 }
 
+
+// ---- Shortcut and command explorer data -------------------------------------------------
+
+const EXPLORER_SLIDES = [
+  [/^Claude Code (shortcuts|commands)/i, 'claude'],
+  [/^Codex shortcuts/i, 'codex'],
+  [/^Cursor shortcuts/i, 'cursor'],
+  [/^Gemini CLI shortcuts/i, 'gemini'],
+];
+
+function splitCells(line) {
+  return line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split(/(?<!\\)\|/)
+    .map((c) => c.replace(/\\\|/g, '|').trim());
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function keysToHtml(cell) {
+  return escapeHtml(cell).replace(/`([^`]+)`/g, '<kbd>$1</kbd>');
+}
+
+function plainCell(cell) {
+  return cell.replace(/`/g, '').replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').trim();
+}
+
+function parseTable(md) {
+  const lines = stripFences(md)
+    .split('\n')
+    .filter((l) => l.trim().startsWith('|'));
+  if (lines.length < 3) return null;
+  const header = splitCells(lines[0]).map((c) => plainCell(c).toLowerCase());
+  const rows = lines.slice(2).map(splitCells);
+  return { header, rows };
+}
+
+export function buildExplorer(markdown) {
+  const items = [];
+  for (const md of splitSlides(markdown)) {
+    const visible = stripFences(md);
+    const headingLine = visible.split('\n').find((l) => /^#{1,3} /.test(l));
+    if (!headingLine) continue;
+    const title = plain(headingLine.replace(/^#{1,3} /, ''));
+    const match = EXPLORER_SLIDES.find(([re]) => re.test(title));
+    if (!match) continue;
+    const table = parseTable(md);
+    if (!table) continue;
+
+    const hasGroup = table.header[0] === 'group';
+    const commandTable = table.header[0] === 'command';
+    const afterColon = title.includes(':') ? title.slice(title.indexOf(':') + 1).trim() : '';
+    const defaultGroup = afterColon ? afterColon[0].toUpperCase() + afterColon.slice(1) : '';
+
+    let group = defaultGroup;
+    for (const cells of table.rows) {
+      let keysCell;
+      let actionCell;
+      if (hasGroup) {
+        const g = plainCell(cells[0]);
+        if (g) group = g;
+        [, keysCell, actionCell] = cells;
+      } else {
+        [keysCell, actionCell] = cells;
+      }
+      if (!keysCell || !actionCell) continue;
+      const keys = plainCell(keysCell);
+      if (!keys) continue;
+      const isCommand = commandTable || /^(\/|codex )/.test(keys);
+      items.push({
+        tool: match[1],
+        kind: isCommand ? 'command' : 'shortcut',
+        group: group || (isCommand ? 'Commands' : 'Shortcuts'),
+        keys,
+        keysHtml: keysToHtml(keysCell),
+        action: plainCell(actionCell),
+      });
+    }
+  }
+  return items;
+}
+
 function lastUpdated() {
   try {
     const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', 'deck.md'], { cwd: root, encoding: 'utf8' }).trim();
@@ -95,7 +181,9 @@ function main() {
   const out = resolve(root, 'app/public/slides.json');
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify({ updated: lastUpdated(), slides }) + '\n');
-  console.log(`Wrote ${slides.length} slides to app/public/slides.json (updated ${lastUpdated()})`);
+  const explorer = buildExplorer(deck);
+  writeFileSync(resolve(root, 'app/public/explorer.json'), JSON.stringify(explorer) + '\n');
+  console.log(`Wrote ${slides.length} slides and ${explorer.length} explorer entries to app/public (updated ${lastUpdated()})`);
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) main();

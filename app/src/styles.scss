@@ -1,57 +1,89 @@
+/* Terminal workbench: flat panes, a tab line, a statusline and a command line.
+   Sans body for reading, lowercase mono for the chrome. One accent that follows your tool. */
+
 :root {
+  --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* day */
   color-scheme: light;
-  --bg: #faf9f7;
-  --surface: #ffffff;
-  --text: #1f1d1a;
-  --muted: #625d56;
-  --accent: #b0452c;
+  --bg: #e9ecf2;
+  --paper: #ffffff;
+  --raised: #f4f6fa;
+  --ink: #141a26;
+  --muted: #536078;
+  --rule: #d3d9e5;
+  --hover: #edf0f6;
+  --code-bg: #f1f4f9;
+  --code-text: #8a4b00;
+  --focus: #0b57d0;
+  --danger: #b3261e;
+  --shadow: 0 18px 50px rgb(20 26 38 / 0.18);
+
+  --accent: #8a5600;
   --on-accent: #ffffff;
-  --border: #ddd8cf;
-  --hover: #f0ece5;
-  --code-bg: #f3f0ea;
-  --code-text: #7a3b22;
-  --focus: #1a5fb4;
+  --c-claude: #b3341a;
+  --c-codex: #1d55b8;
+  --c-cursor: #6236b8;
+  --c-gemini: #0d7250;
 }
 
 :root[data-theme='dark'] {
+  /* night */
   color-scheme: dark;
-  --bg: #0f0f0f;
-  --surface: #171717;
-  --text: #f0f0f0;
-  --muted: #a8a29a;
-  --accent: #e08a6b;
-  --on-accent: #1a1a1a;
-  --border: #2d2d2d;
-  --hover: #202020;
-  --code-bg: #1e1e1e;
-  --code-text: #ce9178;
+  --bg: #0a0d12;
+  --paper: #11161f;
+  --raised: #182030;
+  --ink: #dbe2ee;
+  --muted: #8d99ae;
+  --rule: #252f42;
+  --hover: #1a2231;
+  --code-bg: #0c1118;
+  --code-text: #f0c36a;
   --focus: #7ab7ff;
+  --danger: #ff8a80;
+  --shadow: 0 24px 70px rgb(0 0 0 / 0.6);
+
+  --accent: #f0b94d;
+  --on-accent: #14100a;
+  --c-claude: #ff8d6b;
+  --c-codex: #62aeff;
+  --c-cursor: #b9a0ff;
+  --c-gemini: #4adba6;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+:root[data-tool='claude'] { --accent: var(--c-claude); }
+:root[data-tool='codex'] { --accent: var(--c-codex); }
+:root[data-tool='cursor'] { --accent: var(--c-cursor); }
+:root[data-tool='gemini'] { --accent: var(--c-gemini); }
 
-html, body { height: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { min-height: 100%; }
 
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--text);
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.55;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+::selection { background: var(--accent); color: var(--on-accent); }
 
 button {
-  font: inherit;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.4rem 0.8rem;
+  font: 500 0.78rem/1 var(--mono);
+  color: var(--ink);
+  background: var(--raised);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.5em 0.8em;
   cursor: pointer;
-  &:hover:not(:disabled) { background: var(--hover); }
-  &:disabled { opacity: 0.45; cursor: default; }
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  &:hover:not(:disabled) { border-color: var(--muted); background: var(--hover); }
+  &:disabled { opacity: 0.4; cursor: default; }
 }
 
 .sr-only {
@@ -60,23 +92,86 @@ button {
 }
 
 kbd {
-  font: 0.85em ui-monospace, SFMono-Regular, Menlo, monospace;
-  padding: 0.1em 0.45em; border: 1px solid var(--border); border-bottom-width: 2px;
-  border-radius: 5px; background: var(--code-bg);
+  font: 500 0.78em var(--mono);
+  padding: 0.1em 0.5em; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--raised); color: var(--ink); white-space: nowrap;
 }
 
-/* SVG diagrams (inline in components, themed through the variables above) */
-.diagram { display: block; width: 100%; max-width: 680px; height: auto; margin: 0.5rem 0 1rem; }
-.diagram .box { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+.overlay-backdrop {
+  position: fixed; inset: 0; z-index: 40; background: rgb(4 6 10 / 0.6); backdrop-filter: blur(2px);
+  animation: fade 0.15s ease both;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* A framed window with its title set into the top border, like a floating editor window. */
+.window {
+  position: relative; background: var(--paper); border: 1px solid var(--muted); border-radius: 10px; box-shadow: var(--shadow);
+}
+.window > .title {
+  position: absolute; top: -0.7em; left: 1rem; margin: 0; padding: 0 0.5rem; background: var(--paper);
+  font: 500 0.78rem/1.4 var(--mono); color: var(--accent);
+}
+
+/* ---------- Tables that compare tools ---------- */
+.tc[data-t='claude'] { --col: var(--c-claude); }
+.tc[data-t='codex'] { --col: var(--c-codex); }
+.tc[data-t='cursor'] { --col: var(--c-cursor); }
+.tc[data-t='gemini'] { --col: var(--c-gemini); }
+th.tc::before { margin-right: 0.45em; color: var(--col); }
+th.tc[data-t='claude']::before { content: '●'; }
+th.tc[data-t='codex']::before { content: '▲'; }
+th.tc[data-t='cursor']::before { content: '■'; }
+th.tc[data-t='gemini']::before { content: '◆'; }
+.col-hidden { display: none; }
+tr[hidden] { display: none; }
+
+@each $t in claude, codex, cursor, gemini {
+  :root[data-tool='#{$t}'] .tc[data-t='#{$t}'] { background: color-mix(in srgb, var(--col) 13%, transparent); }
+  :root[data-tool='#{$t}'] th.tc[data-t='#{$t}'] { color: var(--col); border-bottom: 3px solid var(--col); }
+  :root[data-tool='#{$t}'] .tc:not([data-t='#{$t}']) { opacity: 0.62; }
+}
+
+/* ---------- Diagrams ---------- */
+.diagram { display: block; width: 100%; max-width: 700px; height: auto; margin: 0.25rem 0 0.75rem; }
+.diagram .box { fill: var(--raised); stroke: var(--rule); stroke-width: 1.5; transition: fill 0.25s ease, stroke 0.25s ease; }
 .diagram .box.accent { fill: var(--accent); stroke: var(--accent); }
-.diagram .label { fill: var(--text); font: 600 13px Inter, system-ui, sans-serif; text-anchor: middle; }
+.diagram .label { fill: var(--ink); font: 600 13px var(--mono); text-anchor: middle; transition: fill 0.25s ease; }
 .diagram .label.small { font-weight: 400; font-size: 11px; fill: var(--muted); }
-.diagram .label.tight { font-size: 12px; }
+.diagram .label.tight { font-size: 11.5px; }
 .diagram .label.left { text-anchor: start; }
 .diagram .label.right { text-anchor: end; }
 .diagram .label.on { fill: var(--on-accent); }
+.diagram .label.danger { fill: var(--danger); font-size: 12px; }
 .diagram .line { fill: none; stroke: var(--muted); stroke-width: 1.5; }
 .diagram .line.dashed { stroke-dasharray: 5 4; }
 .diagram .arrowhead { fill: var(--muted); }
-.diagram .grid { stroke: var(--border); stroke-width: 1; }
+.diagram .grid { stroke: var(--rule); stroke-width: 1; }
 .diagram .dot { fill: var(--accent); }
+.diagram .t-claude { --tc: var(--c-claude); } .diagram .t-codex { --tc: var(--c-codex); }
+.diagram .t-cursor { --tc: var(--c-cursor); } .diagram .t-gemini { --tc: var(--c-gemini); }
+.diagram .dot[class*='t-'] { fill: var(--tc); }
+.diagram text[class*='t-'] { fill: var(--tc); }
+
+/* Interactive hook lifecycle */
+.stepper { margin: 0 0 1rem; }
+.diagram .node.active .box { fill: var(--accent); stroke: var(--accent); }
+.diagram .node.active .label { fill: var(--on-accent); }
+.diagram .node.done .box { stroke: var(--accent); stroke-width: 2.5; }
+.diagram .node.todo .box { stroke-dasharray: 4 3; }
+.diagram .node.todo { opacity: 0.7; }
+.diagram .node.skipped { opacity: 0.3; }
+.diagram .node.skipped .label { text-decoration: line-through; }
+.stepper .caption { min-height: 3.2em; margin: 0.25rem 0 0.6rem; padding-left: 0.9rem; border-left: 3px solid var(--accent); }
+.stepper-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.stepper-controls .check { display: inline-flex; gap: 0.5rem; align-items: center; font: 0.78rem var(--mono); cursor: pointer; margin-left: 0.5rem; }
+.stepper-controls input { accent-color: var(--accent); width: 1.05rem; height: 1.05rem; }
+
+/* ---------- Motion ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* A block is "written" left to right, like text appearing in a buffer. */
+@keyframes write { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

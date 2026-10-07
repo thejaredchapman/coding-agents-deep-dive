@@ -285,3 +285,16 @@ Gemini CLI shortcuts (full page, https://geminicli.com/docs/reference/keyboard-s
 - Gemini CLI remote or cloud story; Jules, Antigravity, Gemini Code Assist.
 - Claude Cowork official page; Claude in Chrome; Artifacts; Agent SDK; Managed Agents; fast mode page; cross-session messaging; plugin-evals page; Claude Code slash command cheat sheet (full page saved locally at `~/.claude/projects/.../tool-results/toolu_017svwJm6WmgBJe5eDuebWjx.txt`).
 - Cursor permission rules (allow/deny) and Windows/Linux IDE shortcuts.
+
+## Providers and free learning pages (checked 2026-10-07)
+
+Data lives in `app/public/providers.json`; `npm test` validates its shape.
+
+| Program | What was verified | Not verified |
+|---|---|---|
+| Claude Academy (academy.claude.com) | Site says "Free courses, tutorials, and use cases from Anthropic's education team". 27 distinct course links counted live (the earlier "28" was a miscount, now fixed). | Sign-in and certificate details. |
+| OpenAI Academy (academy.openai.com) | Page read directly: pathways Apply AI at Work, Build with AI ("Learn to use Codex across the software development lifecycle or build with the OpenAI API"), Lead AI Adoption, Teach and learn with AI. | "Free with a ChatGPT account" comes from a search summary of OpenAI's help article; the article and openai.com returned 403 to automated checks. |
+| Cursor Learn (cursor.com/learn) | Page read directly; 13 lesson URLs found. | No price stated; lesson titles are derived from the URLs. |
+| Google: Hands-on with Gemini CLI codelab | Page read: audience, what you learn, prerequisites (Gmail account, Chrome). | No price or duration stated. |
+| Google: DeepLearning.AI Gemini CLI course | Page read: Beginner, 1h23m, 11 video lessons, graded assignment needs PRO; hosted by DeepLearning.AI, taught by a Google developer advocate. | Price not listed. |
+| Google Skills (skills.google) | Home page read. | Course page "Accelerate App Development with Gemini CLI" returned 403 to automated checks; its details come from a search listing. |

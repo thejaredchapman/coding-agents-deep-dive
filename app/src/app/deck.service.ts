@@ -10,6 +10,10 @@ export class DeckService {
   readonly total = computed(() => this.slides().length);
   readonly index = signal(0);
   readonly error = signal<string | null>(null);
+  /** 1 after moving forward, -1 after moving back; drives the slide transition direction. */
+  readonly direction = signal<1 | -1>(1);
+  /** Increments on every navigation, so other services can react to the reader moving through slides. */
+  readonly navigations = signal(0);
   readonly current = computed<Slide>(() => this.slides()[this.index()]);
   readonly currentSection = computed(() => this.current()?.section ?? '');
   readonly progress = computed(() => (this.total() > 1 ? this.index() / (this.total() - 1) : 0));
@@ -26,13 +30,15 @@ export class DeckService {
 
   constructor() {
     window.addEventListener('hashchange', () => {
-      if (this.total() > 0) this.index.set(this.clamp(this.readHash()));
+      const fromHash = this.readHash();
+      // Other hashes (#/providers, #/learn) are pages, not slides: leave the position alone.
+      if (fromHash !== null && this.total() > 0) this.index.set(this.clamp(fromHash));
     });
   }
 
   load(data: DeckData): void {
     this.data.set(data);
-    this.index.set(this.clamp(this.readHash()));
+    this.index.set(this.clamp(this.readHash() ?? 0));
   }
 
   async loadFromUrl(url: string): Promise<void> {
@@ -54,7 +60,10 @@ export class DeckService {
   }
 
   goTo(i: number): void {
-    this.index.set(this.clamp(i));
+    const target = this.clamp(i);
+    if (target !== this.index()) this.direction.set(target > this.index() ? 1 : -1);
+    this.index.set(target);
+    this.navigations.update((n) => n + 1);
     this.writeHash();
   }
 
@@ -69,10 +78,10 @@ export class DeckService {
     return Math.min(Math.max(Math.trunc(i), 0), max);
   }
 
-  /** The URL hash is 1-based (#/12 is slide 12); returns a 0-based index, or 0 if the hash is bad. */
-  private readHash(): number {
+  /** The URL hash is 1-based (#/12 is slide 12); returns a 0-based index, or null if the hash is not a slide. */
+  private readHash(): number | null {
     const match = /^#\/(\d+)$/.exec(window.location.hash);
-    return match ? Number(match[1]) - 1 : 0;
+    return match ? Number(match[1]) - 1 : null;
   }
 
   private writeHash(): void {

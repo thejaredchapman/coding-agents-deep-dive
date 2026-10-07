@@ -4,58 +4,111 @@
   <div class="bar" [style.width.%]="percent()"></div>
 </div>
 
-<header class="top">
-  <button type="button" class="menu" (click)="sidebarOpen.set(!sidebarOpen())" [attr.aria-expanded]="sidebarOpen()" aria-controls="sections">
-    Sections
+<header class="tabline">
+  <button type="button" class="menu" (click)="ui.sidebarOpen.set(!ui.sidebarOpen())" [attr.aria-expanded]="ui.sidebarOpen()" aria-controls="sections">
+    contents
   </button>
-  <p class="brand">Coding Agents — Deep Dive</p>
+  <p class="brand"><span class="caret" aria-hidden="true">❯</span>agents<span class="dim">.deep-dive</span></p>
+  <nav class="pages" aria-label="Pages">
+    <a [href]="pages.href('deck')" [attr.aria-current]="pages.page() === 'deck' ? 'page' : null">slides</a>
+    <a [href]="pages.href('providers')" [attr.aria-current]="pages.page() === 'providers' ? 'page' : null">providers</a>
+    <a [href]="pages.href('learn')" [attr.aria-current]="pages.page() === 'learn' ? 'page' : null">free learning</a>
+  </nav>
+  <app-tool-picker class="top-picker" label="Your coding agent" />
   <div class="actions">
-    <button type="button" (click)="helpOpen.set(true)">Shortcuts</button>
-    <button type="button" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'">
-      {{ theme.theme() === 'dark' ? 'Light' : 'Dark' }} mode
+    <button type="button" class="act" (click)="ui.openPalette()" aria-label="Search slides and run commands">search<kbd>/</kbd></button>
+    <button type="button" class="act" (click)="ui.openExplorer()" aria-label="Open the shortcut and command explorer">explorer<kbd>e</kbd></button>
+    <button type="button" class="act theme" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'">
+      {{ theme.theme() === 'dark' ? 'day' : 'night' }}
     </button>
   </div>
 </header>
 
-<div class="layout">
-  <nav id="sections" class="sidebar" [class.open]="sidebarOpen()" aria-label="Sections">
-    <app-sidebar (picked)="sidebarOpen.set(false)" />
-  </nav>
+@if (pages.page() === 'deck') {
+  <div class="layout">
+    <nav id="sections" class="sidebar pane" [class.open]="ui.sidebarOpen()" aria-label="Sections">
+      <p class="pane-title">contents</p>
+      <app-sidebar (picked)="ui.sidebarOpen.set(false)" />
+    </nav>
 
-  <main id="slide" tabindex="-1" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
-    @if (deck.error(); as error) {
-      <p class="error" role="alert">{{ error }}</p>
-    } @else if (deck.current()) {
-      <app-slide-view />
-    } @else {
-      <p class="muted">Loading slides…</p>
-    }
-  </main>
-</div>
+    <main id="slide" class="pane" tabindex="-1" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
+      @if (deck.error(); as error) {
+        <p class="error" role="alert">{{ error }}</p>
+      } @else if (deck.current()) {
+        <app-slide-view />
+      } @else {
+        <p class="muted">loading slides…</p>
+      }
+    </main>
+  </div>
+} @else {
+  <div class="layout single">
+    <main id="slide" class="pane" tabindex="-1">
+      @if (pages.page() === 'providers') {
+        <app-providers-page />
+      } @else {
+        <app-learn-page />
+      }
+    </main>
+  </div>
+}
 
 <footer class="bottom">
-  <button type="button" (click)="deck.prev()" [disabled]="deck.index() === 0" aria-label="Previous slide">← Prev</button>
-  <span class="counter">{{ deck.index() + 1 }} / {{ deck.total() }}</span>
-  <button type="button" (click)="deck.next()" [disabled]="deck.index() >= deck.total() - 1" aria-label="Next slide">Next →</button>
-  <span class="updated">Last updated <time [attr.datetime]="deck.updated()">{{ deck.updated() }}</time></span>
+  <div class="statusline">
+    <span class="seg mode" [attr.data-mode]="mode()">{{ mode() }}</span>
+    <span class="seg tool">
+      @if (tool.info(); as mine) { <span aria-hidden="true">{{ mine.glyph }}</span> {{ mine.name }} } @else { all agents }
+    </span>
+    <span class="seg path">{{ pageLabel() }}</span>
+    <span class="grow"></span>
+    <span class="seg pct">{{ percent() }}%</span>
+    <span class="seg updated"><span class="lbl">Last updated</span> <time [attr.datetime]="deck.updated()">{{ deck.updated() }}</time></span>
+  </div>
+  <div class="cmdline">
+    <span class="prompt" aria-hidden="true">:</span>
+    <span class="hint"><kbd>/</kbd> search · <kbd>e</kbd> explorer · <kbd>m</kbd> my agent · <kbd>?</kbd> keys</span>
+    <span class="grow"></span>
+    @if (tool.info(); as mine) {
+      @if (pages.page() === 'deck') {
+      <button type="button" class="mine" (click)="tool.jumpToMine()">{{ mine.glyph }} go to {{ mine.name }}</button>
+      }
+    }
+    @if (pages.page() === 'deck') {
+      <button type="button" (click)="deck.prev()" [disabled]="deck.index() === 0" aria-label="Previous slide">‹ prev</button>
+      <span class="counter">{{ deck.index() + 1 }} / {{ deck.total() }}</span>
+      <button type="button" (click)="deck.next()" [disabled]="deck.index() >= deck.total() - 1" aria-label="Next slide">next ›</button>
+    } @else {
+      <button type="button" (click)="pages.show('deck')">‹ back to slides</button>
+    }
+  </div>
 </footer>
 
 <div class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement() }}</div>
 
-@if (helpOpen()) {
-  <div class="backdrop" (click)="helpOpen.set(false)"></div>
-  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="help-title">
-    <h2 id="help-title">Keyboard shortcuts</h2>
+@if (ui.paletteOpen()) {
+  <app-command-palette />
+}
+@if (ui.explorerOpen()) {
+  <app-explorer-view />
+}
+@if (ui.helpOpen()) {
+  <div class="overlay-backdrop" (click)="ui.helpOpen.set(false)"></div>
+  <div class="dialog window" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <h2 id="help-title" class="title">keys</h2>
     <dl>
-      <dt><kbd>→</kbd> <kbd>Space</kbd> <kbd>PageDown</kbd></dt><dd>Next slide</dd>
-      <dt><kbd>←</kbd> <kbd>Shift</kbd>+<kbd>Space</kbd> <kbd>PageUp</kbd></dt><dd>Previous slide</dd>
-      <dt><kbd>Home</kbd> / <kbd>End</kbd></dt><dd>First / last slide</dd>
-      <dt><kbd>S</kbd></dt><dd>Show or hide sections</dd>
-      <dt><kbd>T</kbd></dt><dd>Switch light and dark</dd>
-      <dt><kbd>?</kbd></dt><dd>This help</dd>
-      <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+      <dt><kbd>→</kbd> <kbd>space</kbd> <kbd>pgdn</kbd></dt><dd>next slide</dd>
+      <dt><kbd>←</kbd> <kbd>shift</kbd>+<kbd>space</kbd> <kbd>pgup</kbd></dt><dd>previous slide</dd>
+      <dt><kbd>home</kbd> <kbd>end</kbd></dt><dd>first / last slide</dd>
+      <dt><kbd>/</kbd> <kbd>ctrl</kbd>+<kbd>k</kbd></dt><dd>search and commands</dd>
+      <dt><kbd>e</kbd></dt><dd>shortcut and command explorer</dd>
+      <dt><kbd>m</kbd></dt><dd>jump to my agent's section</dd>
+      <dt><kbd>s</kbd></dt><dd>show or hide contents</dd>
+      <dt><kbd>p</kbd> <kbd>l</kbd> <kbd>d</kbd></dt><dd>providers · free learning · slides</dd>
+      <dt><kbd>t</kbd></dt><dd>switch day and night</dd>
+      <dt><kbd>?</kbd></dt><dd>this help</dd>
+      <dt><kbd>esc</kbd></dt><dd>close</dd>
     </dl>
     <p class="muted">On a touch screen, swipe left or right.</p>
-    <button type="button" (click)="helpOpen.set(false)" autofocus>Close</button>
+    <button type="button" (click)="ui.helpOpen.set(false)" autofocus>close</button>
   </div>
 }

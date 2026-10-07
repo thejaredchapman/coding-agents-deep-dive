@@ -1687,7 +1687,7 @@ Free courses from Anthropic at [academy.claude.com](https://academy.claude.com/c
 
 ## The rest of the catalog
 
-The Academy has 28 courses. Beyond the ones above, there is a whole **AI Fluency** track on working with AI well (the "4D" framework: Delegation, Description, Discernment, Diligence), with versions for builders, educators, students, small businesses and nonprofits.
+The Academy has 27 courses (counted on 2026-10-07). Beyond the ones above, there is a whole **AI Fluency** track on working with AI well (the "4D" framework: Delegation, Description, Discernment, Diligence), with versions for builders, educators, students, small businesses and nonprofits.
 
 Browse everything: [academy.claude.com/courses](https://academy.claude.com/courses)
 
