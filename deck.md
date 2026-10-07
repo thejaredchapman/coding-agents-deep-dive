@@ -626,6 +626,106 @@ Time: 15 minutes
 
 ---
 
+# 6. The Claude ecosystem
+## Beyond the terminal
+
+---
+
+## Where Claude Code runs
+
+| Surface | What it is |
+|---------|-----------|
+| **CLI** | The terminal interface, built for daily use |
+| **Desktop app** | The Code tab in the Claude desktop app (macOS, Windows) |
+| **Web** | claude.ai/code. Sessions run in the cloud |
+| **VS Code** | The Claude Code extension |
+| **JetBrains** | The Claude Code plugin for JetBrains IDEs |
+
+Settings are shared: a plugin installed at user scope in the terminal, the desktop app or VS Code works in all three. Cloud sessions don't load your local plugins.
+
+**Fast mode** (`/fast`, or `Option+O` / `Alt+O`): the same Opus model on a faster, pricier configuration, up to 2.5x faster. Opus only; needs usage credits on subscription plans.
+
+---
+
+## Remote Control vs cloud sessions
+
+| | Remote Control | Cloud session |
+|-|----------------|---------------|
+| **Runs on** | Your machine | Anthropic's infrastructure (or your org's runners) |
+| **You drive it from** | claude.ai/code or the Claude mobile app | claude.ai/code, mobile, Slack |
+| **Your files, MCP servers, config** | Stay local and available | Cloned into the cloud environment |
+| **Start** | `claude remote-control`, `claude --remote-control` (or `--rc`), or `/remote-control` (`/rc`) in a session | Start a session at claude.ai/code |
+
+Remote Control needs Pro, Max, Team or Enterprise. On Team and Enterprise an Owner must enable it first. API keys aren't supported.
+
+---
+
+## Claude Tag
+## Claude in your team's Slack
+
+Claude Tag is Claude working in your Slack channels as your organization's shared identity, with access an admin configures. It's in public beta, on Team and Enterprise plans only.
+
+Setup, done by an Owner of the Claude organization:
+
+1. Install the Claude app from the Slack Marketplace
+2. `/invite @Claude` to a channel, then send `@Claude connect` (a Slack workspace admin must do this)
+3. Paste the one-time pairing code (valid 15 minutes) into the admin page
+4. Launch, and pick channels
+
+On Pro and Max, the earlier Claude Code in Slack works instead: each user connects their own account, and `@Claude` starts a cloud session in a channel.
+
+---
+
+## Claude Cowork
+
+Cowork brings Claude Code's agentic architecture to **knowledge work, with no terminal**. Describe an outcome, step away, and come back to finished work: documents, organized files, researched summaries.
+
+- Runs tasks in the cloud (beta on Team and Enterprise), saved to your Claude account
+- Available in the desktop app, on the web, on mobile, and in the Chrome side panel, on paid plans
+- Example: "Organize my Downloads folder by type and date"
+
+Same engine, different audience. Claude Code is for developers working in a repo; Cowork is for everyone else on the team.
+
+---
+
+## Build your own: SDK, API, Managed Agents
+
+| You want to | Use |
+|-------------|-----|
+| Embed Claude Code's agent in your own Python or TypeScript app | **Agent SDK**: the same tools, agent loop and context management |
+| Work interactively in a terminal | **Claude Code CLI** |
+| Call the model directly and write your own tool loop | **Claude API** (client SDKs) |
+| Have Anthropic host the agent in a managed sandbox | **Managed Agents** (beta) |
+
+The Agent SDK exposes the five extension points from this deck: hooks, subagents, MCP, skills and permissions. Other languages can drive the CLI with `claude -p --output-format json`.
+
+---
+
+## Claude in Chrome
+
+Connect Claude Code to your browser: `claude --chrome`, then `/chrome` to check the connection.
+
+- Opens tabs in your own logged-in browser; pauses for logins and CAPTCHAs
+- Read console logs and the DOM, test a local web app, fill forms, extract data, record GIFs
+- Works with Chrome, Edge and other Chromium browsers. Needs the extension and a claude.ai login (not an API key)
+
+For native Mac apps that a browser can't reach, Claude Code also has computer use.
+
+---
+
+## Which model?
+
+| Model | API ID | Best for | Price per MTok (in / out) |
+|-------|--------|----------|--------------------------|
+| **Fable 5.1** | `claude-fable-5-1` | Demanding reasoning, long-horizon agent work | $10 / $50 |
+| **Opus 5.5** | `claude-opus-5-5` | Long-running agentic coding. The docs' starting point | $4 / $20 |
+| **Sonnet 5.5** | `claude-sonnet-5-5` | Best mix of speed and intelligence | $2 / $10 |
+| **Haiku 5.5** | `claude-haiku-5-5` | High-volume, latency-sensitive tasks | from $0.10 / $0.50 |
+
+All four have a 1M-token context window. Switch in a session with `/model`, or `Option+P` / `Alt+P`.
+
+---
+
 # Putting it together
 
 ---
