@@ -7,7 +7,7 @@ import { DeckService } from './deck.service';
 const data: DeckData = {
   updated: '2026-10-07',
   slides: [
-    { id: 1, section: 'Intro', title: 'Cover', html: '<h1>Cover</h1>' },
+    { id: 1, section: 'Intro', title: 'Coding Agents — Deep Dive', html: '<h1>Cover</h1>' },
     { id: 2, section: '1. Alpha', title: 'A1', html: '<h2>A1</h2><pre><code>echo hi</code></pre><p><a href="https://example.com">link</a></p>' },
     { id: 3, section: '1. Alpha', title: 'A2', html: '<h2>A2</h2>', diagram: 'hooks' },
     { id: 4, section: '2. Beta', title: 'Exercise 1', html: '<h2>Ex</h2>', checklist: ['Part A', 'Part B'] },
@@ -51,6 +51,13 @@ describe('App', () => {
     press('ArrowLeft');
     await fixture.whenStable();
     expect(el.querySelector('.slide-content h1')?.textContent).toBe('Cover');
+  });
+
+  it('sets the page title without repeating the deck name on the cover', async () => {
+    expect(document.title).toBe('Coding Agents — Deep Dive');
+    deck.goTo(1);
+    await fixture.whenStable();
+    expect(document.title).toBe('A1 · Coding Agents — Deep Dive');
   });
 
   it('updates the progress bar', async () => {

@@ -69,11 +69,12 @@ kbd {
 .diagram { display: block; width: 100%; max-width: 680px; height: auto; margin: 0.5rem 0 1rem; }
 .diagram .box { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
 .diagram .box.accent { fill: var(--accent); stroke: var(--accent); }
-.diagram .box.accent + .label, .diagram .box.accent ~ .label.on-accent { fill: var(--on-accent); }
 .diagram .label { fill: var(--text); font: 600 13px Inter, system-ui, sans-serif; text-anchor: middle; }
 .diagram .label.small { font-weight: 400; font-size: 11px; fill: var(--muted); }
+.diagram .label.tight { font-size: 12px; }
 .diagram .label.left { text-anchor: start; }
 .diagram .label.right { text-anchor: end; }
+.diagram .label.on { fill: var(--on-accent); }
 .diagram .line { fill: none; stroke: var(--muted); stroke-width: 1.5; }
 .diagram .line.dashed { stroke-dasharray: 5 4; }
 .diagram .arrowhead { fill: var(--muted); }

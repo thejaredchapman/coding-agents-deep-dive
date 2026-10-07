@@ -5,6 +5,7 @@ import { SlideView } from './slide-view';
 import { ThemeService } from './theme.service';
 
 const SWIPE_DISTANCE = 50;
+const BRAND = 'Coding Agents — Deep Dive';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,7 @@ export class App {
   constructor() {
     effect(() => {
       const slide = this.deck.current();
-      document.title = slide ? `${slide.title} · Coding Agents — Deep Dive` : 'Coding Agents — Deep Dive';
+      document.title = !slide || slide.title === BRAND ? BRAND : `${slide.title} · ${BRAND}`;
     });
   }
 

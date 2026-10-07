@@ -23,6 +23,25 @@ The five-section walkthrough is taught with Claude Code examples, because the ex
 
 Each exercise ends with a **Go deeper** link to a Claude Academy course and a **Coming from another tool?** note for Codex, Cursor and Gemini CLI.
 
+**Last updated: 2026-10-07.** The interactive app shows this date in its footer, taken from the last commit that touched `deck.md`.
+
+## Interactive app (Angular)
+
+`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a section sidebar, a progress bar, light and dark themes, copy buttons on code, SVG diagrams, and saved exercise checklists. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
+
+```bash
+npm install                 # build-time tools (marked)
+npm --prefix app install    # Angular
+npm run app:start           # dev server at http://localhost:4200
+npm run app:build           # regenerates slides, then builds to app/dist/app/browser
+npm run app:test            # Vitest component and service tests
+npm test                    # tests for the slide build script
+```
+
+Keys: `→` `Space` next, `←` previous, `Home` `End`, `S` sections, `T` theme, `?` help. On a touch screen, swipe. Deep links work: `#/36` opens slide 36. The build is static files; host the `browser` folder anywhere (the base href is relative).
+
+After you edit `deck.md`, run `npm run build:slides` (or `app:build`) to refresh the app's data.
+
 ## Render the deck
 
 ```bash
@@ -49,6 +68,7 @@ Needs Node 18 or later and no dependencies.
 ## Format
 
 - **Deck:** Marp markdown (`deck.md`), dark theme in the front matter
+- **App:** Angular 22 in `app/`, generated slide data in `app/public/slides.json`
 - **Exercises:** standalone markdown files, one per section
 - **Facts:** `docs/superpowers/facts.md` records every verified claim with its source and date. Items marked unverified there (for example the full Codex CLI shortcut list) are not in the slides as fact.
 
