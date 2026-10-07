@@ -9,6 +9,7 @@ export class DeckService {
   readonly updated = computed(() => this.data().updated);
   readonly total = computed(() => this.slides().length);
   readonly index = signal(0);
+  readonly error = signal<string | null>(null);
   readonly current = computed<Slide>(() => this.slides()[this.index()]);
   readonly currentSection = computed(() => this.current()?.section ?? '');
   readonly progress = computed(() => (this.total() > 1 ? this.index() / (this.total() - 1) : 0));
@@ -35,9 +36,13 @@ export class DeckService {
   }
 
   async loadFromUrl(url: string): Promise<void> {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Could not load ${url}: ${response.status}`);
-    this.load((await response.json()) as DeckData);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      this.load((await response.json()) as DeckData);
+    } catch (e) {
+      this.error.set(`Could not load the slides (${url}): ${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   next(): void {
