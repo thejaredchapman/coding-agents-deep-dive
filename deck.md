@@ -421,72 +421,103 @@ Time: 20 minutes
 
 ## What are Hooks?
 
-Hooks are shell commands that Claude Code runs automatically at specific points in its lifecycle.
+Hooks are commands Claude Code runs automatically at specific points in its lifecycle. Unlike CLAUDE.md, a hook is **enforced**: the model can't ignore it.
 
 ```
-PreToolUse   → before Claude calls any tool
-PostToolUse  → after a tool call completes
-Stop         → when Claude finishes a turn
-Notification → when Claude sends a notification
+SessionStart      → a session begins or resumes
+UserPromptSubmit  → you send a prompt, before Claude sees it
+PreToolUse        → before a tool runs (can block it)
+PostToolUse       → after a tool succeeds
+Stop              → Claude finishes a turn
+SubagentStop      → a subagent finishes
+PreCompact        → before the context is compacted
 ```
 
-The hook receives a JSON payload on stdin describing what happened.
+There are more than 30 events in total. The hook receives a JSON payload on stdin describing what happened.
 
 ---
 
 ## Hook use cases
 
-| Hook | What you can do |
-|------|----------------|
-| **PreToolUse** | Block dangerous commands, add logging, inject context |
-| **PostToolUse** | Validate file changes, run linters, update trackers |
-| **Stop** | Log cost/tokens, send notifications, trigger CI |
-| **Notification** | Route alerts to Slack, email, or a dashboard |
+| Event | What you can do |
+|-------|----------------|
+| **SessionStart** | Load project context, check the environment |
+| **UserPromptSubmit** | Validate or enrich prompts, block bad ones |
+| **PreToolUse** | Block dangerous commands, rewrite tool input, add logging |
+| **PostToolUse** | Run a formatter or linter after edits, update trackers |
+| **Stop** | Log cost and tokens, send notifications, trigger CI |
+| **SubagentStop** | Collect or check subagent results |
+| **PreCompact** | Save state before the context is summarized |
 
 ---
 
 ## Registering a hook
 
-In `~/.claude/settings.json`:
+In `~/.claude/settings.json` (user), `.claude/settings.json` (project, shareable) or `.claude/settings.local.json` (project, private):
 
 ```json
 {
   "hooks": {
     "Stop": [
       {
-        "type": "command",
-        "command": "python3 /path/to/usage_tracker.py"
+        "hooks": [
+          { "type": "command", "command": "python3 ~/hooks/usage.py" }
+        ]
       }
     ],
     "PostToolUse": [
       {
-        "type": "command",
-        "command": "bash /path/to/lint_on_save.sh",
-        "matcher": "write_file"
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "bash ~/hooks/lint_on_save.sh" }
+        ]
       }
     ]
   }
 }
 ```
 
+An event holds **matcher groups**; each group holds a list of **hooks**. The `matcher` filters by tool name (`Bash`, `Edit`, `Write`, `Read`, `mcp__server__tool`). Handler types: `command`, `http`, `mcp_tool`, `prompt`, `agent`.
+
+---
+
+## What a hook receives
+
+Every hook gets common fields on stdin:
+
+```json
+{
+  "session_id": "abc123",
+  "transcript_path": "/home/you/.claude/projects/.../abc123.jsonl",
+  "cwd": "/home/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Bash",
+  "tool_input": { "command": "npm test" }
+}
+```
+
+`tool_name` and `tool_input` appear on the tool events. Read stdin with `json.load(sys.stdin)` in Python or `process.stdin` in Node.
+
 ---
 
 ## The Stop hook payload
 
+A Stop hook has no token counts in its payload. We captured one from a real run:
+
 ```json
 {
-  "model": "claude-sonnet-4-6",
-  "usage": {
-    "input_tokens": 12400,
-    "output_tokens": 890,
-    "cache_creation_input_tokens": 8200,
-    "cache_read_input_tokens": 3100
-  },
-  "stop_reason": "end_turn"
+  "session_id": "0737079f-...",
+  "transcript_path": "/home/you/.claude/projects/.../0737079f-....jsonl",
+  "cwd": "/home/you/my-project",
+  "permission_mode": "default",
+  "hook_event_name": "Stop",
+  "stop_hook_active": false,
+  "last_assistant_message": "ok"
 }
 ```
 
-Read from `sys.stdin` in Python, `process.stdin` in Node.
+To report cost or tokens, open `transcript_path` (a JSONL file) and read the `message.usage` and `message.model` of the `assistant` entries. That is what Exercise 5 does, with models like `claude-sonnet-5-5`.
 
 ---
 
@@ -494,11 +525,19 @@ Read from `sys.stdin` in Python, `process.stdin` in Node.
 
 | Exit code | Meaning |
 |-----------|---------|
-| **0** | Success — continue normally |
-| **Non-zero** | Failure — Claude Code shows the error |
-| **2** (PreToolUse) | **Block the tool call** — Claude abandons the action |
+| **0** | Success. If stdout is JSON, Claude Code parses it |
+| **2** | **Block**, on events that can be blocked |
+| **Other** | Non-blocking error. The action proceeds |
 
-Exit code 2 on `PreToolUse` is a gate: your hook can prevent Claude from running a command.
+What exit 2 does depends on the event:
+
+| Event | Exit 2 effect |
+|-------|---------------|
+| `PreToolUse` | Blocks the tool call |
+| `UserPromptSubmit` | Blocks the prompt |
+| `Stop` | Prevents Claude from stopping |
+| `PostToolUse` | Shows the message to Claude (the tool already ran) |
+| `PreCompact` | Blocks compaction |
 
 ---
 
@@ -506,9 +545,9 @@ Exit code 2 on `PreToolUse` is a gate: your hook can prevent Claude from running
 
 See `exercises/05-hooks.md`
 
-**Goal:** Install the cost tracker Stop hook and verify it fires after a turn.
+**Goal:** Write a usage-reporting Stop hook, a file-edit logger, and a command blocker.
 
-Time: 10 minutes
+Time: 15 minutes
 
 ---
 
