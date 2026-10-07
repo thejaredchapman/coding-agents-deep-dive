@@ -1,0 +1,26 @@
+{
+  "name": "coding-agents-deep-dive",
+  "version": "1.0.0",
+  "description": "Deck, exercises and interactive app",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node --test \"scripts/*.test.mjs\"",
+    "build:slides": "node scripts/build-slides.mjs",
+    "check": "node scripts/check-deck.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thejaredchapman/coding-agents-deep-dive.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/thejaredchapman/coding-agents-deep-dive/issues"
+  },
+  "homepage": "https://github.com/thejaredchapman/coding-agents-deep-dive#readme",
+  "private": true,
+  "devDependencies": {
+    "marked": "^18.1.0"
+  }
+}
