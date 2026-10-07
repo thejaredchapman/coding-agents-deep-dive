@@ -21,10 +21,12 @@ style: |
   .small { font-size: 0.8rem; color: #aaa; }
 ---
 
-# Claude Code — Deep Dive
+# Coding Agents — Deep Dive
 ## The Five Extension Points
 
-Built for engineers who already use Claude Code and want to go further.
+Claude Code · Codex · Cursor · Gemini CLI
+
+Built for engineers who already use an AI coding agent and want to go further.
 
 ---
 

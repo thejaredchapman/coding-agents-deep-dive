@@ -1,8 +1,8 @@
-# Claude Code — Deep Dive Deck
+# Coding Agents — Deep Dive
 
-A 75-slide Marp training deck covering all five Claude Code extension points, with hands-on exercises for each.
+A Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with hands-on exercises for each. It covers Claude Code, Codex, Cursor and Gemini CLI side by side, for engineers who already use one of them and want to go further, or who are moving between them.
 
-Built for engineers who already use Claude Code and want to go further than the basics.
+The core walkthrough is currently taught with Claude Code examples; the cross-tool sections give each tool equal depth.
 
 ## Topics
 
