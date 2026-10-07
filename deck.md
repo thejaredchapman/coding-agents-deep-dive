@@ -919,6 +919,665 @@ Pick conventions once and write them in `AGENTS.md`, not in four places.
 
 ---
 
+# 8. Claude Code: shortcuts and commands
+## The day-to-day reference
+
+---
+
+## Claude Code shortcuts (1/2): session, modes, navigation
+
+| Group | Shortcut | Action |
+|-------|----------|--------|
+| **Session** | `Ctrl+C` | Interrupt; if idle, clear input; press again to exit |
+| | `Esc` | Stop Claude mid-turn, or close a dialog |
+| | `Esc` `Esc` | Clear the draft, or open the rewind menu when empty |
+| | `Ctrl+B` | Send running tasks to the background |
+| | `Ctrl+D` | Exit (press twice) |
+| **Modes** | `Shift+Tab` | Cycle permission modes |
+| | `Option+P` / `Alt+P` | Switch model |
+| | `Option+T` / `Alt+T` | Toggle extended thinking |
+| | `Option+O` / `Alt+O` | Toggle fast mode |
+| **Navigate** | `Ctrl+R` | Reverse-search history |
+| | `Ctrl+O` | Transcript viewer (tool details) |
+| | `Ctrl+T` | Show or hide the task checklist |
+| | `Ctrl+L` | Redraw the screen |
+
+<p class="small">Checked on macOS, 2026-10-07. On macOS the `Alt` combinations in the next slide need Option set as Meta in your terminal.</p>
+
+---
+
+## Claude Code shortcuts (2/2): editing and input
+
+| Group | Shortcut | Action |
+|-------|----------|--------|
+| **Edit** | `Ctrl+A` / `Ctrl+E` | Start / end of line |
+| | `Ctrl+K` / `Ctrl+U` | Delete to end / start of line |
+| | `Ctrl+W` | Delete back to previous whitespace |
+| | `Ctrl+Y` | Paste what you just deleted |
+| | `Ctrl+G` | Edit the prompt in your editor |
+| | `Ctrl+S` | Stash or restore the prompt |
+| | `Ctrl+V` | Paste an image |
+| **Newline** | `\` then `Enter`, or `Ctrl+J` | Works in any terminal |
+| | `Shift+Enter` | Native in iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal |
+| **Prefixes** | `/` | Command or skill |
+| | `!` | Run a shell command and show Claude the output |
+| | `@` | Mention a file |
+| | `?` on empty input | Show the shortcut panel |
+
+---
+
+## Claude Code commands cheat sheet
+
+| Command | Does |
+|---------|------|
+| `/init` | Draft a `CLAUDE.md` for the project |
+| `/clear` | Start a new conversation |
+| `/compact` | Summarize to free context |
+| `/context` | Show context usage |
+| `/model`, `/fast` | Switch model; toggle fast mode |
+| `/permissions` | Manage allow, ask and deny rules |
+| `/mcp`, `/plugin`, `/skills`, `/hooks` | Inspect and manage extensions |
+| `/memory` | Edit CLAUDE.md and auto memory |
+| `/resume`, `/rewind` | Reopen a conversation; roll back |
+| `/diff` | Review changes in the working tree |
+| `/tasks` | Background work and subagents |
+| `/usage` | Cost and plan limits (`/cost` is an alias) |
+| `/remote-control` (`/rc`) | Continue this session from claude.ai |
+| `/btw` | Ask a side question without adding to context |
+| `/doctor` | Diagnose your setup |
+
+Type `/` to see everything, including your skills and plugin commands.
+
+---
+
+# 9. Codex
+## OpenAI's coding agent
+
+---
+
+## Codex: what it is and how to start
+
+Codex runs as a terminal CLI and as a desktop app, which can also run chats in the cloud.
+
+```bash
+# macOS / Linux
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+
+codex                      # interactive terminal UI
+codex "explain this repo"  # start with a prompt
+codex resume               # reopen a recent session
+```
+
+Sign in with your ChatGPT account (or another available method). Windows has a separate installer, and an npm install is available.
+
+User config lives in `~/.codex/config.toml`; a project can add `.codex/config.toml`.
+
+<p class="small">Compared as of 2026-10-07. Docs: learn.chatgpt.com/docs (developers.openai.com/codex redirects there).</p>
+
+---
+
+## Codex: instructions
+
+Codex reads `AGENTS.md`, from several places, then merges them:
+
+1. Global: `~/.codex/AGENTS.override.md`, or `~/.codex/AGENTS.md`
+2. Project: from the Git root down to your current directory, each level checked for `AGENTS.override.md`, then `AGENTS.md`
+
+Files are joined root to current directory, so **closer files override earlier guidance**. The combined size is capped at 32 KiB by default (`project_doc_max_bytes`).
+
+`/init` creates an `AGENTS.md` scaffold for the project.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: subagents and skills
+
+**Subagents** are TOML files in `.codex/agents/` (project) or `~/.codex/agents/` (personal):
+
+```toml
+name = "reviewer"
+description = "Reviews code for security and error handling"
+developer_instructions = """
+You are a code reviewer. Report findings with severity, file and line.
+"""
+sandbox_mode = "read-only"
+```
+
+Built in: `default`, `worker`, `explorer`. Ask for them in a prompt ("spawn one agent per point").
+
+**Skills** use the same `SKILL.md` format as Claude Code, in `.agents/skills/<name>/` (repo) or `~/.agents/skills/` (personal). Plugins: `codex plugin add <plugin>`.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: MCP
+
+In `config.toml`:
+
+```toml
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"
+bearer_token_env_var = "FIGMA_OAUTH_TOKEN"
+```
+
+Or from the shell:
+
+```bash
+codex mcp add context7 -- npx -y @upstash/context7-mcp
+codex mcp list
+```
+
+Project-level servers go in `.codex/config.toml` (trusted projects only).
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: hooks
+
+Hooks live in `hooks.json` or `config.toml`, at `~/.codex/` or `<repo>/.codex/`. The shape matches Claude Code's:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.codex/hooks/session_start.py" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Events include `PreToolUse`, `PostToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, `SubagentStop`, `PreCompact`, `SessionStart`, `SessionEnd`. Exit `2` blocks. Hooks get `session_id`, `transcript_path`, `cwd`, `hook_event_name`, `model` on stdin.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: permissions
+
+Two separate controls:
+
+| Sandbox (`sandbox_mode`) | What Codex can do |
+|--------------------------|-------------------|
+| `workspace-write` | Edit files and run commands in the working directory. The default in version-controlled folders |
+| `read-only` | Read and run commands but not modify. The default elsewhere |
+| `danger-full-access` | No sandbox and no approvals |
+
+| Approvals (`approval_policy`) | Behavior |
+|-------------------------------|----------|
+| `on-request` | Asks before going outside the sandbox or using the network |
+| `never` | No prompts; the sandbox still applies |
+
+Change them in the terminal UI with **`/permissions`**.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: non-interactive use
+
+```bash
+codex exec "run the tests and fix failures"
+codex exec resume <SESSION_ID>
+```
+
+| Flag | Does |
+|------|------|
+| `--json` | Newline-delimited JSON events |
+| `-o, --output-last-message <file>` | Write the final message to a file |
+| `--output-schema <file>` | Validate the result against a JSON Schema |
+| `--ephemeral` | Don't save session files |
+| `-s read-only\|workspace-write\|danger-full-access` | Set the sandbox |
+| `-a on-request\|never` | Set approvals |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex shortcuts and commands (partial)
+
+| What | Verified |
+|------|----------|
+| `@` | Mention a file |
+| `!` | Run a shell command |
+| `Ctrl+G` | Open your editor (`$VISUAL` / `$EDITOR`) for a long prompt |
+| `/init` | Generate an `AGENTS.md` scaffold |
+| `/status` | Show session info |
+| `/permissions` | Change sandbox and approvals |
+| `/model` | Choose the model |
+| `/review` | Review uncommitted changes |
+| `/mcp` | Show MCP server status |
+| `codex resume` | Reopen a recent session |
+
+**Not confirmed:** a complete list of terminal key bindings. Codex's docs point to a "CLI interactive shortcuts" section we could not retrieve. Run `/help` in Codex or see the Developer commands page.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Codex: equivalents elsewhere
+
+| Codex | Claude Code | Cursor | Gemini CLI |
+|-------|-------------|--------|------------|
+| `AGENTS.md` | `CLAUDE.md` or `AGENTS.md` | `.cursor/rules`, `AGENTS.md` | `GEMINI.md` |
+| `.codex/agents/*.toml` | `.claude/agents/*.md` | `.cursor/agents/*.md` | `.gemini/agents/*.md` |
+| `codex mcp add` | `claude mcp add` | `.cursor/mcp.json` | `gemini mcp add` |
+| `/permissions` | `Shift+Tab`, `/permissions` | `Shift+Tab` (modes) | `Shift+Tab` (approval modes) |
+| `codex exec` | `claude -p` | `agent -p` | `gemini -p` |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+# 10. Cursor
+## The editor and its agent
+
+---
+
+## Cursor: what it is and how to start
+
+Cursor has several surfaces that share rules and MCP servers:
+
+- **Desktop app** with an Agent chat panel
+- **CLI**, with the command `agent`
+- **Cloud Agents** that run in isolated VMs (paid plan)
+
+```bash
+# macOS, Linux, WSL
+curl https://cursor.com/install -fsS | bash
+
+agent --version
+agent            # interactive
+agent update     # update
+```
+
+Add `~/.local/bin` to your `PATH` after installing. Modes: **Agent**, **Plan** (`/plan`), **Ask** (`/ask`).
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: instructions
+
+Four kinds, in precedence order **Team, then Project, then User**:
+
+| Kind | Where |
+|------|-------|
+| **Project Rules** | `.cursor/rules/*.mdc` (must be `.mdc`) |
+| **User Rules** | Global, in Cursor settings. Used by Agent chat, not Inline Edit |
+| **Team Rules** | Managed from the dashboard |
+| **`AGENTS.md`** | Plain Markdown in the project root. Nested files allowed; deeper wins |
+
+```markdown
+---
+description: React component conventions
+globs: src/**/*.tsx
+alwaysApply: false
+---
+Use function components. Keep props types in the same file.
+```
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: subagents and skills
+
+**Subagents** are Markdown with YAML frontmatter in `.cursor/agents/` (also reads `.claude/agents/` and `.codex/agents/`):
+
+```markdown
+---
+name: verifier
+description: Confirms a change works end to end
+model: inherit
+readonly: true
+---
+You verify completed work. Run the checks and report what you saw.
+```
+
+Invoke with `/verifier ...`, by name, or let the Agent delegate. Built in: Explore, Bash, Browser.
+
+**Skills** are `SKILL.md` folders in `.agents/skills/` or `.cursor/skills/`, run by typing `/` in Agent chat.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: MCP
+
+In `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+
+```json
+{
+  "mcpServers": {
+    "local-tool": {
+      "command": "npx",
+      "args": ["-y", "mcp-server"],
+      "env": { "API_KEY": "value" }
+    },
+    "remote-tool": {
+      "url": "http://localhost:3000/mcp",
+      "headers": { "API_KEY": "value" }
+    }
+  }
+}
+```
+
+Transports: stdio, SSE and Streamable HTTP. The MCP docs describe the Cursor Marketplace and manual `mcp.json`; they don't describe a CLI add command.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: hooks
+
+`hooks.json` in `~/.cursor/` (user) or `<project>/.cursor/` (project):
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      { "command": "./hooks/format.sh", "timeout": 30, "type": "command", "matcher": "*" }
+    ]
+  }
+}
+```
+
+Events use camelCase: `sessionStart`, `preToolUse`, `postToolUse`, `beforeShellExecution`, `afterFileEdit`, `beforeSubmitPrompt`, `subagentStart`, `subagentStop`, `preCompact`, `stop`, and more. Exit `2` blocks; other failures let the action proceed unless `failClosed: true`.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: permissions and cloud
+
+In the CLI, `/sandbox` or `--sandbox enabled|disabled` toggles sandboxing and network access, and the setting persists across sessions. Allow and deny rule syntax wasn't covered in the pages we checked.
+
+**Cloud Agents** run in isolated VMs with a full dev environment. Start one from:
+
+- The desktop **Cloud** dropdown, `cursor.com/agents` on web, or the iOS app
+- `@cursor` in Slack, GitHub or Bitbucket comments, or Linear
+- The API
+
+In the CLI, start a message with **`&`** to send it to the cloud.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor: non-interactive use
+
+```bash
+agent -p "find and fix the failing test"
+agent -p "summarize the repo" --output-format json
+agent resume              # also: agent --continue
+agent --resume <thread-id>
+agent ls                  # list previous chats
+```
+
+`-p` (or `--print`) is for scripts, CI and automation. Output formats: `text` and `json`.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor shortcuts
+
+**CLI**
+
+| Key | Action |
+|-----|--------|
+| `Shift+Tab` | Rotate Agent, Plan, Ask |
+| `Shift+Enter` or `Ctrl+J` | New line |
+| `Up` | Previous messages |
+| `Ctrl+R` | Review changes |
+| `Ctrl+D` twice | Exit |
+
+**Editor (macOS)**
+
+| Key | Action |
+|-----|--------|
+| `Cmd+I` / `Cmd+L` | Toggle side panel |
+| `Cmd+K` | Inline edit |
+| `Cmd+Shift+L` | Add selection as context |
+| `Cmd+N` | New chat |
+| `Cmd+.` | Mode menu |
+| `Cmd+Shift+P` | Command palette |
+| `Tab` | Accept a suggestion |
+
+<p class="small">Compared as of 2026-10-07. Editor keys are macOS; Windows and Linux keys are not on the docs page.</p>
+
+---
+
+## Cursor: equivalents elsewhere
+
+| Cursor | Claude Code | Codex | Gemini CLI |
+|--------|-------------|-------|------------|
+| `.cursor/rules/*.mdc`, `AGENTS.md` | `CLAUDE.md` or `AGENTS.md` | `AGENTS.md` | `GEMINI.md` |
+| `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | `.gemini/agents/*.md` |
+| `.cursor/mcp.json` | `claude mcp add`, `.mcp.json` | `codex mcp add` | `gemini mcp add` |
+| `hooks.json`, camelCase | `settings.json` hooks | `hooks.json`, same shape | `BeforeTool` style hooks |
+| `agent -p` | `claude -p` | `codex exec` | `gemini -p` |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+# 11. Gemini CLI
+## Google's coding agent
+
+---
+
+## Gemini CLI: what it is and how to start
+
+An open-source terminal agent from Google.
+
+```bash
+npm install -g @google/gemini-cli
+gemini
+```
+
+On first run, choose **Sign in with Google**. Some account types need a Google Cloud project. Check usage with `/stats model`.
+
+Settings live in `settings.json`. Google has other coding products (Jules, Antigravity, Gemini Code Assist); this section covers the CLI.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: instructions
+
+`GEMINI.md` is loaded from three places and concatenated:
+
+1. Global: `~/.gemini/GEMINI.md`
+2. Workspace: your workspace directories and their parents
+3. Just in time: when a tool touches a path, `GEMINI.md` files in that directory and its ancestors
+
+Split a big file with `@file.md` imports. `/memory show` prints the combined context, and `/memory reload` rescans it. `/init` generates a starter file.
+
+To use `AGENTS.md` too, set `context.fileName` in `settings.json`; it accepts several names.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: agents, commands, skills, extensions
+
+**Subagents**: Markdown with YAML frontmatter in `.gemini/agents/` or `~/.gemini/agents/`.
+
+```markdown
+---
+name: reviewer
+description: Reviews code for security and error handling
+max_turns: 30
+---
+You are a code reviewer. Report severity, file and line, and a fix.
+```
+
+Invoke with `@reviewer ...`. Built in: `codebase_investigator`, `cli_help`, `generalist`, `browser_agent` (off by default).
+
+**Custom commands**: TOML in `.gemini/commands/`. `git/commit.toml` becomes `/git:commit`.
+
+```toml
+description = "Summarize a file"
+prompt = "Summarize this in three bullets: {{args}}"
+```
+
+**Skills**: `.gemini/skills/` or `.agents/skills/`. **Extensions** bundle all of these.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: MCP and extensions
+
+```bash
+gemini mcp add github npx -y @modelcontextprotocol/server-github
+gemini mcp add remote https://example.com/mcp --transport http
+gemini mcp add db npx my-db-server --env KEY=value
+gemini mcp add db npx my-db-server --include-tools query,schema
+```
+
+Inside a session, `/mcp` manages servers.
+
+An **extension** packages prompts, MCP servers, custom commands, themes, hooks, subagents and skills:
+
+```json
+{
+  "name": "my-extension",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": { "nodeServer": { "command": "node", "args": ["server.js"] } }
+}
+```
+
+`gemini extensions install <url>`, `list`, `link .` for local development.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: hooks
+
+Hooks go in `settings.json`, and manage with `/hooks`:
+
+```json
+{
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          { "name": "security-check", "type": "command",
+            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/security.sh", "timeout": 5000 }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Events: `SessionStart`, `SessionEnd`, `BeforeAgent`, `AfterAgent`, `BeforeModel`, `AfterModel`, `BeforeToolSelection`, `BeforeTool`, `AfterTool`, `PreCompress`, `Notification`.
+
+Exit `0` parses stdout as JSON, exit `2` blocks, other codes warn and continue.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: permissions
+
+**Approval modes** (`--approval-mode`): `default`, `auto_edit`, `yolo`, `plan`. In a session, `Shift+Tab` cycles them and `Ctrl+Y` toggles YOLO. `/permissions` manages folder trust.
+
+**Sandboxing**, any one of:
+
+- Flag: `-s` or `--sandbox`
+- Environment: `GEMINI_SANDBOX=true|docker|podman|sandbox-exec|runsc|lxc`
+- Setting: `"sandbox": true`
+
+Methods include macOS Seatbelt, containers, Windows native, gVisor and LXC.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: non-interactive use
+
+Headless mode starts when you pass `-p` or run without a TTY.
+
+```bash
+gemini -p "summarize the open TODOs" -o json
+cat build.log | gemini -p "explain the failure"
+gemini -p "refactor foo.ts" --approval-mode auto_edit
+```
+
+| Output | Contains |
+|--------|----------|
+| `json` | `response`, `stats`, optional `error` |
+| `stream-json` | Events: `init`, `message`, `tool_use`, `tool_result`, `error`, `result` |
+
+Exit codes: `0` success, `1` error, `42` input error, `53` turn limit exceeded. `-i` runs a prompt and then stays interactive.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI shortcuts
+
+| Group | Shortcut | Action |
+|-------|----------|--------|
+| **Session** | `Ctrl+C` | Cancel; quit when input is empty |
+| | `Ctrl+D` | Exit when input is empty |
+| | `Esc` | Dismiss or cancel |
+| | `Ctrl+Z` | Suspend |
+| **Modes** | `Shift+Tab` | Cycle approval modes |
+| | `Ctrl+Y` | Toggle YOLO |
+| | `Alt+M` | Toggle Markdown rendering |
+| **Navigate** | `Ctrl+R` | Reverse search history |
+| | `Ctrl+P` / `Ctrl+N` | Previous / next history |
+| | `Ctrl+O` | Expand or collapse blocks |
+| | `Ctrl+T` | Toggle the full TODO list |
+| | `Ctrl+L` | Clear and redraw |
+| **Edit** | `Ctrl+A` / `Ctrl+E` | Start / end of line |
+| | `Ctrl+K` / `Ctrl+U` | Delete to end / start |
+| | `Ctrl+W` | Delete previous word |
+| | `Ctrl+G` | Open prompt in editor |
+| **Input** | `Shift+Enter` or `Ctrl+J` | New line |
+| | `Tab` | Queue the prompt after the current task |
+| | `@path`, `!cmd` | Inject a file; run a shell command |
+
+`/vim` toggles Vim mode.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI: equivalents elsewhere
+
+| Gemini CLI | Claude Code | Codex | Cursor |
+|------------|-------------|-------|--------|
+| `GEMINI.md` | `CLAUDE.md` or `AGENTS.md` | `AGENTS.md` | `.cursor/rules`, `AGENTS.md` |
+| `.gemini/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | `.cursor/agents/*.md` |
+| Custom commands (`.toml`) | Skills (`SKILL.md`) | Skills (`SKILL.md`) | Skills (`SKILL.md`) |
+| `gemini mcp add` | `claude mcp add` | `codex mcp add` | `.cursor/mcp.json` |
+| `gemini -p` | `claude -p` | `codex exec` | `agent -p` |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
 # Putting it together
 
 ---
