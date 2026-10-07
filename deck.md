@@ -345,51 +345,76 @@ Claude Code
 
 ## Registering an MCP server
 
-In `~/.claude/mcp.json` (global) or `.mcp.json` (project):
+Use `claude mcp add`:
+
+```bash
+# Local process (stdio). Everything after -- is the server command
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Documents
+
+# Remote server (HTTP)
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
+
+# See what's registered, and whether it connected
+claude mcp list
+```
+
+Inside a session, `/mcp` shows status and handles sign-in for servers that need OAuth.
+
+---
+
+## Scopes and `.mcp.json`
+
+| Scope | Flag | Stored in | Shared? |
+|-------|------|-----------|---------|
+| **local** (default) | none | `~/.claude.json` | No. You, this project |
+| **project** | `--scope project` | `.mcp.json` in the repo root | Yes, via git |
+| **user** | `--scope user` | `~/.claude.json` | No. You, every project |
 
 ```json
 {
   "mcpServers": {
-    "my-docs": {
-      "command": "node",
-      "args": ["/path/to/my-docs-server/dist/index.js"]
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" }
     },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      "env": {
-        "POSTGRES_CONNECTION_STRING": "postgresql://localhost/mydb"
-      }
+    "local-docs": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./tools/docs-server/dist/index.js"]
     }
   }
 }
 ```
+
+`${VAR}` and `${VAR:-default}` expand from the environment, so tokens stay out of git. Teammates approve project servers the first time they use them.
 
 ---
 
 ## Building an MCP server (TypeScript)
 
 ```typescript
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
 
-const server = new Server(
-  { name: "my-server", version: "1.0.0" },
-  { capabilities: { tools: {} } }
+const server = new McpServer({ name: "time-server", version: "1.0.0" });
+
+server.registerTool(
+  "get_time",
+  {
+    description: "Get the current date and time",
+    inputSchema: { timezone: z.string().optional() },
+  },
+  async ({ timezone }) => ({
+    content: [{ type: "text", text: new Date().toLocaleString("en-US", { timeZone: timezone }) }],
+  })
 );
 
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [{
-    name: "get_weather",
-    description: "Get current weather for a city",
-    inputSchema: {
-      type: "object",
-      properties: { city: { type: "string" } },
-      required: ["city"]
-    }
-  }]
-}));
+await server.connect(new StdioServerTransport());
 ```
+
+Then register it: `claude mcp add time-server -- node dist/index.js`.
 
 ---
 
@@ -398,9 +423,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 | Transport | Use case |
 |-----------|---------|
 | **stdio** | Local servers run as child processes (most common) |
-| **HTTP/SSE** | Remote servers, multi-client scenarios |
+| **HTTP** | Remote servers, multiple clients. The recommended remote transport |
+| **SSE** | Older remote transport. Deprecated in favor of HTTP |
 
-Most local MCP servers use stdio. Claude Code starts the process and communicates via stdin/stdout.
+Claude Code starts a stdio server itself and talks to it over stdin and stdout, so a stdio server must never print anything else to stdout.
 
 ---
 
