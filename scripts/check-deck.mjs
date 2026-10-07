@@ -20,7 +20,7 @@ const REQUIRED = [
   ['deck.md', 'Managed Agents'], ['deck.md', 'plugin'],
   ['deck.md', 'headless'], ['deck.md', 'academy.claude.com'],
   ['deck.md', 'Codex'], ['deck.md', 'Cursor'],
-  ['deck.md', 'AGENTS.md'], ['deck.md', 'compared as of'],
+  ['deck.md', 'AGENTS.md'], ['deck.md', /compared as of/i],
   ['deck.md', 'Gemini CLI'], ['deck.md', 'GEMINI.md'],
   ['deck.md', 'Claude Code shortcuts'], ['deck.md', 'Codex shortcuts'],
   ['deck.md', 'Cursor shortcuts'], ['deck.md', 'Gemini CLI shortcuts'],
@@ -33,7 +33,8 @@ for (const { name, text } of all) {
 }
 for (const [file, s] of REQUIRED) {
   const doc = all.find((d) => d.name === file);
-  if (!doc.text.includes(s)) failures.push(`${file} is missing required string: ${s}`);
+  const found = s instanceof RegExp ? s.test(doc.text) : doc.text.includes(s);
+  if (!found) failures.push(`${file} is missing required string: ${s}`);
 }
 
 function countSlides(md) {

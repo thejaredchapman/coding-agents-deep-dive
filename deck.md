@@ -797,6 +797,128 @@ The same engine is available as a Python and TypeScript library: the Agent SDK.
 
 ---
 
+# 7. Four coding agents, side by side
+## Claude Code · Codex · Cursor · Gemini CLI
+
+---
+
+## The same five ideas everywhere
+
+Every one of these tools has the same building blocks. The ideas transfer; the file names, formats and commands differ.
+
+| Idea | What it is |
+|------|-----------|
+| **Instructions file** | Standing rules loaded every session |
+| **Subagents** | Specialists with their own context |
+| **Skills / commands** | Reusable workflows |
+| **MCP** | External tools and data |
+| **Hooks** | Scripts at lifecycle events |
+
+The next slides map each idea across all four tools, using each vendor's official docs.
+
+<p class="small">Compared as of 2026-10-07. A dash (—) means we could not confirm it in the official docs on that date. It does not mean the feature is missing.</p>
+
+---
+
+## Rosetta table: instructions, agents, skills, MCP
+
+| | Claude Code | Codex | Cursor | Gemini CLI |
+|-|-------------|-------|--------|------------|
+| **Instructions** | `CLAUDE.md` (also reads `AGENTS.md` if no `CLAUDE.md`) | `AGENTS.md`, `AGENTS.override.md` | `.cursor/rules/*.mdc`, `AGENTS.md` | `GEMINI.md` (can read `AGENTS.md`) |
+| **Subagents** | `.claude/agents/*.md` | `.codex/agents/*.toml` | `.cursor/agents/*.md` (also reads `.claude/` and `.codex/`) | `.gemini/agents/*.md` |
+| **Skills** | `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.agents/skills/` or `.cursor/skills/` | `.gemini/skills/` or `.agents/skills/`; custom commands in `.toml` |
+| **MCP** | `claude mcp add`, `.mcp.json` | `codex mcp add`, `config.toml` | `.cursor/mcp.json` | `gemini mcp add` |
+
+<p class="small">Compared as of 2026-10-07. — = not confirmed in official docs.</p>
+
+---
+
+## Rosetta table: hooks, permissions, CI, cloud
+
+| | Claude Code | Codex | Cursor | Gemini CLI |
+|-|-------------|-------|--------|------------|
+| **Hooks** | `settings.json`, 30+ events | `hooks.json` or `config.toml`, same shape | `.cursor/hooks.json`, camelCase events | `settings.json`, `BeforeTool` style events |
+| **Exit code 2 blocks** | Yes | Yes | Yes | Yes |
+| **Permissions** | Modes + allow/deny rules | Sandbox + approval policy | `/sandbox` | `--approval-mode` + sandbox |
+| **Non-interactive** | `claude -p` | `codex exec` | `agent -p` | `gemini -p` |
+| **Remote / cloud** | Remote Control, cloud sessions | `--remote` app server | Cloud Agents | — |
+
+<p class="small">Compared as of 2026-10-07. — = not confirmed in official docs.</p>
+
+---
+
+## What carries over between tools
+
+| Shared | Detail |
+|--------|--------|
+| **`AGENTS.md`** | Read by Codex and Cursor. Claude Code reads it when there is no `CLAUDE.md`. Gemini CLI reads it if you set `context.fileName` |
+| **`SKILL.md` skills** | The same folder format in all four. Codex, Cursor and Gemini CLI all read `.agents/skills/` |
+| **Subagent files** | Cursor also reads `.claude/agents/` and `.codex/agents/` |
+| **Hook config** | Codex uses the same `matcher` + nested `hooks` JSON shape as Claude Code |
+
+Claude Code looks in `.claude/skills/`, not `.agents/skills/`, so copy shared skills there.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Moving a project into Claude Code
+
+| From | What to do |
+|------|-----------|
+| **Instructions** | Keep your `AGENTS.md`. Claude Code reads it when there's no `CLAUDE.md`. To add Claude-only notes, create `CLAUDE.md` containing `@AGENTS.md` |
+| **MCP (Codex)** | Each `[mcp_servers.x]` becomes `claude mcp add x -- <command>`. Example: `codex mcp add context7 -- npx -y @upstash/context7-mcp` is `claude mcp add context7 -- npx -y @upstash/context7-mcp` |
+| **MCP (Cursor)** | `.cursor/mcp.json` already uses `mcpServers`. Copy it to `.mcp.json`, and add `"type": "http"` to `url` entries |
+| **Skills** | Copy `.agents/skills/*` into `.claude/skills/` |
+| **Subagents** | Cursor's Markdown files are close. Codex's `.toml` becomes Markdown, with `developer_instructions` as the body |
+| **Hooks** | Codex hooks keep their shape. Re-check matcher tool names |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Moving a project out of Claude Code
+
+| To | What to do |
+|----|-----------|
+| **Codex / Cursor** | Put shared rules in `AGENTS.md`. Both read it |
+| **Gemini CLI** | Set `context.fileName` to include `AGENTS.md`, or keep a `GEMINI.md` |
+| **MCP** | Re-add each server. Codex: `codex mcp add <name> -- <command>`. Gemini CLI: `gemini mcp add <name> <command>`. Cursor: `.cursor/mcp.json` |
+| **Skills** | Move to `.agents/skills/`, which Codex, Cursor and Gemini CLI all read |
+| **Subagents** | Cursor reads `.claude/agents/` as is. Codex needs `.toml`. Gemini CLI uses `.gemini/agents/` |
+| **Hooks** | Event names and JSON differ in Cursor and Gemini CLI; rewrite them |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Using more than one tool on a team
+
+Aim for one source of truth, and keep tool-specific config small.
+
+1. **`AGENTS.md`** holds the shared rules. Add `@AGENTS.md` to `CLAUDE.md`
+2. **`.agents/skills/`** holds shared skills, copied to `.claude/skills/` for Claude Code
+3. **MCP and hook config stay per tool.** They differ in format (JSON, TOML) and in event names
+4. **Review permissions per tool.** Defaults differ: Codex sandboxes by default, Claude Code asks per tool, Gemini CLI has approval modes
+
+Pick conventions once and write them in `AGENTS.md`, not in four places.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gotchas going in either direction
+
+- **Filenames are not interchangeable.** `CLAUDE.md` is not read by Codex; `GEMINI.md` is not read by Cursor
+- **Skills look the same but live in different folders.** Check the folder, not just the format
+- **Hook event names differ.** Claude Code `PreToolUse`, Gemini CLI `BeforeTool`, Cursor `preToolUse`
+- **Nested instruction files:** closer files win in Codex and Cursor; Claude Code and Gemini CLI both load more specific files as you work in subfolders
+- **Docs move.** Codex's docs now live at `learn.chatgpt.com`; re-check a command before you rely on it
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
 # Putting it together
 
 ---
