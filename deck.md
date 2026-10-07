@@ -106,6 +106,22 @@ Rules **stack** — they don't override each other. More specific files add cont
 
 ---
 
+## AGENTS.md and other files
+
+Other coding agents read `AGENTS.md`. Claude Code reads it too (v2.1.277 and later):
+
+| Your repo has | Claude Code reads |
+|---------------|-------------------|
+| `AGENTS.md` only | `AGENTS.md` |
+| `CLAUDE.md` only | `CLAUDE.md` |
+| Both | `CLAUDE.md` only |
+
+To use one file for every tool, keep `AGENTS.md` as the source and put `@AGENTS.md` in your `CLAUDE.md`.
+
+Also useful: `CLAUDE.local.md` for private instructions you don't commit, `.claude/rules/` for rules scoped to certain files, and `/init` to draft a CLAUDE.md from your codebase.
+
+---
+
 ## 🛠 Exercise 1 — CLAUDE.md
 
 See `exercises/01-claude-md.md`
@@ -168,6 +184,39 @@ Each subagent should return a structured JSON summary.
 
 Or ask Claude directly in chat:
 > "Spawn three subagents to analyze authentication, authorization, and session handling in parallel."
+
+---
+
+## Custom subagents
+
+Save a specialist as a file and reuse it. A subagent is Markdown with YAML frontmatter, in `.claude/agents/` (project) or `~/.claude/agents/` (personal):
+
+```markdown
+---
+name: reviewer
+description: Reviews code for security and error handling. Use after code changes.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are a code reviewer. Report findings as: severity, file and line,
+problem, suggested fix. Do not edit files.
+```
+
+`description` tells Claude when to delegate. `tools` limits what the subagent can do. Other fields include `disallowedTools`, `permissionMode`, `skills`, `mcpServers` and `isolation: worktree`.
+
+---
+
+## Running a custom subagent
+
+| How | Example |
+|-----|---------|
+| **Name it** (guaranteed) | `@agent-reviewer review src/auth.ts` |
+| **Describe the task** | Claude delegates when a subagent's `description` fits |
+| **Whole session** | `claude --agent reviewer` |
+| **No file needed** | `claude --agents '{"reviewer": {...}}'` for one session |
+
+Built in: **Explore** (read-only search), **Plan** (research in plan mode), **general-purpose**. Subagents can spawn subagents, up to three levels deep by default.
 
 ---
 
