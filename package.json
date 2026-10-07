@@ -8,7 +8,10 @@
   "scripts": {
     "test": "node --test \"scripts/*.test.mjs\"",
     "build:slides": "node scripts/build-slides.mjs",
-    "check": "node scripts/check-deck.mjs"
+    "check": "node scripts/check-deck.mjs",
+    "app:start": "npm --prefix app start",
+    "app:build": "npm run build:slides && npm --prefix app run build",
+    "app:test": "npm --prefix app test -- --watch=false"
   },
   "repository": {
     "type": "git",
