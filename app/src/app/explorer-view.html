@@ -1,0 +1,52 @@
+<div class="overlay-backdrop" (click)="ui.explorerOpen.set(false)"></div>
+<div #dialog class="explorer" role="dialog" aria-modal="true" aria-labelledby="explorer-title" (keydown)="onKey($event, dialog)">
+  <header>
+    <div>
+      <p class="kicker">Reference</p>
+      <h2 id="explorer-title">Shortcuts and commands</h2>
+    </div>
+    <button type="button" class="close" (click)="ui.explorerOpen.set(false)" aria-label="Close explorer">Close</button>
+  </header>
+
+  <div class="controls">
+    <div class="group" role="group" aria-label="Filter by tool">
+      @for (t of tools; track t.id) {
+        <button type="button" class="chip" [attr.data-t]="t.id" [attr.aria-pressed]="toolFilter().has(t.id)" (click)="toggleTool(t.id)">
+          <span aria-hidden="true">{{ t.glyph }}</span> {{ t.name }}
+        </button>
+      }
+    </div>
+    <div class="group" role="group" aria-label="Filter by type">
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'all'" (click)="kind.set('all')">All</button>
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'shortcut'" (click)="kind.set('shortcut')">Shortcuts</button>
+      <button type="button" class="seg" [attr.aria-pressed]="kind() === 'command'" (click)="kind.set('command')">Commands</button>
+    </div>
+    <input #search type="search" placeholder="Filter, e.g. “mode” or “ctrl”" aria-label="Filter shortcuts and commands" [value]="query()" (input)="query.set($any($event.target).value)" />
+  </div>
+
+  <p class="count" aria-live="polite">
+    {{ results().length }} {{ results().length === 1 ? 'entry' : 'entries' }}@if (tool.info(); as mine) { · {{ mine.name }} listed first}
+  </p>
+
+  <div class="body">
+    @for (block of blocks(); track block.tool) {
+      <section class="tool" [attr.data-t]="block.tool">
+        <h3><span aria-hidden="true">{{ block.glyph }}</span> {{ block.name }}</h3>
+        @for (group of block.groups; track group.name) {
+          <h4>{{ group.name }}</h4>
+          <dl>
+            @for (item of group.items; track $index) {
+              <dt [innerHTML]="item.keysHtml"></dt>
+              <dd>{{ item.action }}</dd>
+            }
+          </dl>
+        }
+      </section>
+    } @empty {
+      <p class="none">Nothing matches. Try fewer words, or clear the tool filter.</p>
+    }
+    @if (showsCodex()) {
+      <p class="note">The Codex list is partial: its docs did not give a complete key-binding list when this deck was checked.</p>
+    }
+  </div>
+</div>

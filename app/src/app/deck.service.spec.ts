@@ -106,6 +106,18 @@ describe('DeckService', () => {
     expect(deck.currentSection()).toBe('1. Alpha');
   });
 
+  it('tracks the direction of travel', () => {
+    deck.load(data);
+    deck.goTo(3);
+    expect(deck.direction()).toBe(1);
+    deck.prev();
+    expect(deck.direction()).toBe(-1);
+    deck.goTo(3);
+    expect(deck.direction()).toBe(1);
+    deck.goTo(3); // no movement: direction unchanged
+    expect(deck.direction()).toBe(1);
+  });
+
   it('survives an empty deck without throwing', () => {
     deck.load({ updated: '', slides: [] });
     expect(deck.total()).toBe(0);

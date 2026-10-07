@@ -5,21 +5,24 @@
 </div>
 
 <header class="top">
-  <button type="button" class="menu" (click)="sidebarOpen.set(!sidebarOpen())" [attr.aria-expanded]="sidebarOpen()" aria-controls="sections">
+  <button type="button" class="menu" (click)="ui.sidebarOpen.set(!ui.sidebarOpen())" [attr.aria-expanded]="ui.sidebarOpen()" aria-controls="sections">
     Sections
   </button>
-  <p class="brand">Coding Agents — Deep Dive</p>
+  <p class="brand"><span class="mark" aria-hidden="true">▌</span>Coding agents<span class="b2">deep dive</span></p>
+  <app-tool-picker class="top-picker" label="Your coding agent" />
   <div class="actions">
-    <button type="button" (click)="helpOpen.set(true)">Shortcuts</button>
-    <button type="button" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'">
-      {{ theme.theme() === 'dark' ? 'Light' : 'Dark' }} mode
+    <button type="button" class="act" (click)="ui.openPalette()" aria-label="Search slides and run commands">Search<kbd>/</kbd></button>
+    <button type="button" class="act" (click)="ui.openExplorer()" aria-label="Open the shortcut and command explorer">Explorer<kbd>E</kbd></button>
+    <button type="button" class="act theme" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'">
+      {{ theme.theme() === 'dark' ? 'Light' : 'Dark' }}
     </button>
   </div>
 </header>
 
 <div class="layout">
-  <nav id="sections" class="sidebar" [class.open]="sidebarOpen()" aria-label="Sections">
-    <app-sidebar (picked)="sidebarOpen.set(false)" />
+  <nav id="sections" class="sidebar" [class.open]="ui.sidebarOpen()" aria-label="Sections">
+    <p class="toc-title">Contents</p>
+    <app-sidebar (picked)="ui.sidebarOpen.set(false)" />
   </nav>
 
   <main id="slide" tabindex="-1" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
@@ -37,25 +40,37 @@
   <button type="button" (click)="deck.prev()" [disabled]="deck.index() === 0" aria-label="Previous slide">← Prev</button>
   <span class="counter">{{ deck.index() + 1 }} / {{ deck.total() }}</span>
   <button type="button" (click)="deck.next()" [disabled]="deck.index() >= deck.total() - 1" aria-label="Next slide">Next →</button>
+  @if (tool.info(); as mine) {
+    <button type="button" class="mine" (click)="tool.jumpToMine()">{{ mine.glyph }} Jump to {{ mine.name }}</button>
+  }
   <span class="updated">Last updated <time [attr.datetime]="deck.updated()">{{ deck.updated() }}</time></span>
 </footer>
 
 <div class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement() }}</div>
 
-@if (helpOpen()) {
-  <div class="backdrop" (click)="helpOpen.set(false)"></div>
+@if (ui.paletteOpen()) {
+  <app-command-palette />
+}
+@if (ui.explorerOpen()) {
+  <app-explorer-view />
+}
+@if (ui.helpOpen()) {
+  <div class="overlay-backdrop" (click)="ui.helpOpen.set(false)"></div>
   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="help-title">
     <h2 id="help-title">Keyboard shortcuts</h2>
     <dl>
       <dt><kbd>→</kbd> <kbd>Space</kbd> <kbd>PageDown</kbd></dt><dd>Next slide</dd>
       <dt><kbd>←</kbd> <kbd>Shift</kbd>+<kbd>Space</kbd> <kbd>PageUp</kbd></dt><dd>Previous slide</dd>
       <dt><kbd>Home</kbd> / <kbd>End</kbd></dt><dd>First / last slide</dd>
+      <dt><kbd>/</kbd> or <kbd>Ctrl</kbd>+<kbd>K</kbd></dt><dd>Search and commands</dd>
+      <dt><kbd>E</kbd></dt><dd>Shortcut and command explorer</dd>
+      <dt><kbd>M</kbd></dt><dd>Jump to my tool's section</dd>
       <dt><kbd>S</kbd></dt><dd>Show or hide sections</dd>
       <dt><kbd>T</kbd></dt><dd>Switch light and dark</dd>
       <dt><kbd>?</kbd></dt><dd>This help</dd>
       <dt><kbd>Esc</kbd></dt><dd>Close</dd>
     </dl>
     <p class="muted">On a touch screen, swipe left or right.</p>
-    <button type="button" (click)="helpOpen.set(false)" autofocus>Close</button>
+    <button type="button" (click)="ui.helpOpen.set(false)" autofocus>Close</button>
   </div>
 }

@@ -1,45 +1,111 @@
-.slide { max-width: 62rem; }
-.eyebrow { margin: 0 0 0.25rem; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.slide { position: relative; max-width: 64rem; --dx: 28px; }
+.slide.back { --dx: -28px; }
+.slide > * { position: relative; }
+
+/* Large outlined section numeral behind the slide. */
+.slide::before {
+  content: attr(data-num); position: absolute; right: -0.25rem; top: -1.4rem; z-index: 0;
+  font: 800 clamp(5rem, 15vw, 11rem) / 1 var(--mono); letter-spacing: -0.06em;
+  color: transparent; -webkit-text-stroke: 1.5px var(--rule); pointer-events: none; user-select: none;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem; font: 600 0.7rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+  &::before { content: ''; display: inline-block; width: 1.6rem; height: 2px; margin-right: 0.6rem; vertical-align: middle; background: currentColor; }
+}
 
 .slide-content {
-  h1 { color: var(--accent); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.15; margin: 0.2em 0 0.3em; }
-  h2 { color: var(--accent); font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.2; margin: 0.2em 0 0.5em; }
-  h3 { color: var(--accent); font-size: 1.15rem; }
-  p, li { font-size: clamp(1rem, 1.6vw, 1.15rem); }
-  a { color: var(--accent); text-underline-offset: 2px; }
+  > * { animation: slide-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  > :nth-child(2) { animation-delay: 50ms; }
+  > :nth-child(3) { animation-delay: 100ms; }
+  > :nth-child(4) { animation-delay: 150ms; }
+  > :nth-child(5) { animation-delay: 200ms; }
+  > :nth-child(n + 6) { animation-delay: 250ms; }
+
+  h1 { font: 800 clamp(2rem, 5vw, 3.2rem) / 1.05 var(--serif); letter-spacing: -0.025em; margin: 0.1em 0 0.3em; }
+  h2 { font: 700 clamp(1.6rem, 3.6vw, 2.4rem) / 1.12 var(--serif); letter-spacing: -0.015em; margin: 0.1em 0 0.5em; }
+  h3 { font: 700 1.2rem var(--serif); color: var(--accent); }
+  p, li { font-size: clamp(1rem, 1.5vw, 1.12rem); max-width: 46rem; }
+  a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
   strong { font-weight: 700; }
-  hr { border: 0; border-top: 1px solid var(--border); }
+  hr { border: 0; border-top: 1px solid var(--rule); }
   blockquote { margin: 1rem 0; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
+  ul, ol { padding-left: 1.3rem; }
+  li::marker { color: var(--accent); }
 
   code {
-    font: 0.88em ui-monospace, SFMono-Regular, Menlo, monospace;
-    background: var(--code-bg); color: var(--code-text); padding: 0.1em 0.35em; border-radius: 4px;
+    font: 0.84em var(--mono); background: var(--code-bg); color: var(--code-text);
+    padding: 0.12em 0.4em; border-radius: 2px;
   }
   pre {
-    position: relative; margin: 1rem 0; padding: 1rem 1rem 1rem 1.1rem; overflow-x: auto;
-    background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 0.9rem;
-    code { background: none; color: var(--text); padding: 0; font-size: 1em; }
+    position: relative; margin: 1rem 0; padding: 1rem 1rem 1rem 1.2rem; overflow-x: auto;
+    background: var(--code-bg); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 2px; font-size: 0.86rem;
+    code { background: none; color: var(--ink); padding: 0; font-size: 1em; }
   }
   pre .copy {
-    position: absolute; top: 0.4rem; right: 0.4rem; padding: 0.15rem 0.5rem; font-size: 0.75rem;
-    opacity: 0.85;
+    position: absolute; top: 0.4rem; right: 0.4rem; padding: 0.35em 0.6em; font-size: 0.64rem;
+    text-transform: uppercase; background: var(--paper); opacity: 0.8;
   }
   pre:hover .copy, pre .copy:focus-visible { opacity: 1; }
 
   /* Wide tables scroll inside the slide, never the page. */
-  table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
-  th { background: var(--accent); color: var(--on-accent); text-align: left; padding: 0.45rem 0.8rem; white-space: nowrap; }
-  td { padding: 0.4rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-  tbody tr:nth-child(even) { background: var(--hover); }
-  .small { font-size: 0.8rem; color: var(--muted); }
+  table {
+    display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem;
+    border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); background: color-mix(in srgb, var(--paper) 70%, transparent);
+  }
+  th {
+    font: 600 0.66rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; text-align: left; color: var(--muted);
+    padding: 0.6rem 0.9rem; border-bottom: 1.5px solid var(--ink); white-space: nowrap;
+  }
+  td { padding: 0.5rem 0.9rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  td:first-child strong { font-family: var(--mono); font-size: 0.82em; letter-spacing: 0.04em; text-transform: uppercase; }
+  .small { font: 0.74rem var(--mono); color: var(--muted); letter-spacing: 0.02em; }
 }
+
+/* Compare controls the app adds above tables that compare tools. */
+.table-tools {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; align-items: center; margin: 1rem 0 0; padding: 0.5rem 0.7rem;
+  border: 1px dashed var(--rule); border-bottom: 0;
+  legend { padding: 0 0.4rem; font: 600 0.62rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .chip { display: inline-flex; gap: 0.4rem; align-items: center; font: 600 0.7rem var(--mono); text-transform: uppercase; cursor: pointer; padding: 0.25rem 0.5rem; border: 1.5px solid var(--rule); border-radius: 2px; }
+  .chip input { width: 0.95rem; height: 0.95rem; margin: 0; accent-color: var(--accent); }
+  .chip[data-t='claude'] input { accent-color: var(--c-claude); }
+  .chip[data-t='codex'] input { accent-color: var(--c-codex); }
+  .chip[data-t='cursor'] input { accent-color: var(--c-cursor); }
+  .chip[data-t='gemini'] input { accent-color: var(--c-gemini); }
+  .chip:has(input:checked) { border-color: var(--ink); }
+  input[type='search'] {
+    margin-left: auto; font: 0.8rem var(--mono); padding: 0.35rem 0.6rem; min-width: 9rem; color: var(--ink);
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 2px;
+  }
+  input[type='search']:focus { border-color: var(--accent); }
+}
+.table-tools + table { border-top-style: solid; }
 
 .hide-first-code .slide-content pre:first-of-type { display: none; }
 
+/* ---- Cover ---- */
+.cover .slide-content {
+  h1 {
+    display: inline; font-size: clamp(2.8rem, 8.5vw, 6rem); line-height: 1.02; letter-spacing: -0.035em;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0 0.14em; animation: sweep 1.1s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  h2 { font: 600 0.95rem var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-top: 1.4rem; }
+}
+.cover::before { content: ''; }
+.cover-picker {
+  margin-top: 1.75rem; padding: 1.25rem 1.4rem; max-width: 46rem; background: color-mix(in srgb, var(--paper) 80%, transparent);
+  border: 1.5px solid var(--ink); box-shadow: 6px 6px 0 var(--accent); animation: slide-in 0.6s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  h2 { margin: 0 0 0.75rem; font: 700 1.3rem var(--serif); }
+  .hint { margin: 0.9rem 0 0; color: var(--muted); font-size: 0.92rem; }
+}
+
 .checklist {
-  margin: 1.5rem 0 0; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface);
-  legend { padding: 0 0.4rem; font-weight: 600; }
+  margin: 1.5rem 0 0; padding: 0.75rem 1rem; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: 4px 4px 0 var(--accent);
+  legend { padding: 0 0.4rem; font: 600 0.74rem var(--mono); letter-spacing: 0.06em; }
   label { display: flex; gap: 0.6rem; align-items: baseline; padding: 0.3rem 0; cursor: pointer; }
   input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
-  .link { border: 0; background: none; color: var(--muted); text-decoration: underline; padding: 0.4rem 0 0; }
+  .link { border: 0; padding: 0.4rem 0 0; color: var(--muted); text-decoration: underline; font-weight: 500; }
 }

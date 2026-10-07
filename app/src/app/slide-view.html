@@ -1,5 +1,12 @@
 @let slide = deck.current();
-<article class="slide" [class.hide-first-code]="slide.diagram && slide.diagram !== 'ecosystem'">
+<article
+  class="slide"
+  [class.cover]="slide.id === 1"
+  [class.fwd]="deck.direction() === 1"
+  [class.back]="deck.direction() === -1"
+  [class.hide-first-code]="slide.diagram && slide.diagram !== 'ecosystem' && slide.diagram !== 'hooks'"
+  [attr.data-num]="sectionNumber()"
+>
   <p class="eyebrow">{{ slide.section }}</p>
 
   @switch (slide.diagram) {
@@ -10,6 +17,17 @@
   }
 
   <div #content class="slide-content" [innerHTML]="slide.html" (click)="onContentClick($event)"></div>
+
+  @if (slide.id === 1) {
+    <section class="cover-picker" aria-labelledby="pick-title">
+      <h2 id="pick-title">Which agent do you use?</h2>
+      <app-tool-picker [large]="true" label="Pick your coding agent to personalize this deck" />
+      <p class="hint">
+        Your choice tints the deck, highlights your column in every comparison, and lists your shortcuts first.
+        Change it any time from the header. Press <kbd>/</kbd> to search, <kbd>E</kbd> for the shortcut explorer.
+      </p>
+    </section>
+  }
 
   @if (slide.checklist?.length) {
     <fieldset class="checklist">

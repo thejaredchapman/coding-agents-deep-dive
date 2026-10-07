@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, afterRenderEffect, inject, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, afterRenderEffect, computed, inject, viewChild } from '@angular/core';
 import { ChecklistService } from './checklist.service';
 import { DeckService } from './deck.service';
 import { DiagramEcosystem, DiagramFlow, DiagramHooks, DiagramSubagents } from './diagrams';
+import { enhanceTables } from './table-enhancer';
+import { ToolPicker } from './tool-picker';
 
 @Component({
   selector: 'app-slide-view',
-  imports: [DiagramSubagents, DiagramHooks, DiagramFlow, DiagramEcosystem],
+  imports: [DiagramSubagents, DiagramHooks, DiagramFlow, DiagramEcosystem, ToolPicker],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   templateUrl: './slide-view.html',
@@ -15,6 +17,12 @@ export class SlideView {
   protected readonly deck = inject(DeckService);
   protected readonly checklist = inject(ChecklistService);
   private readonly content = viewChild<ElementRef<HTMLElement>>('content');
+
+  /** Section number such as "05", shown large behind the slide. */
+  protected readonly sectionNumber = computed(() => {
+    const match = /^(\d+)\./.exec(this.deck.currentSection());
+    return match ? match[1].padStart(2, '0') : '';
+  });
 
   constructor() {
     // Runs after each render: add copy buttons and open external links in a new tab.
@@ -46,6 +54,7 @@ export class SlideView {
       button.setAttribute('aria-label', 'Copy code to clipboard');
       pre.appendChild(button);
     });
+    enhanceTables(root);
     root.querySelectorAll('a[href^="http"]').forEach((a) => {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');

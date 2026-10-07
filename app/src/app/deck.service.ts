@@ -10,6 +10,8 @@ export class DeckService {
   readonly total = computed(() => this.slides().length);
   readonly index = signal(0);
   readonly error = signal<string | null>(null);
+  /** 1 after moving forward, -1 after moving back; drives the slide transition direction. */
+  readonly direction = signal<1 | -1>(1);
   readonly current = computed<Slide>(() => this.slides()[this.index()]);
   readonly currentSection = computed(() => this.current()?.section ?? '');
   readonly progress = computed(() => (this.total() > 1 ? this.index() / (this.total() - 1) : 0));
@@ -54,7 +56,9 @@ export class DeckService {
   }
 
   goTo(i: number): void {
-    this.index.set(this.clamp(i));
+    const target = this.clamp(i);
+    if (target !== this.index()) this.direction.set(target > this.index() ? 1 : -1);
+    this.index.set(target);
     this.writeHash();
   }
 
