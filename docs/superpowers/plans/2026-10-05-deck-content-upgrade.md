@@ -663,7 +663,7 @@ Slide 1, the mapping table (title and slug, base `https://academy.claude.com/cou
 | Cloud providers | Claude with Amazon Bedrock | `claude-with-amazon-bedrock` |
 | Cloud providers | Claude with Google Cloud's Vertex AI | `claude-with-google-cloud-s-vertex-ai` |
 
-Render each course as a full link. Slide 2: one pointer to the full catalog at `https://academy.claude.com/courses` (28 courses, including the AI Fluency track). Update the Resources slide: replace `claude.ai/docs/claude-code` with `https://code.claude.com/docs`.
+Render each course as a full link. Slide 2: one pointer to the full catalog at `https://academy.claude.com/courses` (27 courses, counted 2026-10-07, including the AI Fluency track). Update the Resources slide: replace `claude.ai/docs/claude-code` with `https://code.claude.com/docs`.
 
 - [ ] **Step 3: Add "Go deeper" lines to exercises**
 

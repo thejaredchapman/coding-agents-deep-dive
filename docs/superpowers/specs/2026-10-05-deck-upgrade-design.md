@@ -65,7 +65,7 @@ The closing section gains a "which product for what" table beside the existing e
 
 ### 1d. New section: Keep learning (Claude Academy)
 
-`platform.claude.com/docs/en/resources/courses` redirects to https://academy.claude.com/courses, so the deck links to Claude Academy (28 courses). Mapping:
+`platform.claude.com/docs/en/resources/courses` redirects to https://academy.claude.com/courses, so the deck links to Claude Academy (27 courses, counted 2026-10-07). Mapping:
 
 | Deck section | Course |
 |---|---|
