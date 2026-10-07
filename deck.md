@@ -20,9 +20,13 @@ style: |
   pre { background: #1e1e1e; border-left: 3px solid #d97757; border-radius: 6px; }
   pre code { background: transparent; color: #d4d4d4; }
   strong { color: #e8a87c; }
-  table { border-collapse: collapse; width: 100%; }
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  td code, th code { white-space: normal; overflow-wrap: anywhere; font-size: 0.8em; padding: 1px 4px; }
+  table:has(th:nth-child(5)) th:first-child, table:has(th:nth-child(5)) td:first-child { width: 13%; }
   th { background: #d97757; color: #fff; padding: 5px 10px; }
-  td { padding: 4px 10px; border-bottom: 1px solid #333; }
+  td { padding: 4px 10px; border-bottom: 1px solid #333; color: #f0f0f0; }
+  table tr, table tbody tr { background: #161616; }
+  table tbody tr:nth-child(2n) { background: #1f1f1f; }
   .small { font-size: 0.8rem; color: #aaa; }
 ---
 
@@ -434,11 +438,7 @@ Inside a session, `/mcp` shows status and handles sign-in for servers that need 
       "url": "https://api.githubcopilot.com/mcp/",
       "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" }
     },
-    "local-docs": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["./tools/docs-server/dist/index.js"]
-    }
+    "docs": { "type": "stdio", "command": "node", "args": ["./docs-server.js"] }
   }
 }
 ```
@@ -559,7 +559,7 @@ In `~/.claude/settings.json` (user), `.claude/settings.json` (project, shareable
 }
 ```
 
-An event holds **matcher groups**; each group holds a list of **hooks**. The `matcher` filters by tool name (`Bash`, `Edit`, `Write`, `Read`, `mcp__server__tool`). Handler types: `command`, `http`, `mcp_tool`, `prompt`, `agent`.
+An event holds **matcher groups**; each holds a list of **hooks**. `matcher` filters by tool name (`Bash`, `Edit`, `Write`, `mcp__server__tool`). Types: `command`, `http`, `mcp_tool`, `prompt`, `agent`.
 
 ---
 
@@ -770,6 +770,12 @@ Every tool call is checked. You choose how much Claude can do without asking.
 
 Cycle modes with `Shift+Tab`. Set a default with `defaultMode` in settings.
 
+---
+
+## Permission rules
+
+Allow and deny specific tool calls in `settings.json`:
+
 ```json
 {
   "permissions": {
@@ -973,7 +979,7 @@ Pick conventions once and write them in `AGENTS.md`, not in four places.
 
 ---
 
-## Claude Code commands cheat sheet
+## Claude Code commands cheat sheet (1/2)
 
 | Command | Does |
 |---------|------|
@@ -983,14 +989,21 @@ Pick conventions once and write them in `AGENTS.md`, not in four places.
 | `/context` | Show context usage |
 | `/model`, `/fast` | Switch model; toggle fast mode |
 | `/permissions` | Manage allow, ask and deny rules |
-| `/mcp`, `/plugin`, `/skills`, `/hooks` | Inspect and manage extensions |
 | `/memory` | Edit CLAUDE.md and auto memory |
+
+---
+
+## Claude Code commands cheat sheet (2/2)
+
+| Command | Does |
+|---------|------|
+| `/mcp`, `/plugin`, `/skills`, `/hooks` | Inspect and manage extensions |
 | `/resume`, `/rewind` | Reopen a conversation; roll back |
 | `/diff` | Review changes in the working tree |
 | `/tasks` | Background work and subagents |
 | `/usage` | Cost and plan limits (`/cost` is an alias) |
 | `/remote-control` (`/rc`) | Continue this session from claude.ai |
-| `/btw` | Ask a side question without adding to context |
+| `/btw` | Side question that doesn't add to context |
 | `/doctor` | Diagnose your setup |
 
 Type `/` to see everything, including your skills and plugin commands.
@@ -1340,19 +1353,23 @@ agent ls                  # list previous chats
 
 ---
 
-## Cursor shortcuts
-
-**CLI**
+## Cursor shortcuts (1/2): CLI
 
 | Key | Action |
 |-----|--------|
-| `Shift+Tab` | Rotate Agent, Plan, Ask |
+| `Shift+Tab` | Rotate Agent, Plan, Ask modes |
 | `Shift+Enter` or `Ctrl+J` | New line |
 | `Up` | Previous messages |
 | `Ctrl+R` | Review changes |
 | `Ctrl+D` twice | Exit |
 
-**Editor (macOS)**
+Slash commands: `/plan`, `/ask`, `/summarize`, `/resume`. Start a message with `&` to send it to the cloud.
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Cursor shortcuts (2/2): editor (macOS)
 
 | Key | Action |
 |-----|--------|
@@ -1364,7 +1381,7 @@ agent ls                  # list previous chats
 | `Cmd+Shift+P` | Command palette |
 | `Tab` | Accept a suggestion |
 
-<p class="small">Compared as of 2026-10-07. Editor keys are macOS; Windows and Linux keys are not on the docs page.</p>
+<p class="small">Compared as of 2026-10-07. Editor keys are macOS only on the docs page.</p>
 
 ---
 
@@ -1541,7 +1558,7 @@ Exit codes: `0` success, `1` error, `42` input error, `53` turn limit exceeded. 
 
 ---
 
-## Gemini CLI shortcuts
+## Gemini CLI shortcuts (1/2): session, modes, navigation
 
 | Group | Shortcut | Action |
 |-------|----------|--------|
@@ -1557,6 +1574,15 @@ Exit codes: `0` success, `1` error, `42` input error, `53` turn limit exceeded. 
 | | `Ctrl+O` | Expand or collapse blocks |
 | | `Ctrl+T` | Toggle the full TODO list |
 | | `Ctrl+L` | Clear and redraw |
+
+<p class="small">Compared as of 2026-10-07.</p>
+
+---
+
+## Gemini CLI shortcuts (2/2): editing and input
+
+| Group | Shortcut | Action |
+|-------|----------|--------|
 | **Edit** | `Ctrl+A` / `Ctrl+E` | Start / end of line |
 | | `Ctrl+K` / `Ctrl+U` | Delete to end / start |
 | | `Ctrl+W` | Delete previous word |

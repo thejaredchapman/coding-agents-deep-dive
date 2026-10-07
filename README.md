@@ -1,6 +1,6 @@
 # Coding Agents — Deep Dive
 
-A 103-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
+A 107-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
 
 The five-section walkthrough is taught with Claude Code examples, because the exercises need one concrete tool. The cross-tool sections then give each tool the same depth, with its own shortcuts reference. All facts come from each vendor's official docs, checked on 2026-10-07 (see `docs/superpowers/facts.md` for the sources).
 
@@ -13,12 +13,12 @@ The five-section walkthrough is taught with Claude Code examples, because the ex
 | 3. Skills | 7 | `exercises/03-skills.md` |
 | 4. MCP | 8 | `exercises/04-mcp.md` |
 | 5. Hooks | 8 | `exercises/05-hooks.md` |
-| 6. The Claude ecosystem (surfaces, Remote Control, Claude Tag, Cowork, Agent SDK, Chrome, models, plugins, permissions, headless) | 11 | — |
+| 6. The Claude ecosystem (surfaces, Remote Control, Claude Tag, Cowork, Agent SDK, Chrome, models, plugins, permissions, headless) | 12 | — |
 | 7. Four coding agents, side by side | 9 | — |
-| 8. Claude Code shortcuts and commands | 4 | — |
+| 8. Claude Code shortcuts and commands | 5 | — |
 | 9. Codex | 10 | — |
-| 10. Cursor | 10 | — |
-| 11. Gemini CLI | 10 | — |
+| 10. Cursor | 11 | — |
+| 11. Gemini CLI | 11 | — |
 | Putting it together, Keep learning (Claude Academy) | 8 | — |
 
 Each exercise ends with a **Go deeper** link to a Claude Academy course and a **Coming from another tool?** note for Codex, Cursor and Gemini CLI.
@@ -54,7 +54,7 @@ Needs Node 18 or later and no dependencies.
 
 ## Delivery
 
-The 103 slides are too many for one session. Pick a path:
+The 107 slides are too many for one session. Pick a path:
 
 - **90-minute core:** sections 1–5 with their exercises (about 40 slides)
 - **Ecosystem add-on:** section 6
