@@ -17,18 +17,18 @@ const slides: Slide[] = [
 describe('buildContents', () => {
   const groups = buildContents(slides);
   it('groups sections by topic, in the deck order, with unknown ones last', () => {
-    expect(groups.map((g) => g.name)).toEqual(['Start here', 'The five extension points', 'Compare the agents', 'AI coding assistants guide', 'Wrap up', 'More']);
-    expect(groups[3].sections.map((s) => s.name)).toEqual(['12. Choosing and using any tool', '14. More assistants']);
+    expect(groups.map((g) => g.name)).toEqual(['Start here', 'AI coding assistants guide', 'Compare the agents', 'The five extension points', 'Wrap up', 'More']);
+    expect(groups[1].sections.map((s) => s.name)).toEqual(['12. Choosing and using any tool', '14. More assistants']);
   });
   it('lists one entry per slide in ordinary sections', () => {
-    const skills = groups[1].sections[0];
+    const skills = groups[3].sections[0];
     expect(skills.items.map((i) => i.label)).toEqual(['What is a skill?', 'Skill anatomy']);
   });
   it('does not turn one repeated prefix into a chapter', () => {
     expect(groups[2].sections[0].items.map((i) => i.label)).toEqual(['Codex: install', 'Codex: permissions']);
   });
   it('merges consecutive slides of the same chapter and keeps the first slide index', () => {
-    const items = groups[3].sections[0].items;
+    const items = groups[1].sections[0].items;
     expect(items.map((i) => [i.label, i.count])).toEqual([['12. Choosing', 1], ['Pick Your Tool', 2], ['Safeguards', 2], ['Responsible', 1]]);
     expect(items[1].index).toBe(slides.findIndex((s) => s.title === 'Pick Your Tool: Step 0'));
   });

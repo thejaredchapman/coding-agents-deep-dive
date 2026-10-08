@@ -25,10 +25,10 @@ export interface ContentsGroup {
 /** How sections are grouped, by section number (or by name for the unnumbered ones). Anything else lands in "More". */
 const GROUPS: { name: string; blurb: string; keys: (number | string)[] }[] = [
   { name: 'Start here', blurb: 'What this is', keys: ['Intro'] },
+  { name: 'AI coding assistants guide', blurb: 'Choose a tool, use it safely, seven profiles', keys: [12, 14] },
+  { name: 'Compare the agents', blurb: 'Claude Code, Codex, Cursor and Gemini CLI', keys: [7, 9, 10, 11] },
   { name: 'The five extension points', blurb: 'With a hands-on exercise each', keys: [1, 2, 3, 4, 5] },
   { name: 'Claude Code', blurb: 'The ecosystem, shortcuts and a beginner field guide', keys: [6, 8, 13] },
-  { name: 'Compare the agents', blurb: 'Claude Code, Codex, Cursor and Gemini CLI', keys: [7, 9, 10, 11] },
-  { name: 'AI coding assistants guide', blurb: 'Choose a tool, use it safely, seven profiles', keys: [12, 14] },
   { name: 'Wrap up', blurb: 'Putting it together and where to learn more', keys: ['Putting it together', 'Keep learning', 'Questions?'] },
 ];
 
