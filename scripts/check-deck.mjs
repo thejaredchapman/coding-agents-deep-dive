@@ -28,12 +28,13 @@ const REQUIRED = [
 
 const failures = [];
 
-// The cross-tool sections legitimately mention other tools' names and placeholders
-// (for example Gemini CLI's {{args}} and write_file), so scan the rest of the deck.
+// The per-tool and guide sections legitimately mention other tools' names and placeholders
+// (for example Gemini CLI's {{args}} and write_file, or retired model ids in a status table),
+// so scan the rest of the deck.
+const EXEMPT = /Codex|Cursor|Gemini|Copilot|Devin|Aider|side by side|Choosing|More assistants|field guide/;
 function withoutCrossTool(text) {
-  const start = text.indexOf('# 7. Coding agents, side by side');
-  const end = text.indexOf('# Putting it together');
-  return start >= 0 && end > start ? text.slice(0, start) + text.slice(end) : text;
+  const parts = text.split(/\n---\n(?=\s*# (?:\d+\. |Putting it together|Keep learning|Questions))/);
+  return parts.filter((p) => !EXEMPT.test(p.split('\n').find((l) => l.startsWith('# ')) ?? '')).join('\n---\n');
 }
 for (const { name, text } of all) {
   const scanned = name === 'deck.md' ? withoutCrossTool(text) : text;

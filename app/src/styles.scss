@@ -166,6 +166,8 @@ tr[hidden] { display: none; }
 .diagram .t-cursor { --tc: var(--c-cursor); } .diagram .t-gemini { --tc: var(--c-gemini); }
 .diagram .t-copilot { --tc: var(--c-copilot); } .diagram .t-devin { --tc: var(--c-devin); } .diagram .t-aider { --tc: var(--c-aider); }
 .diagram .dot[class*='t-'] { fill: var(--tc); }
+.diagram .dot.none[class*='t-'] { fill: none; stroke: var(--tc); stroke-width: 1.5; opacity: 0.55; }
+.diagram .label.tiny { font-size: 11px; }
 .diagram text[class*='t-'] { fill: var(--tc); }
 
 /* Interactive hook lifecycle */

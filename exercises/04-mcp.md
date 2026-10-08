@@ -27,7 +27,7 @@ The steps below were **run for real in Claude Code**. For every other tool the t
 | Gemini CLI | `gemini mcp add filesystem npx -y @modelcontextprotocol/server-filesystem ~/Documents` | `/mcp` |
 | GitHub Copilot | `mcp.json` in your IDE, or the Copilot CLI | `/mcp` in the CLI |
 
-Scopes, `.mcp.json` and `--scope` below are Claude Code's. Other tools have their own config files (see section 4).
+Scopes, `.mcp.json` and `--scope` below are Claude Code's. Other tools have their own config files (see section 7).
 
 ---
 

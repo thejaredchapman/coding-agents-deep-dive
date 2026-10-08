@@ -2,33 +2,27 @@
 
 A 329-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Aider, Claude Code, Codex, Cursor, Devin Desktop (formerly Windsurf), Gemini CLI and GitHub Copilot** (listed alphabetically), for engineers who already use one of them and want to go further, or who are moving between them.
 
-Each of the five extension points is taught as an idea with a table of how every tool does it, and every tool then gets the same three layers: in depth, ecosystem and a field guide. The exercises were run for real in Claude Code (the only tool they were run in) and each opens with a table mapping the steps to the other tools. All facts come from each vendor's official docs, checked on 2026-10-07 and 2026-10-08 (see `docs/superpowers/facts.md` for the sources and the gaps).
+The sections run in the same order as the contents pane: the guide, the side-by-side comparison, the five extension points, then one block per tool in alphabetical order. Each of the five extension points is taught as an idea with a table of how every tool does it, and every tool then gets the same three layers: in depth, ecosystem and a field guide. The exercises were run for real in Claude Code (the only tool they were run in) and each opens with a table mapping the steps to the other tools. All facts come from each vendor's official docs, checked on 2026-10-07 and 2026-10-08 (see `docs/superpowers/facts.md` for the sources and the gaps).
 
 ## Contents
 
 | Section | Slides | Exercise |
 |---------|--------|---------|
-| 1. Instructions files (the idea, then every tool) | 8 | `exercises/01-instructions-files.md` |
-| 2. Subagents | 7 | `exercises/02-subagents.md` |
-| 3. Skills | 7 | `exercises/03-skills.md` |
-| 4. MCP | 8 | `exercises/04-mcp.md` |
-| 5. Hooks | 6 | `exercises/05-hooks.md` |
-| 30. Claude Code: in depth (CLAUDE.md, subagents, skills, MCP and hooks in Claude Code) | 16 | — |
-| 6. The Claude ecosystem (surfaces, Remote Control, Claude Tag, Cowork, Agent SDK, Chrome, models, plugins, permissions, headless) | 12 | — |
-| 7. Coding agents, side by side (seven at a glance, then four in detail) | 11 | — |
-| 8. Claude Code shortcuts and commands | 5 | — |
-| 9. Codex | 10 | — |
-| 10. Cursor | 11 | — |
-| 11. Gemini CLI | 11 | — |
-| 12. Choosing and using any tool (pick a tool, compare, IT checklist, safeguards, cost habits, responsible use) | 30 | — |
-| 13. Claude Code field guide (install to cost, for beginners) | 41 | — |
-| 14. More assistants (profiles of seven, with pros and cons) | 30 | — |
-| 15–16. Codex: ecosystem and field guide | 15 | — |
-| 17–18. Cursor: ecosystem and field guide | 12 | — |
-| 19–20. Gemini CLI: ecosystem and field guide | 13 | — |
-| 21–23. GitHub Copilot: in depth, ecosystem, field guide | 22 | — |
-| 24–26. Devin Desktop (Windsurf): in depth, ecosystem, field guide | 16 | — |
-| 27–29. Aider: in depth, ecosystem, field guide | 19 | — |
+| 1. Choosing and using any tool (pick a tool, compare, IT checklist, safeguards, cost habits, responsible use) | 30 | — |
+| 2. More assistants (profiles of seven, with pros and cons) | 30 | — |
+| 3. Coding agents, side by side (seven tools: overview, free starts, Rosetta tables, moving between them) | 11 | — |
+| 4. Instructions files (the idea, then every tool) | 8 | `exercises/01-instructions-files.md` |
+| 5. Subagents | 7 | `exercises/02-subagents.md` |
+| 6. Skills | 7 | `exercises/03-skills.md` |
+| 7. MCP | 8 | `exercises/04-mcp.md` |
+| 8. Hooks | 6 | `exercises/05-hooks.md` |
+| 9–11. Aider: in depth, ecosystem, field guide | 19 | — |
+| 12–15. Claude Code: in depth, ecosystem (surfaces, Remote Control, Claude Tag, Cowork, Agent SDK, Chrome, models, plugins, permissions, headless), shortcuts and commands, field guide | 74 | — |
+| 16–18. Codex: in depth, ecosystem, field guide | 25 | — |
+| 19–21. Cursor: in depth, ecosystem, field guide | 23 | — |
+| 22–24. Devin Desktop (Windsurf): in depth, ecosystem, field guide | 16 | — |
+| 25–27. Gemini CLI: in depth, ecosystem, field guide | 24 | — |
+| 28–30. GitHub Copilot: in depth, ecosystem, field guide | 22 | — |
 | Putting it together, Keep learning (every tool's own program) | 17 | — |
 
 Each exercise ends with a **Go deeper** link to a Claude Academy course and a **Coming from another tool?** note for Codex, Cursor and Gemini CLI.
@@ -89,9 +83,9 @@ Needs Node 18 or later and no dependencies.
 
 The 329 slides are too many for one session. Pick a path:
 
-- **90-minute core:** sections 1–5 with their exercises (about 36 slides)
-- **Claude Code add-on:** sections 30 and 6
-- **Moving between tools:** sections 7–11, or just the section for the tool your audience uses
+- **90-minute core:** sections 4–8 with their exercises (about 36 slides)
+- **Tool by tool:** the block for the tool your audience uses (sections 9–30)
+- **Moving between tools:** section 3, or just the block for the tool your audience uses
 - **Reference:** the shortcut slides in each tool's section double as cheat sheets
 
 The pedagogy: show the concept, show how it works, then make them build it immediately while the context is warm.

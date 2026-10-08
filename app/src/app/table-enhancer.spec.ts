@@ -131,4 +131,12 @@ describe('enhanceTables', () => {
     expect(root.querySelector('.table-tools legend')?.textContent).toBeTruthy();
     expect(root.querySelector('input[type="search"]')?.getAttribute('aria-label')).toBeTruthy();
   });
+
+  it('uses the tight layout for tables that compare six or more tools', () => {
+    const root = document.createElement('div');
+    const names = ['Aider', 'Claude Code', 'Codex', 'Cursor', 'Devin Desktop', 'Gemini CLI', 'GitHub Copilot'];
+    root.innerHTML = `<table><thead><tr><th></th>${names.map((n) => `<th>${n}</th>`).join('')}</tr></thead><tbody><tr><td>x</td>${names.map(() => '<td>y</td>').join('')}</tr></tbody></table>`;
+    enhanceTables(root);
+    expect(root.querySelector('.table-wrap')?.classList.contains('many-tools')).toBe(true);
+  });
 });

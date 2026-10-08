@@ -164,28 +164,34 @@ export class DiagramFlow {
   selector: 'app-diagram-ecosystem',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <svg viewBox="0 0 640 230" role="img" aria-labelledby="ec-t ec-d" class="diagram">
-      <title id="ec-t">Five extension points across four coding agents</title>
+    <svg viewBox="0 0 700 250" role="img" aria-labelledby="ec-t ec-d" class="diagram">
+      <title id="ec-t">Five extension points across seven coding agents</title>
       <desc id="ec-d">
-        A grid with five rows (instructions, subagents, skills, MCP, hooks) and four columns (Claude Code, Codex, Cursor, Gemini CLI). Every cell is marked: all four tools have all five ideas, with different file names and formats.
+        A grid with five rows (instructions, subagents, skills, MCP, hooks) and seven columns, one per tool. A filled dot means the tool's own docs describe it; an empty circle means we did not find it in the docs we read. Every tool has an instructions file. Aider has none of the other four, Devin Desktop has skills and MCP, GitHub Copilot has skills, MCP and hooks, and Claude Code, Codex, Cursor and Gemini CLI have all five.
       </desc>
       @for (c of tools; track c.id; let ci = $index) {
-        <text [attr.x]="230 + ci * 105" y="22" [class]="'label strong t-' + c.id">{{ c.glyph }} {{ c.name }}</text>
+        <text [attr.x]="215 + ci * 72" y="22" [class]="'label tiny strong t-' + c.id">{{ c.glyph }} {{ c.short }}</text>
       }
-      @for (r of rows; track r; let ri = $index) {
-        <text x="20" [attr.y]="58 + ri * 36" class="label left">{{ r }}</text>
-        <line x1="20" x2="620" [attr.y1]="42 + ri * 36" [attr.y2]="42 + ri * 36" class="grid" />
+      @for (r of rows; track r.name; let ri = $index) {
+        <text x="20" [attr.y]="58 + ri * 36" class="label left">{{ r.name }}</text>
+        <line x1="20" x2="680" [attr.y1]="42 + ri * 36" [attr.y2]="42 + ri * 36" class="grid" />
         @for (c of tools; track c.id; let ci = $index) {
-          <circle [attr.cx]="230 + ci * 105" [attr.cy]="54 + ri * 36" r="9" [class]="'dot t-' + c.id" />
+          <circle [attr.cx]="215 + ci * 72" [attr.cy]="54 + ri * 36" r="9" [class]="'dot t-' + c.id + (r.has.includes(c.id) ? '' : ' none')" />
         }
       }
+      <text x="350" y="240" class="label small">filled = in the tool's docs · empty = not found in the docs we read</text>
     </svg>
   `,
 })
 export class DiagramEcosystem {
-  /** The five-ideas grid is a claim about these four agents only; Copilot, Devin Desktop and Aider do not have all five. */
-  protected readonly tools = TOOLS.filter((t) => ['claude', 'codex', 'cursor', 'gemini'].includes(t.id));
-  protected readonly rows = ['Instructions file', 'Subagents', 'Skills', 'MCP', 'Hooks'];
+  protected readonly tools = TOOLS.map((t) => ({ ...t, short: t.name.replace(' Desktop', '').replace(' CLI', '').replace('GitHub ', '').replace(' Code', '') }));
+  protected readonly rows = [
+    { name: 'Instructions file', has: ['aider', 'claude', 'codex', 'cursor', 'devin', 'gemini', 'copilot'] },
+    { name: 'Subagents', has: ['claude', 'codex', 'cursor', 'gemini'] },
+    { name: 'Skills', has: ['claude', 'codex', 'cursor', 'devin', 'gemini', 'copilot'] },
+    { name: 'MCP', has: ['claude', 'codex', 'cursor', 'devin', 'gemini', 'copilot'] },
+    { name: 'Hooks', has: ['claude', 'codex', 'cursor', 'gemini', 'copilot'] },
+  ];
 }
 
 export const DIAGRAMS = [DiagramSubagents, DiagramHooks, DiagramFlow, DiagramEcosystem];

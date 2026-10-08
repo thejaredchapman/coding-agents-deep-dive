@@ -6,10 +6,10 @@ const mk = (section: string, titles: string[]): Slide[] => titles.map((title, i)
 
 const slides: Slide[] = [
   ...mk('Intro', ['Cover']),
-  ...mk('3. Skills', ['What is a skill?', 'Skill anatomy']),
-  ...mk('9. Codex', ['Codex: install', 'Codex: permissions']),
-  ...mk('12. Choosing and using any tool', ['12. Choosing', 'Pick Your Tool: Step 0', 'Pick Your Tool: Rubric (1/2)', 'Safeguards: Secrets', 'Safeguards: Blast radius', 'Responsible: Risks']),
-  ...mk('14. More assistants', ['Aider: What it is']),
+  ...mk('6. Skills', ['What is a skill?', 'Skill anatomy']),
+  ...mk('16. Codex', ['Codex: install', 'Codex: permissions']),
+  ...mk('1. Choosing and using any tool', ['12. Choosing', 'Pick Your Tool: Step 0', 'Pick Your Tool: Rubric (1/2)', 'Safeguards: Secrets', 'Safeguards: Blast radius', 'Responsible: Risks']),
+  ...mk('2. More assistants', ['Aider: What it is']),
   ...mk('Questions?', ['Questions?']),
   ...mk('99. Odd', ['Odd one']),
 ].map((s, i) => ({ ...s, id: i + 1 }));
@@ -18,7 +18,7 @@ describe('buildContents', () => {
   const groups = buildContents(slides);
   it('groups sections by topic, in the deck order, with unknown ones last', () => {
     expect(groups.map((g) => g.name)).toEqual(['Start here', 'AI coding assistants guide', 'The five extension points', 'Codex', 'Wrap up', 'More']);
-    expect(groups[1].sections.map((s) => s.name)).toEqual(['12. Choosing and using any tool', '14. More assistants']);
+    expect(groups[1].sections.map((s) => s.name)).toEqual(['1. Choosing and using any tool', '2. More assistants']);
   });
   it('lists one entry per slide in ordinary sections', () => {
     const skills = groups[2].sections[0];

@@ -19,7 +19,7 @@ const data: DeckData = {
     { id: 4, section: '2. Beta', title: 'Exercise 1', html: '<h2>Ex</h2>', checklist: ['Part A', 'Part B'] },
     {
       id: 5,
-      section: '9. Codex',
+      section: '16. Codex',
       title: 'Compare',
       html: '<table><thead><tr><th></th><th>Claude Code</th><th>Codex</th><th>Cursor</th></tr></thead><tbody><tr><td>MCP</td><td>claude mcp add</td><td>codex mcp add</td><td>mcp.json</td></tr></tbody></table>',
     },
@@ -115,7 +115,7 @@ describe('App', () => {
     expect(el.querySelector('.crumb')?.textContent?.trim()).toBe('~/deep-dive/intro/coding-agents-deep-dive.md');
     deck.goTo(4);
     await fixture.whenStable();
-    expect(el.querySelector('.crumb')?.textContent?.trim()).toBe('~/deep-dive/09-codex/compare.md');
+    expect(el.querySelector('.crumb')?.textContent?.trim()).toBe('~/deep-dive/16-codex/compare.md');
   });
 
   it('updates the progress bar', async () => {

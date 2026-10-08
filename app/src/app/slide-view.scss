@@ -53,6 +53,12 @@
   .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); }
   table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
   td code, th code { white-space: normal; overflow-wrap: break-word; }
+  .table-wrap.many-tools table { table-layout: fixed; font-size: 0.78rem; }
+  .table-wrap.many-tools th { padding: 0.45rem 0.4rem; white-space: normal; font-size: 0.66rem; }
+  .table-wrap.many-tools td { padding: 0.4rem; overflow-wrap: anywhere; }
+  .table-wrap.many-tools td code { font-size: 0.9em; padding: 0.05em 0.25em; }
+  .table-wrap.many-tools th:first-child, .table-wrap.many-tools td:first-child { width: 5.5rem; }
+  @media (max-width: 800px) { .table-wrap.many-tools table { table-layout: auto; min-width: 46rem; } }
   th { font: 500 0.72rem var(--mono); text-align: left; color: var(--muted); padding: 0.55rem 0.85rem; background: var(--raised); border-bottom: 1px solid var(--rule); white-space: nowrap; }
   td { padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th + th, td + td { border-left: 1px solid var(--rule); }

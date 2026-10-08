@@ -77,8 +77,8 @@ describe('ToolService', () => {
       updated: '2026-10-07',
       slides: [
         { id: 1, section: 'Intro', title: 'Cover', html: '' },
-        { id: 2, section: '9. Codex', title: 'Codex: what it is', html: '' },
-        { id: 3, section: '10. Cursor', title: 'Cursor: what it is', html: '' },
+        { id: 2, section: '16. Codex', title: 'Codex: what it is', html: '' },
+        { id: 3, section: '19. Cursor', title: 'Cursor: what it is', html: '' },
       ],
     });
     const tool = TestBed.inject(ToolService);

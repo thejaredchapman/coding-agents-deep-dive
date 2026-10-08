@@ -27,6 +27,8 @@ export function enhanceTables(root: HTMLElement): void {
       columnTools.forEach((tool, i) => tag(row.children[i], tool));
     });
 
+    // Seven tool columns do not fit at normal size, so the table switches to a tighter layout.
+    if (toolColumns.length >= 6) wrap.classList.add('many-tools');
     if (toolColumns.length >= 3) wrap.before(buildControls(table, toolColumns));
   });
 }
