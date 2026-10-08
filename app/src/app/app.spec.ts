@@ -191,7 +191,7 @@ describe('App', () => {
   it('groups the contents by topic and opens the current section\'s entries', async () => {
     const titles = Array.from(el.querySelectorAll('.sidebar h3')).map((h) => h.textContent);
     expect(titles).toContain('Start here');
-    expect(titles).toContain('Compare the agents');
+    expect(titles).toContain('Codex');
     expect(el.querySelectorAll('.sidebar .item').length).toBeGreaterThan(0);
     expect(el.querySelector('.sidebar .item.cur')).not.toBeNull();
   });

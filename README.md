@@ -1,6 +1,6 @@
 # Coding Agents — Deep Dive
 
-A 208-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
+A 305-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
 
 The five-section walkthrough is taught with Claude Code examples, because the exercises need one concrete tool. The cross-tool sections then give each tool the same depth, with its own shortcuts reference. All facts come from each vendor's official docs, checked on 2026-10-07 (see `docs/superpowers/facts.md` for the sources).
 
@@ -22,6 +22,12 @@ The five-section walkthrough is taught with Claude Code examples, because the ex
 | 12. Choosing and using any tool (pick a tool, compare, IT checklist, safeguards, cost habits, responsible use) | 30 | — |
 | 13. Claude Code field guide (install to cost, for beginners) | 41 | — |
 | 14. More assistants (profiles of seven, with pros and cons) | 30 | — |
+| 15–16. Codex: ecosystem and field guide | 15 | — |
+| 17–18. Cursor: ecosystem and field guide | 12 | — |
+| 19–20. Gemini CLI: ecosystem and field guide | 13 | — |
+| 21–23. GitHub Copilot: in depth, ecosystem, field guide | 22 | — |
+| 24–26. Devin Desktop (Windsurf): in depth, ecosystem, field guide | 16 | — |
+| 27–29. Aider: in depth, ecosystem, field guide | 19 | — |
 | Putting it together, Keep learning (Claude Academy) | 8 | — |
 
 Each exercise ends with a **Go deeper** link to a Claude Academy course and a **Coming from another tool?** note for Codex, Cursor and Gemini CLI.
@@ -30,7 +36,7 @@ Each exercise ends with a **Go deeper** link to a Claude Academy course and a **
 
 ## Interactive app (Angular)
 
-`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a grouped contents pane (six topics, expandable sections, chapter entries and a filter box), a statusline, day and night themes, a command palette (`/` or `Ctrl+K`), a tool picker that re-tints the deck for Claude Code, Codex, Cursor or Gemini CLI, an explorer of every extension point, an interactive hooks diagram, copy buttons on code, and saved exercise checklists. Two reference pages sit beside the deck: **Providers** (`#/providers`, official links for each tool) and **Free learning** (`#/learn`, each provider's own program with a cost note and a link). The former ai-coding-assistants-guide is part of the deck itself (sections 12 to 14); its tool picker is an interactive slide that ranks tools against the needs you tick and marks your agent. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
+`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a grouped contents pane (twelve topics, one per tool, expandable sections, chapter entries and a filter box), a statusline, day and night themes, a command palette (`/` or `Ctrl+K`), a tool picker that re-tints the deck for Claude Code, Codex, Cursor or Gemini CLI, an explorer of every extension point, an interactive hooks diagram, copy buttons on code, and saved exercise checklists. Two reference pages sit beside the deck: **Providers** (`#/providers`, official links for each tool) and **Free learning** (`#/learn`, each provider's own program with a cost note and a link). The former ai-coding-assistants-guide is part of the deck itself (sections 12 to 14); its tool picker is an interactive slide that ranks tools against the needs you tick and marks your agent. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
 
 ```bash
 npm install                 # build-time tools (marked)
@@ -80,7 +86,7 @@ Needs Node 18 or later and no dependencies.
 
 ## Delivery
 
-The 208 slides are too many for one session. Pick a path:
+The 305 slides are too many for one session. Pick a path:
 
 - **90-minute core:** sections 1–5 with their exercises (about 40 slides)
 - **Ecosystem add-on:** section 6

@@ -17,15 +17,15 @@ const slides: Slide[] = [
 describe('buildContents', () => {
   const groups = buildContents(slides);
   it('groups sections by topic, in the deck order, with unknown ones last', () => {
-    expect(groups.map((g) => g.name)).toEqual(['Start here', 'AI coding assistants guide', 'Compare the agents', 'The five extension points', 'Wrap up', 'More']);
+    expect(groups.map((g) => g.name)).toEqual(['Start here', 'AI coding assistants guide', 'The five extension points', 'Codex', 'Wrap up', 'More']);
     expect(groups[1].sections.map((s) => s.name)).toEqual(['12. Choosing and using any tool', '14. More assistants']);
   });
   it('lists one entry per slide in ordinary sections', () => {
-    const skills = groups[3].sections[0];
+    const skills = groups[2].sections[0];
     expect(skills.items.map((i) => i.label)).toEqual(['What is a skill?', 'Skill anatomy']);
   });
   it('does not turn one repeated prefix into a chapter', () => {
-    expect(groups[2].sections[0].items.map((i) => i.label)).toEqual(['Codex: install', 'Codex: permissions']);
+    expect(groups[3].sections[0].items.map((i) => i.label)).toEqual(['Codex: install', 'Codex: permissions']);
   });
   it('merges consecutive slides of the same chapter and keeps the first slide index', () => {
     const items = groups[1].sections[0].items;
@@ -44,7 +44,7 @@ describe('filterContents', () => {
   });
   it('matches a section or group name and keeps all its entries', () => {
     expect(filterContents(groups, 'skills')[0].sections[0].items.length).toBe(2);
-    expect(filterContents(groups, 'compare')[0].sections.length).toBe(1);
+    expect(filterContents(groups, 'codex')[0].sections.length).toBe(1);
   });
   it('requires every word', () => expect(filterContents(groups, 'skill zzz')).toEqual([]));
 });
