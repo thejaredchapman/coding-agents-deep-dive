@@ -11,7 +11,8 @@
     "check": "node scripts/check-deck.mjs",
     "app:start": "npm --prefix app start",
     "app:build": "npm run build:slides && npm --prefix app run build",
-    "app:test": "npm --prefix app test -- --watch=false"
+    "app:test": "npm --prefix app test -- --watch=false",
+    "check:links": "node scripts/check-links.mjs"
   },
   "repository": {
     "type": "git",

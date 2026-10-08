@@ -137,7 +137,7 @@
       "provider": "codex",
       "title": "OpenAI Academy",
       "url": "https://academy.openai.com",
-      "cost": "OpenAI's help center describes the courses as free with a ChatGPT account. That is not stated on the Academy home page itself, so confirm there.",
+      "cost": "OpenAI's help center states that Academy courses are free. You need a ChatGPT account to start a course and save your progress. The Academy home page itself does not state this.",
       "summary": "OpenAI's learning hub, with course pathways, live events and communities. Its Build with AI pathway teaches Codex across the software development lifecycle, or building with the OpenAI API.",
       "items": [
         {
@@ -235,14 +235,9 @@
       "provider": "gemini",
       "title": "Google Skills",
       "url": "https://www.skills.google",
-      "cost": "The site offers free and paid options. The price of the Gemini CLI course below was not confirmed.",
-      "summary": "Google's learning platform for AI, with skill badges, certificates and hands-on labs. A course listed there, Accelerate App Development with Gemini CLI, is aimed at app developers and DevOps engineers.",
-      "items": [
-        {
-          "title": "Accelerate App Development with Gemini CLI",
-          "url": "https://www.skills.google/paths/1282/course_templates/1448"
-        }
-      ]
+      "cost": "The home page offers free and paid routes: it advertises a GEAR program with 35 monthly credits for hands-on learning \"at no cost\", and lists Subscriptions. Check the catalog for the price of a specific course.",
+      "summary": "Google's learning platform for AI and cloud, with hands-on labs, skill badges and certificates. Search the catalog for Gemini CLI content.",
+      "items": []
     }
   ]
 }

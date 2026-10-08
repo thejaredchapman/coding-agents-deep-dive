@@ -27,7 +27,7 @@ Each exercise ends with a **Go deeper** link to a Claude Academy course and a **
 
 ## Interactive app (Angular)
 
-`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a section sidebar, a progress bar, light and dark themes, copy buttons on code, SVG diagrams, and saved exercise checklists. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
+`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a file-tree contents pane, a statusline, day and night themes, a command palette (`/` or `Ctrl+K`), a tool picker that re-tints the deck for Claude Code, Codex, Cursor or Gemini CLI, an explorer of every extension point, an interactive hooks diagram, copy buttons on code, and saved exercise checklists. Two reference pages sit beside the deck: **Providers** (`#/providers`, official links for each tool) and **Free learning** (`#/learn`, each provider's own program with a cost note and a link). `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
 
 ```bash
 npm install                 # build-time tools (marked)
@@ -38,7 +38,7 @@ npm run app:test            # Vitest component and service tests
 npm test                    # tests for the slide build script
 ```
 
-Keys: `→` `Space` next, `←` previous, `Home` `End`, `S` sections, `T` theme, `?` help. On a touch screen, swipe. Deep links work: `#/36` opens slide 36. The build is static files; host the `browser` folder anywhere (the base href is relative).
+Keys: `→` `Space` next, `←` previous, `Home` `End`, `/` or `Ctrl+K` search, `E` explorer, `M` tool picker, `S` contents, `T` theme, `P` providers, `L` free learning, `D` back to the deck, `?` help. On a touch screen, swipe. Deep links work: `#/36` opens slide 36. The build is static files; host the `browser` folder anywhere (the base href is relative).
 
 After you edit `deck.md`, run `npm run build:slides` (or `app:build`) to refresh the app's data.
 
@@ -61,7 +61,10 @@ Or use the [Marp VS Code extension](https://marketplace.visualstudio.com/items?i
 ```bash
 node scripts/check-deck.mjs          # stale strings, required content, slide count
 node scripts/check-deck.mjs --links  # also checks every Claude Academy link
+npm run check:links                  # live check of every https link in the deck, exercises, README and providers.json
 ```
+
+`check:links` fails on 404s and network errors. Sites that refuse automated requests (401/403/429) are listed as "blocked"; open those in a browser. The provider and free-learning data lives in `app/public/providers.json`; every claim in it is recorded with its source in `docs/superpowers/facts.md`.
 
 Needs Node 18 or later and no dependencies.
 

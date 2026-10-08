@@ -4,9 +4,9 @@ Date: 2026-10-07. Builds on the Angular app (PR #2).
 
 ## Direction
 
-**Terminal-native field manual.** Warm paper and ink, graph-paper grid, fine rules, a serif for reading and mono for labels (system font stacks only; the app works offline). One memorable idea: **pick your tool** and the deck re-tints around it.
+**Terminal workbench** (revised after the first "field manual" look resembled another app). A tab line, a file-tree contents pane, a statusline showing the mode (NORMAL, SEARCH, EXPLORE, HELP), and floating windows with titles set into the border. Day and night themes, a sans body with mono chrome (system font stacks only; the app works offline). One memorable idea: **pick your tool** and the deck re-tints around it.
 
-- **Neutral by default.** No tool selected: teal accent. Selecting a tool tints the interface with that tool's hue and glyph.
+- **Neutral by default.** No tool selected: neutral amber/teal accent. Selecting a tool tints the interface with that tool's hue and glyph.
 - **Tools** (hue plus glyph, so color is never the only cue): Claude Code ● vermilion, Codex ▲ blue, Cursor ■ violet, Gemini CLI ◆ green. Text-safe darker variants on paper, lighter tints in dark mode; all text pairs meet 4.5:1.
 - **Motion** is purposeful: a staged reveal on slide change (direction-aware), a cover sequence, and stepping animation in the hook lifecycle. Everything honors `prefers-reduced-motion`.
 
