@@ -12,6 +12,8 @@ export interface Provider {
   product: string;
   summary: string;
   links: ProviderLink[];
+  /** Shown on the learning page when the provider has no program of its own. */
+  learningNote?: string;
 }
 
 export interface LearningItem {

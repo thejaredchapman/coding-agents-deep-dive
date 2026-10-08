@@ -26,6 +26,9 @@
   --c-codex: #1d55b8;
   --c-cursor: #6236b8;
   --c-gemini: #0d7250;
+  --c-copilot: #a8196b;
+  --c-devin: #00697f;
+  --c-aider: #4f6a05;
 }
 
 :root[data-theme='dark'] {
@@ -50,12 +53,18 @@
   --c-codex: #62aeff;
   --c-cursor: #b9a0ff;
   --c-gemini: #4adba6;
+  --c-copilot: #ff7ac2;
+  --c-devin: #4fd1ea;
+  --c-aider: #b7e04a;
 }
 
 :root[data-tool='claude'] { --accent: var(--c-claude); }
 :root[data-tool='codex'] { --accent: var(--c-codex); }
 :root[data-tool='cursor'] { --accent: var(--c-cursor); }
 :root[data-tool='gemini'] { --accent: var(--c-gemini); }
+:root[data-tool='copilot'] { --accent: var(--c-copilot); }
+:root[data-tool='devin'] { --accent: var(--c-devin); }
+:root[data-tool='aider'] { --accent: var(--c-aider); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { min-height: 100%; }
@@ -117,15 +126,21 @@ kbd {
 .tc[data-t='codex'] { --col: var(--c-codex); }
 .tc[data-t='cursor'] { --col: var(--c-cursor); }
 .tc[data-t='gemini'] { --col: var(--c-gemini); }
+.tc[data-t='copilot'] { --col: var(--c-copilot); }
+.tc[data-t='devin'] { --col: var(--c-devin); }
+.tc[data-t='aider'] { --col: var(--c-aider); }
 th.tc::before { margin-right: 0.45em; color: var(--col); }
 th.tc[data-t='claude']::before { content: '●'; }
 th.tc[data-t='codex']::before { content: '▲'; }
 th.tc[data-t='cursor']::before { content: '■'; }
 th.tc[data-t='gemini']::before { content: '◆'; }
+th.tc[data-t='copilot']::before { content: '★'; }
+th.tc[data-t='devin']::before { content: '⬢'; }
+th.tc[data-t='aider']::before { content: '✚'; }
 .col-hidden { display: none; }
 tr[hidden] { display: none; }
 
-@each $t in claude, codex, cursor, gemini {
+@each $t in claude, codex, cursor, gemini, copilot, devin, aider {
   :root[data-tool='#{$t}'] .tc[data-t='#{$t}'] { background: color-mix(in srgb, var(--col) 13%, transparent); }
   :root[data-tool='#{$t}'] th.tc[data-t='#{$t}'] { color: var(--col); border-bottom: 3px solid var(--col); }
   :root[data-tool='#{$t}'] .tc:not([data-t='#{$t}']) { opacity: 0.62; }
@@ -149,6 +164,7 @@ tr[hidden] { display: none; }
 .diagram .dot { fill: var(--accent); }
 .diagram .t-claude { --tc: var(--c-claude); } .diagram .t-codex { --tc: var(--c-codex); }
 .diagram .t-cursor { --tc: var(--c-cursor); } .diagram .t-gemini { --tc: var(--c-gemini); }
+.diagram .t-copilot { --tc: var(--c-copilot); } .diagram .t-devin { --tc: var(--c-devin); } .diagram .t-aider { --tc: var(--c-aider); }
 .diagram .dot[class*='t-'] { fill: var(--tc); }
 .diagram text[class*='t-'] { fill: var(--tc); }
 

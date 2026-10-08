@@ -11,6 +11,9 @@
 .chip[data-t='codex'] .glyph { color: var(--c-codex); }
 .chip[data-t='cursor'] .glyph { color: var(--c-cursor); }
 .chip[data-t='gemini'] .glyph { color: var(--c-gemini); }
+.chip[data-t='copilot'] .glyph { color: var(--c-copilot); }
+.chip[data-t='devin'] .glyph { color: var(--c-devin); }
+.chip[data-t='aider'] .glyph { color: var(--c-aider); }
 
 /* Selected: a tinted tab with a bar underneath, in the tool's colour. */
 .chip[aria-pressed='true'] { background: color-mix(in srgb, var(--accent) 16%, transparent); border-color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
@@ -18,6 +21,9 @@
 .chip[aria-pressed='true'][data-t='codex'] { --accent: var(--c-codex); }
 .chip[aria-pressed='true'][data-t='cursor'] { --accent: var(--c-cursor); }
 .chip[aria-pressed='true'][data-t='gemini'] { --accent: var(--c-gemini); }
+.chip[aria-pressed='true'][data-t='copilot'] { --accent: var(--c-copilot); }
+.chip[aria-pressed='true'][data-t='devin'] { --accent: var(--c-devin); }
+.chip[aria-pressed='true'][data-t='aider'] { --accent: var(--c-aider); }
 
 /* Large: an interactive prompt menu, like a command-line "select" question. */
 .picker.large { flex-direction: column; align-items: stretch; gap: 0.1rem; }

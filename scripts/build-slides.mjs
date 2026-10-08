@@ -84,6 +84,9 @@ const EXPLORER_SLIDES = [
   [/^Codex shortcuts/i, 'codex'],
   [/^Cursor shortcuts/i, 'cursor'],
   [/^Gemini CLI shortcuts/i, 'gemini'],
+  [/^Copilot shortcuts/i, 'copilot'],
+  [/^Devin Desktop shortcuts/i, 'devin'],
+  [/^Aider shortcuts/i, 'aider'],
 ];
 
 function splitCells(line) {
@@ -138,7 +141,13 @@ export function buildExplorer(markdown) {
     for (const cells of table.rows) {
       let keysCell;
       let actionCell;
-      if (hasGroup) {
+      if (table.header[0] === 'action' && /windows/.test(table.header[1] ?? '')) {
+        // "Action | Windows / Linux | macOS": one entry showing both keys.
+        const win = plainCell(cells[1]);
+        const mac = plainCell(cells[2]);
+        keysCell = win === mac ? cells[1] : `${cells[1]} (Windows, Linux) · ${cells[2]} (macOS)`;
+        actionCell = cells[0];
+      } else if (hasGroup) {
         const g = plainCell(cells[0]);
         if (g) group = g;
         [, keysCell, actionCell] = cells;

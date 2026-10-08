@@ -173,8 +173,8 @@ test('buildExplorer ignores slides that are not shortcut or command tables', () 
   assert.ok(!items.some((i) => i.action === '2'));
 });
 
-test('buildExplorer on the real deck covers all four tools', () => {
+test('buildExplorer on the real deck covers all seven tools', () => {
   const deck = readFileSync(new URL('../deck.md', import.meta.url), 'utf8');
   const tools = new Set(buildExplorer(deck).map((i) => i.tool));
-  assert.deepEqual([...tools].sort(), ['claude', 'codex', 'cursor', 'gemini']);
+  assert.deepEqual([...tools].sort(), ['aider', 'claude', 'codex', 'copilot', 'cursor', 'devin', 'gemini']);
 });

@@ -4,7 +4,7 @@ import { ToolService } from './tool.service';
 import { ToolId } from './tools';
 
 /** The deck's tool ids mapped to this picker's ids. */
-const PICKER_ID: Record<ToolId, string> = { claude: 'claude-code', codex: 'codex', cursor: 'cursor', gemini: 'gemini-cli' };
+const PICKER_ID: Record<ToolId, string> = { claude: 'claude-code', codex: 'codex', cursor: 'cursor', gemini: 'gemini-cli', copilot: 'copilot', devin: 'windsurf', aider: 'aider' };
 
 @Component({
   selector: 'app-needs-picker',

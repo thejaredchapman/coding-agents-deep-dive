@@ -1,4 +1,4 @@
-export type ToolId = 'claude' | 'codex' | 'cursor' | 'gemini';
+export type ToolId = 'claude' | 'codex' | 'cursor' | 'gemini' | 'copilot' | 'devin' | 'aider';
 
 export interface ToolInfo {
   id: ToolId;
@@ -14,6 +14,9 @@ export const TOOLS: readonly ToolInfo[] = [
   { id: 'codex', name: 'Codex', glyph: '▲', section: '9. Codex' },
   { id: 'cursor', name: 'Cursor', glyph: '■', section: '10. Cursor' },
   { id: 'gemini', name: 'Gemini CLI', glyph: '◆', section: '11. Gemini CLI' },
+  { id: 'copilot', name: 'GitHub Copilot', glyph: '★', section: '21. GitHub Copilot: in depth' },
+  { id: 'devin', name: 'Devin Desktop', glyph: '⬢', section: '24. Devin Desktop (Windsurf): in depth' },
+  { id: 'aider', name: 'Aider', glyph: '✚', section: '27. Aider: in depth' },
 ];
 
 export function toolById(id: ToolId): ToolInfo {

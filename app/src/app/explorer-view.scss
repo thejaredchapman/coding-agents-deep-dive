@@ -14,6 +14,9 @@
 .chip[data-t='codex'][aria-pressed='true'] { --accent: var(--c-codex); }
 .chip[data-t='cursor'][aria-pressed='true'] { --accent: var(--c-cursor); }
 .chip[data-t='gemini'][aria-pressed='true'] { --accent: var(--c-gemini); }
+.chip[data-t='copilot'][aria-pressed='true'] { --accent: var(--c-copilot); }
+.chip[data-t='devin'][aria-pressed='true'] { --accent: var(--c-devin); }
+.chip[data-t='aider'][aria-pressed='true'] { --accent: var(--c-aider); }
 input[type='search'] {
   flex: 1; min-width: 12rem; font: 0.88rem var(--mono); padding: 0.45rem 0.7rem; color: var(--ink);
   background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px;
@@ -29,6 +32,9 @@ input[type='search']:focus { border-color: var(--accent); }
 .tool[data-t='codex'] h3 { border-color: var(--c-codex); color: var(--c-codex); }
 .tool[data-t='cursor'] h3 { border-color: var(--c-cursor); color: var(--c-cursor); }
 .tool[data-t='gemini'] h3 { border-color: var(--c-gemini); color: var(--c-gemini); }
+.tool[data-t='copilot'] h3 { border-color: var(--c-copilot); color: var(--c-copilot); }
+.tool[data-t='devin'] h3 { border-color: var(--c-devin); color: var(--c-devin); }
+.tool[data-t='aider'] h3 { border-color: var(--c-aider); color: var(--c-aider); }
 h4 { margin: 0.85rem 0 0.2rem; font: 500 0.7rem var(--mono); color: var(--muted); }
 h4::before { content: '// '; color: var(--accent); }
 dl { display: grid; grid-template-columns: minmax(7rem, auto) 1fr; gap: 0.3rem 0.9rem; margin: 0; align-items: baseline; }

@@ -33,7 +33,7 @@ style: |
 # Coding Agents — Deep Dive
 ## The Five Extension Points
 
-Claude Code · Codex · Cursor · Gemini CLI
+Claude Code · Codex · Cursor · Gemini CLI · GitHub Copilot · Devin Desktop · Aider
 
 Built for engineers who already use an AI coding agent and want to go further.
 
@@ -51,7 +51,7 @@ Built for engineers who already use an AI coding agent and want to go further.
 
 Each section: concept → how it works → hands-on exercise.
 
-Then: the Claude ecosystem, a side-by-side of **Claude Code, Codex, Cursor and Gemini CLI** with a shortcuts reference for each, and where to keep learning.
+Then: the Claude ecosystem, a side-by-side of **Claude Code, Codex, Cursor and Gemini CLI** with a shortcuts reference for each, an ecosystem and field guide for every tool (adding **GitHub Copilot, Devin Desktop and Aider**), and where to keep learning.
 
 ---
 
@@ -3039,7 +3039,7 @@ Run `codex` and choose **Sign in with ChatGPT**. An API key also works but needs
 
 ---
 
-## Shortcuts: what is confirmed
+## Codex shortcuts: what is confirmed
 
 | Key | Does |
 |---|---|
@@ -3499,7 +3499,7 @@ copilot --prompt "..."  # long form
 
 ---
 
-## Shortcuts: VS Code
+## Copilot shortcuts: VS Code
 
 | Action | Windows / Linux | macOS |
 |---|---|---|
@@ -3516,7 +3516,7 @@ Slash commands in chat: `/plan`, `/explain`, `/fix`, `/tests`, `/doc`, `/new`.
 
 ---
 
-## Shortcuts: Copilot CLI
+## Copilot shortcuts: CLI
 
 | Key | Does |
 |---|---|
@@ -3759,7 +3759,7 @@ Cascade can use at most **100 tools** at a time and has **no MCP marketplace** o
 
 ---
 
-## Shortcuts, and what is not documented
+## Devin Desktop shortcuts, and what is not documented
 
 | Key | Does |
 |---|---|
@@ -3963,7 +3963,7 @@ Flags: `--message` or `-m`, `--message-file`, `--yes`, `--auto-commits`, `--dry-
 
 ---
 
-## Shortcuts
+## Aider shortcuts
 
 | Key | Does |
 |---|---|

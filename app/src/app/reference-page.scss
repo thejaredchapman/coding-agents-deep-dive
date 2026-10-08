@@ -23,6 +23,9 @@ h1::before { content: '#'; color: var(--muted); font: 500 0.6em var(--mono); mar
 [data-t='codex'] { --accent: var(--c-codex); }
 [data-t='cursor'] { --accent: var(--c-cursor); }
 [data-t='gemini'] { --accent: var(--c-gemini); }
+[data-t='copilot'] { --accent: var(--c-copilot); }
+[data-t='devin'] { --accent: var(--c-devin); }
+[data-t='aider'] { --accent: var(--c-aider); }
 
 .card { border-color: var(--rule); border-top: 3px solid var(--accent); }
 .card.mine { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }

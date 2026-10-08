@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const data = JSON.parse(readFileSync(new URL('../app/public/providers.json', import.meta.url), 'utf8'));
-const TOOLS = ['claude', 'codex', 'cursor', 'gemini'];
+const TOOLS = ['claude', 'codex', 'cursor', 'gemini', 'copilot', 'devin', 'aider'];
 
 function allUrls() {
   const urls = [];
@@ -29,10 +29,11 @@ test('every tool has a provider with a summary and at least a docs link and a ho
   }
 });
 
-test('every tool has at least one learning program with a summary, cost note and program page', () => {
+test('every tool has a learning program with a summary, cost note and program page, or a note saying none was found', () => {
   for (const tool of TOOLS) {
     const programs = data.learning.filter((l) => l.provider === tool);
-    assert.ok(programs.length >= 1, `${tool} has no learning program`);
+    const note = data.providers.find((p) => p.id === tool).learningNote;
+    assert.ok(programs.length >= 1 || note, `${tool} has no learning program and no note saying why`);
     for (const l of programs) {
       assert.ok(l.title && l.summary && l.cost && l.url, `${l.title} is missing a field`);
       assert.ok(l.summary.length > 60, `${l.title} summary is too short`);

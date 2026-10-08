@@ -14,6 +14,9 @@
       <section class="group" [attr.data-t]="p.id" [class.mine]="tool.selected() === p.id" [attr.aria-labelledby]="'learn-' + p.id">
         <h2 [id]="'learn-' + p.id"><span aria-hidden="true">{{ glyph(p.id) }}</span> {{ p.product }} <span class="by">by {{ p.name }}</span>@if (tool.selected() === p.id) { <span class="you">your agent</span> }</h2>
 
+        @if (programs(p.id).length === 0 && p.learningNote) {
+          <p class="muted note">{{ p.learningNote }}</p>
+        }
         @for (program of programs(p.id); track program.url) {
           <article class="program window" [attr.data-t]="p.id">
             <h3 class="title">{{ program.title }}</h3>

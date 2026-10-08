@@ -73,6 +73,9 @@
   .chip[data-t='codex'] input { accent-color: var(--c-codex); }
   .chip[data-t='cursor'] input { accent-color: var(--c-cursor); }
   .chip[data-t='gemini'] input { accent-color: var(--c-gemini); }
+  .chip[data-t='copilot'] input { accent-color: var(--c-copilot); }
+  .chip[data-t='devin'] input { accent-color: var(--c-devin); }
+  .chip[data-t='aider'] input { accent-color: var(--c-aider); }
   .chip:has(input:checked) { border-color: var(--muted); }
   input[type='search'] {
     margin-left: auto; font: 0.8rem var(--mono); padding: 0.35rem 0.6rem; min-width: 9rem; color: var(--ink);

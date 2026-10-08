@@ -1,5 +1,5 @@
 {
-  "checked": "2026-10-07",
+  "checked": "2026-10-08",
   "providers": [
     {
       "id": "claude",
@@ -97,6 +97,71 @@
           "kind": "code"
         }
       ]
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub (Microsoft)",
+      "product": "GitHub Copilot",
+      "summary": "GitHub's assistant for editors, the terminal and github.com, with a cloud agent that works on issues and pull requests.",
+      "links": [
+        {
+          "label": "GitHub Copilot",
+          "url": "https://github.com/features/copilot",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://docs.github.com/en/copilot",
+          "kind": "docs"
+        },
+        {
+          "label": "Copilot CLI on GitHub",
+          "url": "https://github.com/github/copilot-cli",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "id": "devin",
+      "name": "Cognition",
+      "product": "Devin Desktop (formerly Windsurf)",
+      "summary": "An AI IDE with an agent called Cascade, renamed from Windsurf in 2026. Old windsurf.com addresses redirect here.",
+      "links": [
+        {
+          "label": "Devin Desktop",
+          "url": "https://devin.ai/desktop",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://docs.devin.ai/desktop/getting-started",
+          "kind": "docs"
+        }
+      ]
+    },
+    {
+      "id": "aider",
+      "name": "Aider (open source)",
+      "product": "Aider",
+      "summary": "An open-source terminal pair programmer that works with the model you choose and commits every change to git.",
+      "links": [
+        {
+          "label": "Aider",
+          "url": "https://aider.chat",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://aider.chat/docs/",
+          "kind": "docs"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Aider-AI/aider",
+          "kind": "code"
+        }
+      ],
+      "learningNote": "We found no official course or academy. The documentation has a usage tips page: https://aider.chat/docs/usage/tips.html."
     }
   ],
   "learning": [
@@ -238,6 +303,68 @@
       "cost": "The home page offers free and paid routes: it advertises a GEAR program with 35 monthly credits for hands-on learning \"at no cost\", and lists Subscriptions. Check the catalog for the price of a specific course.",
       "summary": "Google's learning platform for AI and cloud, with hands-on labs, skill badges and certificates. Search the catalog for Gemini CLI content.",
       "items": []
+    },
+    {
+      "provider": "copilot",
+      "title": "GitHub Skills: Copilot courses",
+      "url": "https://learn.github.com/skills",
+      "cost": "The Getting started with GitHub Copilot course page states it is free (a public, MIT-licensed repository) and takes under an hour. It runs in GitHub Codespaces, and we did not check Codespaces limits.",
+      "summary": "Interactive exercises on GitHub itself. The Copilot ones teach you to use Copilot to explain, write, plan and review code, then go on to MCP, agent mode, customization and the Copilot app.",
+      "items": [
+        {
+          "title": "Getting started with GitHub Copilot",
+          "url": "https://github.com/skills/getting-started-with-github-copilot"
+        },
+        {
+          "title": "Integrate MCP with Copilot",
+          "url": "https://github.com/skills/integrate-mcp-with-copilot"
+        },
+        {
+          "title": "Customize your GitHub Copilot experience",
+          "url": "https://github.com/skills/customize-your-github-copilot-experience"
+        },
+        {
+          "title": "Build applications with Copilot agent mode",
+          "url": "https://github.com/skills/build-applications-w-copilot-agent-mode"
+        },
+        {
+          "title": "Test and debug with GitHub Copilot",
+          "url": "https://github.com/skills/test-and-debug-with-github-copilot"
+        },
+        {
+          "title": "Expand your team with Copilot",
+          "url": "https://github.com/skills/expand-your-team-with-copilot"
+        }
+      ]
+    },
+    {
+      "provider": "devin",
+      "title": "Devin University",
+      "url": "https://learndevin.com/",
+      "cost": "No price is stated on the page.",
+      "summary": "Interactive courses from Cognition. They teach Devin, the cloud agent, so they help with the Devin side of the product more than the desktop editor.",
+      "items": [
+        {
+          "title": "Devin Foundations (8 lessons)",
+          "url": "https://learndevin.com/course/devin-foundations"
+        },
+        {
+          "title": "Cloud 101 (7 lessons)",
+          "url": "https://learndevin.com/course/cloud-101"
+        },
+        {
+          "title": "Cloud 102 (8 lessons)",
+          "url": "https://learndevin.com/course/cloud-102"
+        },
+        {
+          "title": "Cloud 103 (7 lessons)",
+          "url": "https://learndevin.com/course/cloud-103"
+        },
+        {
+          "title": "Devin for Admins (11 lessons)",
+          "url": "https://learndevin.com/course/devin-for-admins"
+        }
+      ]
     }
   ]
 }

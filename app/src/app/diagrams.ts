@@ -183,7 +183,8 @@ export class DiagramFlow {
   `,
 })
 export class DiagramEcosystem {
-  protected readonly tools = TOOLS;
+  /** The five-ideas grid is a claim about these four agents only; Copilot, Devin Desktop and Aider do not have all five. */
+  protected readonly tools = TOOLS.filter((t) => ['claude', 'codex', 'cursor', 'gemini'].includes(t.id));
   protected readonly rows = ['Instructions file', 'Subagents', 'Skills', 'MCP', 'Hooks'];
 }
 
