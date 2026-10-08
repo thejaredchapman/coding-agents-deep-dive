@@ -420,11 +420,11 @@ describe('App', () => {
   describe('providers and free learning pages', () => {
     it('has links to the pages in the tab line, with the current one marked', async () => {
       const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('nav.pages a'));
-      expect(links.map((a) => a.textContent?.trim())).toEqual(['slides', 'providers', 'free learning', 'guide']);
-      expect(links[3].getAttribute('href')).toBe('#/guide');
+      expect(links.map((a) => a.textContent?.trim())).toEqual(['slides', 'guide', 'providers', 'free learning']);
+      expect(links[1].getAttribute('href')).toBe('#/guide');
       expect(links[0].getAttribute('aria-current')).toBe('page');
-      expect(links[1].getAttribute('href')).toBe('#/providers');
-      expect(links[2].getAttribute('href')).toBe('#/learn');
+      expect(links[2].getAttribute('href')).toBe('#/providers');
+      expect(links[3].getAttribute('href')).toBe('#/learn');
     });
 
     it('shows a card per provider with its official links in a new tab', async () => {
