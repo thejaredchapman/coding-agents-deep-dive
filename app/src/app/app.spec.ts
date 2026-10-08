@@ -188,6 +188,36 @@ describe('App', () => {
     expect(el.querySelector('.sidebar button.active')?.textContent).toContain('Beta');
   });
 
+  it('groups the contents by topic and opens the current section\'s entries', async () => {
+    const titles = Array.from(el.querySelectorAll('.sidebar h3')).map((h) => h.textContent);
+    expect(titles).toContain('Start here');
+    expect(titles).toContain('Codex');
+    expect(el.querySelectorAll('.sidebar .item').length).toBeGreaterThan(0);
+    expect(el.querySelector('.sidebar .item.cur')).not.toBeNull();
+  });
+
+  it('filters the contents, jumps to an entry, and closes the filter result with a clear box', async () => {
+    const input = el.querySelector<HTMLInputElement>('.sidebar input[type="search"]')!;
+    input.value = 'A2';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await fixture.whenStable();
+    const hit = Array.from(el.querySelectorAll<HTMLButtonElement>('.sidebar .item')).find((b) => b.textContent?.includes('A2'))!;
+    hit.click();
+    await fixture.whenStable();
+    expect(deck.index()).toBe(2);
+    input.value = 'zzzz';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await fixture.whenStable();
+    expect(el.querySelector('.sidebar .empty')?.textContent).toContain('zzzz');
+  });
+
+  it('collapses and expands a section with its toggle', async () => {
+    const toggle = el.querySelector<HTMLButtonElement>('.sidebar .toggle[aria-expanded="true"]')!;
+    toggle.click();
+    await fixture.whenStable();
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('adds copy buttons to code blocks and opens external links safely', async () => {
     deck.goTo(1);
     await fixture.whenStable();
@@ -391,6 +421,23 @@ describe('App', () => {
       expect(caption()).toMatch(/code 2/i);
       expect(el.querySelector('.node.skipped')).not.toBeNull();
       expect(el.querySelector('.stepper svg text.danger')?.textContent).toContain('blocked');
+    });
+  });
+
+  describe('needs picker slide', () => {
+    it('ranks tools against ticked needs and marks the reader\'s agent', async () => {
+      deck.load({ ...data, slides: [...data.slides, { id: 6, section: '12. Choosing', title: 'Pick Your Tool: Tick what matters to you', html: '<h2>Pick</h2>', diagram: 'picker' }] });
+      TestBed.inject(ToolService).select('codex');
+      deck.goTo(5);
+      await fixture.whenStable();
+      const boxes = el.querySelectorAll<HTMLInputElement>('app-needs-picker .needs input');
+      expect(boxes.length).toBe(13);
+      expect(el.querySelector('app-needs-picker .you')?.textContent).toContain('your agent');
+      const aider = Array.from(boxes).find((b) => b.parentElement?.textContent?.includes('Every change is a git commit'))!;
+      aider.click();
+      await fixture.whenStable();
+      expect(el.querySelector('app-needs-picker .ranked li .name')?.textContent).toContain('Aider');
+      expect(el.querySelector('app-needs-picker .ranked li .score')?.textContent).toBe('1/1');
     });
   });
 

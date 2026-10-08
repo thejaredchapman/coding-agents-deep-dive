@@ -1611,6 +1611,2476 @@ Exit codes: `0` success, `1` error, `42` input error, `53` turn limit exceeded. 
 
 ---
 
+# 12. Choosing and using any tool
+## Pick one, check it, use it safely
+
+What AI coding assistants are, what they can do, and how to use any of them responsibly.
+
+<p class="small">Merged from the former ai-coding-assistants-guide. Its facts were read from vendor docs on 2026-10-02 and were not re-verified here; where it overlaps the sections above, the sections above win.</p>
+
+---
+
+## The landscape
+
+| Tool | Made by | Style |
+|---|---|---|
+| Aider | Open source | Terminal pair programmer that commits every change to git |
+| Claude Code | Anthropic | Agent for terminal, IDEs, desktop, and web |
+| Codex | OpenAI | Terminal, IDE, desktop, and cloud coding agent |
+| Cursor | Anysphere | AI code editor with Tab, chat, and an agent mode |
+| Gemini CLI | Google | Open-source terminal agent |
+| GitHub Copilot | GitHub / Microsoft | Suggestions and chat in your editor, plus agent tasks |
+| Windsurf (now Devin Desktop) | Cognition | Standalone AI IDE with an agent |
+
+---
+
+## What is a coding assistant?
+
+A coding assistant is an AI that helps you write, read, fix, and explain code. You describe what you want in plain language and it responds with code, explanations, or actions. Some only suggest text as you type. Others can act: open files, edit them, run commands, and check their own work.
+
+### What using one really means
+
+- You become the reviewer. Your job shifts from typing every line to deciding what is right.
+- You stay accountable. The tool drafts, you ship.
+- The more it can do, the more it can do wrong. Autonomy and risk grow together.
+- Clear instructions give clear results. Vague requests give vague code.
+
+---
+
+## What to look for in any of them
+
+- Control: can you choose when it asks before editing files or running commands?
+- Privacy: where does your code go, and is it used for training?
+- Fit: does it work in the editor or terminal you already use?
+- Cost: is pricing per seat, per use, or bring-your-own key, and what are the limits?
+- Approval: is it on your organization's approved list?
+
+<p class="small">No tool is best for everyone. Pick for your work, your team, and your rules.</p>
+
+> **Professional use: check with IT first.** If you are using an AI coding assistant for work, check with your IT or security team before you use it. Your organization may restrict which tools are allowed, what data and code can be shared with them, and how the output may be used. It is your responsibility to follow those rules. This guide is general information, not legal, security, or compliance advice.
+
+---
+
+## Pick Your Tool: Step 0: is it approved?
+
+Before you compare features, check with your IT or security team. If a tool is not approved for work, it does not matter how good it is.
+
+> **Risk.** Using an unapproved tool on work code can break company policy. It is your responsibility to check first.
+
+---
+
+## Pick Your Tool: Tick what matters to you (1/2)
+
+*In the interactive app you can tick the needs that matter to you and the tools re-rank themselves. The table shows which needs each tool fits.*
+
+| Tool | Fits these needs |
+|---|---|
+| Claude Code | Hand off big multi-file tasks, Work in the terminal, Stay in my current editor, Run tasks in the cloud, Rules, skills, MCP customization, GitHub-centered workflow, Team or enterprise plans |
+| GitHub Copilot | Suggestions while I type, Hand off big multi-file tasks, Stay in my current editor, Free or very low cost, Run tasks in the cloud, Rules, skills, MCP customization, GitHub-centered workflow, Team or enterprise plans |
+| Cursor | Suggestions while I type, Hand off big multi-file tasks, Choose any model, Rules, skills, MCP customization, Team or enterprise plans |
+| Windsurf (Devin Desktop) | Hand off big multi-file tasks, Rules, skills, MCP customization |
+
+---
+
+## Pick Your Tool: Tick what matters to you (2/2)
+
+| Tool | Fits these needs |
+|---|---|
+| OpenAI Codex | Hand off big multi-file tasks, Work in the terminal, Stay in my current editor, Open source, Run tasks in the cloud, Rules, skills, MCP customization, Team or enterprise plans |
+| Gemini CLI | Hand off big multi-file tasks, Work in the terminal, Free or very low cost, Open source, Rules, skills, MCP customization, Very large context window |
+| Aider | Work in the terminal, Free or very low cost, Choose any model, Open source, Every change is a git commit |
+
+<p class="small">This ranks tools by how many of your needs match what the vendors' docs describe. It is a starting point, not a verdict. Try your top two on a small real task.</p>
+
+---
+
+## Pick Your Tool: The rubric: need to best fit (1/4)
+
+| If you need | Look at | Why | Watch out for |
+|---|---|---|---|
+| Suggestions while I type | GitHub Copilot, Cursor | Built for help inside the editor as you work. | Suggestions can look right and be wrong. Read each one. |
+| Hand off a big multi-file task | Claude Code, Codex, Cursor, GitHub Copilot agent | Agent modes plan, edit several files, and prepare changes for review. | The more it does alone, the more you must review. |
+| Stay in the terminal | Claude Code, Codex, Gemini CLI, Aider | Command-line tools that fit scripts and remote machines. | Steeper learning curve for beginners. |
+| Stay in my current editor | GitHub Copilot, Claude Code (VS Code, JetBrains), Codex (IDE), Cline, Continue | Extensions bring the assistant to the editor you use. | Check your editor is supported on your plan. |
+
+---
+
+## Pick Your Tool: The rubric: need to best fit (2/4)
+
+| If you need | Look at | Why | Watch out for |
+|---|---|---|---|
+| Spend little or nothing | GitHub Copilot Free, Gemini CLI free tier, Aider with your own key | Free tiers, or you pay only for the API you use. | Free tiers have request limits. |
+| Choose any model | Aider, Cursor | Aider works with many providers. Cursor lists 50+ models. | You manage keys, cost, and quality yourself. |
+| Open source I can inspect | Aider, Codex CLI, Gemini CLI | Source code is public (Apache-2.0 for Codex CLI and Gemini CLI). | Open source does not mean no data leaves your machine. |
+| Easy undo of every change | Aider | Commits each change to git automatically. | Use a git branch with any tool. |
+
+---
+
+## Pick Your Tool: The rubric: need to best fit (3/4)
+
+| If you need | Look at | Why | Watch out for |
+|---|---|---|---|
+| Run tasks in the cloud | Codex (Codex Web), Claude Code (web), GitHub Copilot agent | Long tasks run off your machine and report back. | Cloud runs have limited access and still need review. |
+| Heavy customization | Claude Code, Cursor, Windsurf | Rules, skills, MCP servers, memories, and workflows. | More setup, and more places for mistakes. |
+| Very large codebase | Gemini CLI | 1M token context window with Gemini 3 models. | Bigger context is not the same as better answers. |
+| GitHub-centered team | GitHub Copilot, Claude Code (GitHub Actions) | Works with pull requests, issues, and code review. | Check which features your plan includes. |
+
+---
+
+## Pick Your Tool: The rubric: need to best fit (4/4)
+
+| If you need | Look at | Why | Watch out for |
+|---|---|---|---|
+| I am new to coding | Any tool, set to approve every step | Manual mode (Claude Code), Review mode (Codex), or Aider's commit-per-change keep you in control. | Never use auto or full-auto modes until you can review the result. |
+| I work at a company with rules | Whichever your IT team approves | Approval is the first gate, before features or price. | Using an unapproved tool can break policy, and the responsibility is yours. |
+
+---
+
+## Pick Your Tool: Score your own shortlist
+
+Give each finalist 1 to 5 on every row, then add them up. Weigh the rows that matter most to you.
+
+| Criterion | Ask yourself |
+|---|---|
+| Approval | Is it allowed by IT? A no here ends the comparison. |
+| Data and privacy | Where does my code go? Is it used for training? Can I keep secrets out? |
+| Control | Can I make it ask before editing files or running commands? |
+| Fit | Does it work in my editor or terminal, on my operating system? |
+| Quality on my code | Did it do well on a small real task from my own project? |
+| Cost | Per seat, per use, or bring-your-own key? What are the limits? |
+| Customization | Can I give it my team's rules and recipes? |
+| Team support | Is there an admin, billing, and a plan for teams? |
+
+---
+
+## Compare Them All: At a glance (1/2)
+
+| Tool | Lives in | Best for | Models |
+|---|---|---|---|
+| Claude Code | Terminal, VS Code, JetBrains, desktop, web | Big multi-file tasks and customizable workflows | Anthropic |
+| GitHub Copilot | Your editor and GitHub | Help while you code, plus agent tasks on GitHub | Set by GitHub and your plan |
+| Cursor | Its own editor | People who want AI built into the editor | 50+ models from several providers |
+| Windsurf (Devin Desktop) | Its own standalone IDE | Agent-driven edits inside an IDE | Set by the product and your plan |
+
+---
+
+## Compare Them All: At a glance (2/2)
+
+| Tool | Lives in | Best for | Models |
+|---|---|---|---|
+| Codex | Terminal, IDE, desktop app, cloud | Delegating tasks, including in the cloud | OpenAI |
+| Gemini CLI | Terminal | Free-tier terminal work and very large context | Google Gemini |
+| Aider | Terminal | Git-friendly pairing with the model you choose | Many providers |
+
+<p class="small">Details come from each vendor's own docs, read on 2 Oct 2026. This space moves fast, so check the vendor site before you decide.</p>
+
+---
+
+## Compare Them All: Which one should you pick?
+
+- Want help while you type in an editor: GitHub Copilot or Cursor.
+- Want to hand off a whole task and review the result: Claude Code, Codex, or an IDE agent like Cursor or Windsurf.
+- Want to pay little or nothing: Gemini CLI's free tier, GitHub Copilot Free, or Aider with a cheap model.
+- Want to choose or switch models freely: Aider or Cursor.
+- Work in a locked-down company: ask IT which tools are approved before you install anything.
+
+---
+
+## Compare Them All: The same rules apply to all of them
+
+- Work on a git branch and commit before you start.
+- Read every change before you accept it.
+- Never paste secrets or customer data into any assistant.
+- Start with the most cautious permission setting, and check what the default is first.
+
+> **Risk.** Every tool on these pages can be wrong, and the ones that run commands can also break things. The safer the setting, the slower it feels. That trade is worth it until you trust the workflow.
+
+---
+
+## More Assistants: Also worth knowing (1/2)
+
+These did not get a full page, but you may meet them at work. Facts come from each vendor's own pages, read on 2 Oct 2026.
+
+| Tool | Made by | What it is | Worth knowing |
+|---|---|---|---|
+| Amazon Q Developer | AWS | Code suggestions, inline chat, agentic tasks, and vulnerability scanning in IDEs, a CLI, and the AWS console | Has a free tier. AWS plans to end IDE plugin support on 30 Apr 2027 and points users to Kiro. |
+| Kiro | AWS | Agentic platform with an IDE, CLI, web, and mobile. Turns prompts into specs, designs, and tasks first. | Credit-based pricing, with models from several providers. |
+| Cline | Cline Bot Inc. | Open-source (Apache 2.0) agent for VS Code, JetBrains, a CLI, and a desktop app | Asks approval for every edit and command unless you turn on auto-approve. Works with many providers. |
+| Continue | Open source | Chat, edit, agent mode, and autocomplete in VS Code and JetBrains, plus a CLI | You choose your own models. |
+
+---
+
+## More Assistants: Also worth knowing (2/2)
+
+| Tool | Made by | What it is | Worth knowing |
+|---|---|---|---|
+| Zed | Zed Industries | A code editor with an agent panel, edit prediction, and an inline assistant | Bring your own API keys, use local models, or use Zed-hosted ones. Supports external agents. |
+
+<p class="small">Other tools exist too, including JetBrains' own AI features, which I could not confirm from their page.</p>
+
+### Why a long list does not mean a better choice
+
+- Most of these use the same few underlying models, so the difference is the workflow around them.
+- Pick two, try both on one small real task, and keep the one that fits.
+- Ask IT which are approved before you try any of them at work.
+
+---
+
+## IT Review Checklist: Why this page exists
+
+If you use an AI coding assistant for work, your IT or security team decides what is allowed. This checklist helps you ask good questions, so approval takes days, not months.
+
+> **Risk.** It is your responsibility to get approval before you use a tool on work code or data. These are questions to ask, not answers. This guide is not legal, security, or compliance advice.
+
+---
+
+## IT Review Checklist: Questions to bring to IT (1/2)
+
+| Topic | Ask |
+|---|---|
+| Approval | Is this tool on the approved list? Is a specific plan or account type required? |
+| Account type | Must I use a company account, not a personal one? Who pays? |
+| Data handling | Where is my code sent and stored? For how long? Is it used to train models? |
+| Allowed data | What data classes can I put in a prompt? Which are never allowed (customer data, secrets, regulated data)? |
+| Access control | Is single sign-on required? Who can add or remove users? |
+| Logging | Are prompts and actions logged? Who can see the logs? |
+| Extensions | Are plugins, MCP servers, and extensions approved one by one, or blocked? |
+| Permissions | Which modes are allowed? Is auto or full-auto approval banned? |
+
+---
+
+## IT Review Checklist: Questions to bring to IT (2/2)
+
+| Topic | Ask |
+|---|---|
+| Network | Does it need to reach the internet? Does it work behind our proxy? |
+| Legal | Who owns the output? Are there license or IP rules for AI-written code? |
+| Compliance | Do we have rules (SOC 2, HIPAA, PCI, export controls) that limit use? |
+| Disclosure | Do I need to say when AI helped write code? |
+
+### Before you ask
+
+- Know which tool, which plan, and which task you want to use it for.
+- Be ready to say what code or data it would see.
+- Read the vendor's security and privacy page so your questions are specific.
+- Write down the answer, with the date and who gave it.
+
+---
+
+## Using AI Responsibly: What using AI responsibly means
+
+A coding assistant works like a fast, tireless, eager intern. It will try anything you let it, and it cannot always tell a good idea from a bad one. Using it responsibly means you stay the person in charge of what ships.
+
+- You own the result. If Claude writes it and you ship it, it is your code.
+- Check the work. Run it, test it, read it. Confident does not mean correct.
+- Protect other people's data. Customers, coworkers, and patients did not agree to be pasted into a prompt.
+- Follow your company policy on AI tools, and say so when AI helped build something.
+- Respect licenses. Do not ship code you cannot trace to a source you are allowed to use.
+
+---
+
+## Using AI Responsibly: The risks, in plain English
+
+| What can go wrong | What it looks like |
+|---|---|
+| It is confidently wrong | Invents a function or setting that does not exist, and says it with total certainty. |
+| It deletes or overwrites | A cleanup request removes files you needed. Without git, they may be gone. |
+| It runs commands as you | Anything you can do on your computer, it can do: install software, move files, change settings. |
+| It leaks secrets | Passwords and API keys in a file it reads can end up in a prompt, a log, or committed code. |
+| It is tricked by content | Text in a web page, issue, or file can contain hidden instructions aimed at the AI (prompt injection). |
+| It adds risky packages | It may install a library that is outdated, unmaintained, or malicious. |
+| You stop understanding your code | If nobody can explain it, nobody can fix it at 2am. |
+
+---
+
+## Using AI Responsibly: Habits that keep you safe
+
+- Start with the most cautious approval setting your tool offers, and read every change and every command.
+- Use git for everything, and commit before big changes.
+- Never run it as administrator or in a folder with files you cannot lose.
+- Never paste passwords, keys, customer data, or health data.
+- Ask it to explain anything you do not understand, before you accept it.
+- If something feels off, stop with Escape and ask what it is doing.
+
+> **Risk.** The risk is not that Claude is careless. It is that it is fast. A mistake you would catch on step two can pile up to step twenty before you look up.
+
+---
+
+## Safeguards: Keep secrets out of reach
+
+- Do not keep passwords, keys, or tokens in the project folder. Use a secrets manager or environment variables outside the repo.
+- Add secret files such as .env to .gitignore so they never reach git.
+- Many tools can be told to ignore files or deny reading them. Check your tool's docs for how, and turn it on.
+- If a secret ever reaches a prompt or a commit, treat it as leaked and rotate it.
+
+```
+# Claude Code example: block reading a secrets file
+# .claude/settings.json
+{
+  "permissions": {
+    "deny": ["Read(./.env)"]
+  }
+}
+```
+
+<p class="small">Deny rules block in every Claude Code mode, including bypass. Check the permissions docs for the exact rule syntax in your version.</p>
+
+---
+
+## Safeguards: Limit the blast radius
+
+- Work on a git branch, and commit before you start.
+- Use a sandbox, container, or throwaway folder for riskier modes. Claude Code has /sandbox, and Codex sandboxes file access.
+- Never run an agent as an administrator.
+- Keep production credentials off any machine where an agent runs unattended.
+
+---
+
+## Safeguards: Verify AI-written code
+
+AI code can look right and be wrong. Treat it like a pull request from someone you have not met.
+
+- Read the diff. If you cannot explain a change, do not merge it.
+- Run the tests, and add a test for anything new.
+- Run your linter and a security scanner.
+- Check any new dependency: does it exist, is it maintained, is it the real package?
+- Keep changes small, so review stays possible.
+
+---
+
+## Safeguards: Watch for prompt injection
+
+Text in a web page, an issue, a file, or an MCP tool result can contain hidden instructions aimed at the AI. If your assistant reads outside content, it may try to follow them.
+
+> **Risk.** Be extra careful when an agent can both read untrusted content and take actions like running commands or sending data. Keep approvals on in that situation.
+
+---
+
+## Saving Money (Any Tool): How the tools charge
+
+| Tool | Cost model, per vendor docs |
+|---|---|
+| GitHub Copilot | A free tier, and paid plans with larger AI credit allowances. Students, teachers, and open source maintainers can qualify for premium features at no cost. |
+| Gemini CLI | Free with a personal Google login: 60 requests a minute and 1,000 a day. An API key has a free tier of 1,000 requests a day. |
+| Amazon Q Developer | Free tier of 50 agentic chat interactions a month; paid options for more. |
+| Kiro | Credit-based, with different credit costs for different models. |
+| Aider, Cline, Continue | The software is open source. You pay your model provider for what you use. |
+| Claude Code | A Claude subscription or Anthropic Console account. API pricing is per million tokens, with batch requests 50% off. |
+| Codex | Sign in with a ChatGPT plan, or use an API key. |
+| Cursor, Windsurf | Plans and limits change, so read the current pricing page. |
+
+---
+
+## Saving Money (Any Tool): Habits that save money on any tool
+
+- Use the smallest model that does the job, and move up only when you must.
+- Plan before you build. A reviewed plan avoids expensive rework.
+- Start a fresh conversation for each task, because long history costs more on every request.
+- Be specific. Naming the file and the goal beats "look around and fix it".
+- Keep instruction files short, since they load every session.
+- Connect only the extensions and servers you need.
+- Watch your usage screen or command, and set alerts where the tool offers them.
+
+<p class="small">Claude-specific commands such as /cost and /clear are covered in the Claude Code deep dive.</p>
+
+---
+
+# 13. Claude Code field guide
+## Install to cost, for beginners
+
+The step-by-step track from install to cost control. It overlaps sections 1 to 6 on purpose, so someone new can read it start to finish.
+
+<p class="small">Merged from the former ai-coding-assistants-guide. Its facts were read from vendor docs on 2026-10-02 and were not re-verified here; where it overlaps the sections above, the sections above win.</p>
+
+---
+
+## Install: Requirements
+
+A terminal, and a Claude subscription or an Anthropic Console account. The recommended installer does not need Node.js. No IDE is required, though VS Code and JetBrains extensions, a desktop app, and a web version exist.
+
+---
+
+## Install: Install (recommended)
+
+```
+# macOS, Linux, WSL
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Windows PowerShell
+irm https://claude.ai/install.ps1 | iex
+
+# or Homebrew
+brew install --cask claude-code
+```
+
+<p class="small">Native installs update themselves in the background. Homebrew installs do not, so run brew upgrade now and then.</p>
+
+---
+
+## Install: Authenticate
+
+```
+claude
+```
+
+<p class="small">You are prompted to log in the first time you run claude. If ANTHROPIC_API_KEY is set, it asks you to approve the key instead.</p>
+
+### Verify
+
+```
+claude --version
+```
+
+<p class="small">If your shell says claude is not found, open a new terminal window. If it still fails, the install folder is not on your PATH yet.</p>
+
+---
+
+## First Session: First things to do
+
+1. Open a terminal in a project you know well (a git repo, not your home folder).
+2. Run claude, then ask for an architecture overview to confirm it can read your code.
+3. Run /init to generate a starter CLAUDE.md, then edit it with your real conventions.
+4. Check which permission mode you are in (Shift+Tab cycles modes). Recent versions can start in auto mode, so run claude --permission-mode default to approve each action until you trust the workflow.
+5. Make one small change on a new git branch so it is easy to review or discard.
+6. Run /cost to see usage, and /clear between unrelated tasks.
+
+<p class="small">If you want to learn more, please go to academy.claude.com</p>
+
+---
+
+## First Session: Courses worth knowing (academy.claude.com)
+
+- AI Fluency: Framework and Foundations: collaborate with AI effectively, ethically, and safely using the 4D framework (about 4 hours)
+- AI Capabilities and Limitations: build an accurate picture of what language models can and cannot do (about 3.5 hours)
+- Building Effective Human-Agent Teams (beta): preparing your team for multiplayer AI, best for team leaders (about 45 minutes)
+- Claude Code 101: the agentic loop, context windows, the Explore, Plan, Code, Commit workflow, CLAUDE.md, subagents, MCP, and hooks (about 1.5 hours; a Claude account or API key is needed)
+- Claude Code in Action: running longer, less supervised sessions, permission modes, scheduling, GitHub Actions, and verifying unattended work (about 1 hour; assumes you already use Claude Code)
+
+<p class="small">The Claude Code courses are linked from the Claude Code docs at academy.claude.com/courses/claude-code-101 and academy.claude.com/courses/claude-code-in-action.</p>
+
+---
+
+## First Session: If you are a creative
+
+- Draft and revise: ask for three different takes on a story, script, or pitch, then merge the best parts.
+- Build a small personal site or portfolio page and iterate on the design by describing what you want changed.
+- Put your voice and style rules in CLAUDE.md so drafts sound like you.
+- Use it as a sounding board: ask it to critique your idea before you commit to it.
+
+<p class="small">Just like the Green Lanterns, creativity is key. The ring only builds what you can imagine, and Claude works the same way: the clearer and more inventive your idea, the better the result. Specificity begets clarity.</p>
+
+---
+
+## First Session: If you are a professional
+
+- Ask for an overview of an unfamiliar codebase or document set before you start work.
+- Automate repetitive chores: tests, release notes, report formatting, data cleanup.
+- Write team conventions into a project CLAUDE.md and commit it so everyone shares them.
+- Review every change before merging, and never paste secrets or restricted data (see Safety &amp; Data).
+
+### Start in a project directory
+
+```
+cd your-project
+claude
+```
+
+<p class="small">Claude Code reads your project context on startup — git history, file structure, and any CLAUDE.md files.</p>
+
+---
+
+## First Session: Useful first prompts
+
+- "What does this codebase do? Give me an architecture overview."
+- "What are the main entry points?"
+- "Find all the places where user authentication happens."
+- "What tests exist and how do I run them?"
+
+### Key shortcuts
+
+|  |  |
+|---|---|
+| Escape | Cancel current generation |
+| Ctrl+C | Exit Claude Code |
+| ↑ / ↓ | Navigate prompt history |
+| /help | Show all slash commands |
+| /clear | Clear conversation context |
+
+---
+
+## Models: Three tiers, one idea
+
+Anthropic ships models in sizes. Small ones are fast and cheap, large ones think harder and cost more. Pick the smallest model that does the job, and move up only when the answer is not good enough.
+
+|  |  |
+|---|---|
+| Haiku | Fastest and cheapest. High-volume, latency-sensitive tasks. |
+| Sonnet | The balance of speed and intelligence. A good everyday default. |
+| Opus | Long-running agentic coding and knowledge work. |
+| Fable | The top of the lineup, for demanding reasoning and long-horizon agent work. |
+
+---
+
+## Models: Current models
+
+| Model | API ID | Price per million tokens (in / out) | Context | Retirement |
+|---|---|---|---|---|
+| Fable 5.1 | claude-fable-5-1 | $10 / $50 | 1M | Not sooner than 1 Sep 2027 |
+| Opus 5.5 | claude-opus-5-5 | $4 / $20 | 1M | Not sooner than 22 Sep 2027 |
+| Sonnet 5.5 | claude-sonnet-5-5 | $2 / $10 | 1M | Not sooner than 28 Sep 2027 |
+| Haiku 5.5 | claude-haiku-5-5 | from $0.10 / $0.50 | 1M | Check the deprecations page |
+
+<p class="small">Corrected against Anthropic's models overview on 2026-10-07: Haiku 5.5 is the current small model, and Haiku 4.5 is now legacy (see the next table). The docs suggest starting with Opus 5.5 for most workloads and moving to Fable 5.1 when Opus at higher effort still falls short. Batch requests are 50% off.</p>
+
+---
+
+## Models: Older models and their status (1/5)
+
+| Model | API ID | Status | Date |
+|---|---|---|---|
+| Haiku 4.5 | claude-haiku-4-5-20251001 | Active (legacy) | Not sooner than 15 Oct 2026 |
+| Mythos 5.1 / 5 | claude-mythos-5-1, claude-mythos-5 | Active | Not sooner than 1 Sep 2027 / 9 Jun 2027 |
+| Fable 5 | claude-fable-5 | Active (legacy) | Not sooner than 9 Jun 2027 |
+| Opus 5 | claude-opus-5 | Active (legacy) | Not sooner than 24 Jul 2027 |
+
+---
+
+## Models: Older models and their status (2/5)
+
+| Model | API ID | Status | Date |
+|---|---|---|---|
+| Sonnet 5 | claude-sonnet-5 | Active (legacy) | Not sooner than 30 Jun 2027 |
+| Opus 4.8 / 4.7 / 4.6 | claude-opus-4-8, -4-7, -4-6 | Active (legacy) | Not sooner than 28 May 2027 / 16 Apr 2027 / 5 Feb 2027 |
+| Sonnet 4.6 | claude-sonnet-4-6 | Active (legacy) | Not sooner than 17 Feb 2027 |
+| Opus 4.5 | claude-opus-4-5-20251101 | Active (legacy) | Not sooner than 24 Nov 2026 |
+
+---
+
+## Models: Older models and their status (3/5)
+
+| Model | API ID | Status | Date |
+|---|---|---|---|
+| Sonnet 4.5 | claude-sonnet-4-5-20250929 | Deprecated | Retires 30 Nov 2026 |
+| Opus 4.1 | claude-opus-4-1-20250805 | Retired | 5 Aug 2026 |
+| Opus 4, Sonnet 4 | claude-opus-4-20250514, claude-sonnet-4-20250514 | Retired | 15 Jun 2026 |
+| Haiku 3 | claude-3-haiku-20240307 | Retired | 20 Apr 2026 |
+
+---
+
+## Models: Older models and their status (4/5)
+
+| Model | API ID | Status | Date |
+|---|---|---|---|
+| Sonnet 3.7, Haiku 3.5 | claude-3-7-sonnet-20250219, claude-3-5-haiku-20241022 | Retired | 19 Feb 2026 |
+| Opus 3 | claude-3-opus-20240229 | Retired | 5 Jan 2026 |
+| Sonnet 3.5 (both versions) | claude-3-5-sonnet-20240620, -20241022 | Retired | 28 Oct 2025 |
+| Claude 2, 2.1, Sonnet 3 | claude-2.0, claude-2.1, claude-3-sonnet-20240229 | Retired | 21 Jul 2025 |
+
+---
+
+## Models: Older models and their status (5/5)
+
+| Model | API ID | Status | Date |
+|---|---|---|---|
+| Claude 1, Instant | claude-1.x, claude-instant-1.x | Retired | 6 Nov 2024 |
+
+<p class="small">Status comes from Anthropic's model deprecations page, as read by the original guide on 2 Oct 2026 (not re-checked here). Retired models fail if you call them, and Anthropic gives at least 60 days' notice before retiring a public model. Check that page before you build on any model.</p>
+
+### Switch models inside Claude Code
+
+```
+/model
+```
+
+<p class="small">Look up current prices on the Anthropic pricing page, since they change between generations.</p>
+
+---
+
+## CLAUDE.md & .md Files: What it does
+
+CLAUDE.md is a markdown file Claude Code reads automatically at the start of every session. It's your standing instructions — conventions, rules, toolchain specifics. Think of it as onboarding documentation for your AI collaborator.
+
+### Locations
+
+- ~/.claude/CLAUDE.md — global, applies to every project
+- {project}/CLAUDE.md — project-specific rules
+- {project}/{dir}/CLAUDE.md — subtree rules (applied when working in that folder)
+
+---
+
+## CLAUDE.md & .md Files: Starter template
+
+```
+# Project: my-service
+
+## Toolchain
+- Package manager: pnpm (never npm or yarn)
+- Test runner: vitest — run `pnpm test` before committing
+- Linter: biome — `pnpm lint:fix` before pushing
+
+## Architecture
+- Hexagonal. Domain layer has zero framework imports.
+- New services go in src/domain/services/
+
+## Rules
+- Never modify migration files after they've been committed
+- No console.log in committed code — use the logger module
+- All API endpoints need a corresponding OpenAPI spec entry
+```
+
+---
+
+## CLAUDE.md & .md Files: Which .md file does what
+
+| File | Who reads it | When it loads |
+|---|---|---|
+| CLAUDE.md | Claude | Automatically, every session. Standing rules. |
+| SKILL.md | Claude | When your request matches its description, or when you type /name. |
+| README.md | Humans (and Claude on request) | Only if someone opens it. Describes the project to people. |
+| AGENTS.md | Any AI coding tool | A shared convention across tools. Claude Code reads CLAUDE.md, so point it at AGENTS.md with an @AGENTS.md import. |
+| intent.md | You decide | Not built in. A team convention: a short file explaining why the project exists and what done looks like. Reference it from CLAUDE.md or ask Claude to read it. |
+| PLAN.md | You and Claude | Not built in. A saved plan for a task so work survives a /clear. |
+
+<p class="small">The difference in one line: CLAUDE.md is how to work here, intent.md is why we are doing this, a plan is what we do next, and a skill is a recipe.</p>
+
+---
+
+## CLAUDE.md & .md Files: Example intent.md
+
+```
+# Intent: invoice-export
+
+## Why
+Finance needs a monthly CSV of all invoices. Today it is done by hand.
+
+## Done means
+- One command produces the CSV
+- Totals match the billing dashboard
+- No customer emails appear in the file
+
+## Not in scope
+- PDF export
+- Changing the invoice database schema
+```
+
+---
+
+## CLAUDE.md & .md Files: What NOT to put in CLAUDE.md
+
+- Secrets, API keys, or credentials
+- Long explanations — keep it terse and actionable
+- Things Claude already knows (standard patterns, common libraries)
+- Everything — longer is not better. Be surgical.
+
+---
+
+## Skills: What skills are
+
+Skills are folders containing a SKILL.md file that defines a reusable workflow. Type /skill-name to run one, or let Claude pick it up on its own when your request matches its description. Great for repetitive multi-step tasks.
+
+### Create a skill
+
+```
+# Skills live in:
+~/.claude/skills/<name>/SKILL.md   # global
+.claude/skills/<name>/SKILL.md      # project-only
+
+# Create one:
+mkdir -p ~/.claude/skills/standup
+vim ~/.claude/skills/standup/SKILL.md
+```
+
+---
+
+## Skills: Example: /standup skill
+
+```
+---
+name: standup
+description: Generate a daily standup from git history. Use when the user asks for a standup, daily update, or what they did yesterday.
+---
+
+# Daily Standup
+
+1. Run `git log --oneline --since="yesterday midnight" --until="midnight" --author="$(git config user.name)"`
+2. Run `git status` to see in-progress work
+3. Output format:
+
+**Yesterday:** [bullets from commits]
+**Today:** [in-progress items]
+**Blockers:** [any / none]
+```
+
+---
+
+## Skills: What triggers a skill automatically
+
+Every skill has a short description at the top of its SKILL.md. Claude reads the descriptions, and when your request matches one, it loads that skill without you typing anything. So the description is the trigger.
+
+- Your words: asking to "review this PR" can load a review skill.
+- The task: writing tests, planning, debugging, or deploying can load the skill built for it.
+- The files: working in a certain language or framework can match a skill written for it.
+- You: typing /skill-name always runs it, no matching needed.
+
+<p class="small">Write descriptions as "Use when ..." with the exact situations you want. Vague descriptions fire at the wrong times or never.</p>
+
+---
+
+## Skills: Skill vs. plugin
+
+A skill is one recipe. A plugin is a package that can bundle several skills, slash commands, subagents, hooks, and MCP servers so a whole team installs the same setup in one step.
+
+```
+/plugin
+```
+
+<p class="small">Run /plugin to browse and install plugins. Treat plugins like any software you install: only use ones from sources you trust, because they can run code on your machine.</p>
+
+---
+
+## Skills: Useful skills to build
+
+- /standup — generate daily standup from git log
+- /review — run a structured code review on a file
+- /deploy-check — verify the project is ready to deploy
+- /doc — generate documentation for a function or module
+- /test — write tests for a specific file or function
+
+---
+
+## MCP & Plugins: What an MCP server is
+
+MCP (Model Context Protocol) is an open standard for plugging outside tools into Claude. An MCP server gives Claude new abilities: read your GitHub issues, query a database, check a calendar, drive a browser. Without one, Claude only sees your files and terminal.
+
+### Add and inspect servers
+
+```
+claude mcp add <name> -- <command>   # add a server
+claude mcp list                      # see what is connected
+/mcp                                 # status inside a session
+```
+
+---
+
+## MCP & Plugins: MCP vs. skills vs. plugins
+
+| Thing | What it is | Example |
+|---|---|---|
+| MCP server | Connects Claude to an outside system | Read and comment on GitHub issues |
+| Skill | A written recipe Claude follows | How we do a code review here |
+| Plugin | A bundle of skills, commands, hooks, and servers | A team starter pack |
+
+---
+
+## MCP & Plugins: Rules of thumb
+
+- Connect only the servers a task needs. Each one adds tool descriptions to the context, which costs money and can distract Claude.
+- Prefer read-only access. A server that can only read cannot delete anything.
+- Use a limited account or token for each server, never your admin credentials.
+
+> **Risk.** An MCP server acts with your accounts and permissions. A server that can send email, write to a database, or push code can do that wrong just as fast as it can do it right.
+
+---
+
+## Plans & Permissions: You choose how much to trust it
+
+Claude Code can read files, edit files, and run commands. The permission mode decides how often it has to stop and ask you. Press Shift+Tab to cycle between modes. Recent versions (v2.1.283 and later) start new terminal and VS Code sessions in auto mode, so check which mode you are in before you begin.
+
+| Mode | What runs without asking | Risk level |
+|---|---|---|
+| Manual (default) | Reads only. Asks before edits, commands, and network access. | Lowest. Start here. |
+| Accept edits | Reads, file edits, and common file commands like mkdir, mv, cp | Low to medium |
+| Plan | Reads only. No edits until you approve a plan. | Lowest. Nothing changes. |
+| Auto | Everything, while a second model reviews each action in the background | Medium to high |
+| Don't ask | Only tools you pre-approved. Everything else is denied. | Low. Meant for CI and scripts. |
+| Bypass permissions | Everything, with no checks (--dangerously-skip-permissions) | Highest. Containers and VMs only. |
+
+---
+
+## Plans & Permissions: Start in Manual mode
+
+```
+# one session
+claude --permission-mode default
+
+# every session: add to ~/.claude/settings.json
+{
+  "permissions": { "defaultMode": "default" }
+}
+```
+
+<p class="small">Manual is the mode that reviews every action. Its config value is "default".</p>
+
+---
+
+## Plans & Permissions: Make a plan first
+
+Planning costs a little and saves a lot. A plan lets you catch a wrong approach before any file changes, instead of after twenty.
+
+1. Press Shift+Tab until you reach plan mode.
+2. Describe the goal, the limits, and what done looks like.
+3. Let Claude explore and write the plan. It cannot change anything yet.
+4. Read it. Ask for changes. Ask what could go wrong.
+5. Approve it, then work in Manual or Accept edits mode.
+6. Save the plan to PLAN.md so it survives /clear.
+
+---
+
+## Plans & Permissions: Plan template
+
+```
+# Plan: add CSV export
+
+## Goal
+One command exports last month's invoices to CSV.
+
+## Constraints
+- No schema changes
+- Do not touch the billing module
+
+## Steps
+1. Add export function in src/export/invoices.ts
+2. Add a test with 3 sample invoices
+3. Wire up the CLI command
+
+## Verify
+- npm test passes
+- Output totals match the dashboard
+```
+
+---
+
+## Plans & Permissions: Manually accepting edits
+
+In Manual mode, Claude shows each change as a diff: red lines are removed, green lines are added. You press accept or reject. Reading the diff is the whole point, so do not hold the accept key down without looking.
+
+> **Risk.** The risk of skipping review: a small mistake lands in your project and you do not find out until it breaks something real. If you cannot explain what a change does, reject it and ask Claude to explain.
+
+---
+
+## Plans & Permissions: Auto mode: what you are agreeing to
+
+Auto mode saves you from clicking approve a hundred times. A second model reviews each action in the background and blocks the risky ones, but that is a safety check, not a guarantee. You are still trusting Claude to make many small decisions without you.
+
+- It can edit or delete many files in one go.
+- It can run commands that install software or change your system.
+- A wrong guess early on can snowball into many wrong steps before you look.
+
+> **Risk.** If you are new to coding, set Manual mode as your default. Use auto mode only on a git branch with everything saved, in a folder that holds nothing you cannot afford to lose, and only for tasks you could review afterward.
+
+---
+
+## Plans & Permissions: Safety net before you give Claude more freedom
+
+- Work on a git branch, and commit before you start.
+- Keep secrets out of the project folder, or in a file Claude is told to ignore.
+- Know the undo: git diff shows what changed, git restore puts files back.
+- Run the tests after every task, not only at the end.
+
+---
+
+## Safety & Data (Claude Code): What Claude Code can see
+
+- Files you are working in (reads them when needed)
+- Git history and status
+- Terminal output from commands it runs
+- Environment variables (be careful with secrets)
+
+### What Claude Code cannot do
+
+- Access files outside your project without explicit permission
+- Make network calls directly (only via tools you approve)
+- Run commands without showing them to you first (in Manual mode)
+
+---
+
+## Safety & Data (Claude Code): Data classification rules
+
+- Never paste production data (PII, credentials, PHI) into Claude Code prompts
+- Treat Claude Code conversations as internal-confidential by default
+- If you're unsure whether data is safe to share, don't share it
+- Use sanitized/synthetic data for examples in prompts
+
+### Review before accepting
+
+Claude Code shows you every file it wants to modify. Read the diff before accepting. You are responsible for code you ship. In Manual mode Claude asks first. In auto mode it acts on its own, so you review the results afterward.
+
+---
+
+## Cost & Limits: How billing works
+
+Claude Code needs a Claude subscription or an Anthropic Console account. With API billing you pay per token (input and output). Either way, cost depends on the model you pick and how much context each request carries, so a quick question is cheap and a long, sprawling session is not. Run /cost to see where you stand.
+
+---
+
+## Cost & Limits: Cost control tips
+
+- Use the smallest model that works. Haiku or Sonnet for routine work, Opus only when you are stuck (switch with /model).
+- Plan first. A reviewed plan avoids expensive rework and wrong turns.
+- Use /clear between unrelated tasks, and /compact to shrink a long session.
+- Be specific. Naming the file and the goal beats "look around and fix it".
+- Keep CLAUDE.md short, since it loads every session.
+- Connect only the MCP servers you need. Each one adds to every request.
+- Install the cost tracker Stop hook to see per-turn cost in real time
+- Set COST_ALERT_12H and COST_ALERT_DAY env vars to get spend alerts
+
+---
+
+## Cost & Limits: Install the cost tracker
+
+```
+git clone https://github.com/thejaredchapman/claude-code-usage-guard
+cd claude-code-usage-guard
+bash install.sh
+```
+
+---
+
+# 14. More assistants
+## Seven profiles: what it is, how to start, pros and cons
+
+Claude Code, GitHub Copilot, Cursor, Windsurf (Devin Desktop), OpenAI Codex, Gemini CLI and Aider, in the same shape.
+
+<p class="small">Merged from the former ai-coding-assistants-guide. Its facts were read from vendor docs on 2026-10-02 and were not re-verified here; where it overlaps the sections above, the sections above win.</p>
+
+---
+
+## Claude Code: Pros & Cons: What it is
+
+Anthropic's agentic coding tool. It reads your codebase, edits files, runs commands, and connects to your dev tools. It runs in the terminal, VS Code, JetBrains, a desktop app, and the web, and all of them share the same engine, CLAUDE.md files, settings, and MCP servers.
+
+### Get started
+
+```
+curl -fsSL https://claude.ai/install.sh | bash   # macOS, Linux, WSL
+cd your-project
+claude
+```
+
+---
+
+## Claude Code: Pros & Cons: How to use it
+
+- Run claude in a project and log in when prompted.
+- Press Shift+Tab to see and change the permission mode.
+- Use plan mode for anything bigger than a small edit.
+- Put rules in CLAUDE.md, recipes in skills, and automatic actions in hooks.
+- Use /clear between tasks and /cost to watch spend.
+
+---
+
+## Claude Code: Pros & Cons: Pros and cons
+
+**Pros**
+
+- Works across files and tools, including git, commits, and pull requests.
+- Extensible: CLAUDE.md, skills, hooks, subagents, MCP servers, and an Agent SDK.
+- Several permission modes let you set how closely it is watched.
+- Same setup in terminal, IDEs, desktop, and web.
+- Can also read an AGENTS.md written for other tools.
+
+**Cons**
+
+- Anthropic models by default; other providers only through some setups.
+- Most surfaces need a Claude subscription or Anthropic Console account.
+- Costs can grow on long sessions with lots of context.
+- Terminal-first, which is a learning curve for beginners.
+
+---
+
+## Claude Code: Pros & Cons: Keep it safe
+
+> **Risk.** Recent versions can start in auto mode. Switch to Manual with claude --permission-mode default until you have a git branch and tests to catch mistakes.
+
+---
+
+## GitHub Copilot: What it is
+
+GitHub's assistant. Per GitHub's docs it responds while you work (suggesting code, answering questions, explaining code), handles multi-step agent tasks (researching a repo, proposing plans, editing files, preparing pull requests), and can be customized with instructions, prompts, and custom agents. It also works with MCP servers and third-party coding agents.
+
+---
+
+## GitHub Copilot: Get started
+
+```
+# 1. Try Copilot Free or subscribe to a paid plan.
+# 2. Through an organization? Request access at
+#    github.com/settings/copilot
+# 3. Install the extension in your editor and sign in.
+#
+# Documented editors: VS Code, Visual Studio, JetBrains IDEs,
+# Xcode, Eclipse, Vim/Neovim, Azure Data Studio.
+```
+
+---
+
+## GitHub Copilot: How to use it
+
+- Accept suggestions as you type, and read each one first.
+- Ask chat to explain code, plan a task, or refactor.
+- Use agent features for multi-step work and review the pull request it prepares.
+- Add custom instructions so it follows your conventions.
+
+---
+
+## GitHub Copilot: Pros and cons
+
+**Pros**
+
+- A free tier exists, so you can try it at no cost.
+- Students, teachers, and open source maintainers can qualify for premium features at no cost.
+- Works in many editors, from VS Code and JetBrains to Xcode and Neovim.
+- Built into GitHub, so it fits pull requests and code review.
+- Business and Enterprise plans for organizations.
+
+**Cons**
+
+- What you get depends on your plan, including its AI credit allowance.
+- Models and features vary by plan, so check what yours includes.
+- Suggestions can look right and still be wrong.
+- Less of a standalone, scriptable terminal workflow than the CLI agents.
+
+---
+
+## GitHub Copilot: Keep it safe
+
+> **Risk.** Suggestions are easy to accept by reflex. Read them as carefully as code from a stranger, especially around security and data handling.
+
+---
+
+## Cursor: What it is
+
+An AI code editor that Cursor describes as "a coding agent for building ambitious software". It offers Tab and inline editing, chat, an agent mode for complex tasks, codebase understanding, and code review. It supports 50+ models from Anthropic, OpenAI, Google, and others.
+
+### Get started
+
+```
+# Download Cursor from cursor.com
+# macOS 12+ (.dmg), Windows 10+ (.exe),
+# Linux (apt, dnf, or AppImage)
+# Open the app, finish setup, and open your project folder.
+```
+
+---
+
+## Cursor: How to use it
+
+- Use Tab and inline editing for quick changes as you type.
+- Use chat to ask about the project.
+- Use agent mode for bigger tasks, and review the diff.
+- Customize it with rules, skills, MCP servers, and plugins.
+
+---
+
+## Cursor: Pros and cons
+
+**Pros**
+
+- Choose from 50+ models across several providers.
+- Tab, chat, and agent are all inside one editor.
+- Customizable with plugins, skills, MCP, and rules.
+- Connects to GitHub, GitLab, Azure DevOps, Bitbucket, Slack, Linear, and more.
+
+**Cons**
+
+- You work inside its editor, so you have to switch.
+- Plans and usage limits change, so read the current pricing page.
+- Your code goes to cloud models, so check company policy first.
+- Agent edits can be large and easy to over-accept.
+
+---
+
+## Cursor: Keep it safe
+
+> **Risk.** Cursor makes accepting changes very smooth. Slow down on agent edits and read the diff for every file before you accept.
+
+---
+
+## Windsurf (Devin Desktop): What it is
+
+Windsurf is now called Devin Desktop, an AI IDE with an agent called Cascade. Cognition, the maker of Devin, acquired Windsurf in July 2025 and announced the rename in June 2026, according to press reports. The docs describe it as a standalone IDE, not VS Code-based, and some URLs and package names still say "windsurf".
+
+### Get started
+
+```
+# Download for Mac, Windows, or Linux from the Windsurf / Devin Desktop site.
+# Setup: pick a theme, optionally import VS Code or Cursor settings,
+# sign in, then start your first AI session.
+```
+
+---
+
+## Windsurf (Devin Desktop): How to use it
+
+- Describe a task to the agent in plain language.
+- Watch which files it touches and review each change.
+- Add memories and rules so it follows your conventions.
+- Use workflows for repeated tasks and MCP servers for outside tools.
+
+---
+
+## Windsurf (Devin Desktop): Pros and cons
+
+**Pros**
+
+- Memories and rules customize how it behaves.
+- Workflows automate repetitive tasks.
+- One-click app deploys.
+- Can import your VS Code or Cursor settings.
+
+**Cons**
+
+- The product was renamed in 2026, so names in docs and packages can differ.
+- It is a standalone IDE, so you have to adopt it.
+- Some extensions are incompatible, including other AI completion tools.
+- Agent actions still need careful review.
+
+---
+
+## Windsurf (Devin Desktop): Keep it safe
+
+> **Risk.** When an agent can run terminal commands, read each command before approving it. Never approve a command you do not understand.
+
+---
+
+## OpenAI Codex: What it is
+
+OpenAI's coding agent. It comes as a terminal CLI, an IDE integration (VS Code, Cursor, Windsurf), a desktop app, and Codex Web, a cloud agent at chatgpt.com/codex. The CLI is open source under the Apache-2.0 license.
+
+### Get started
+
+```
+# macOS / Linux
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+# or: npm install -g @openai/codex
+# or: brew install --cask codex
+
+cd your-project
+codex
+```
+
+---
+
+## OpenAI Codex: How to use it
+
+- Sign in with ChatGPT, or use an API key.
+- Describe a task, for example "Tell me about this project".
+- Pick permissions: Review mode asks before acting, Autonomous mode does not. Adjust per session with /permissions.
+- Run /init to create an AGENTS.md of project instructions.
+
+---
+
+## OpenAI Codex: Pros and cons
+
+**Pros**
+
+- Open-source CLI under Apache-2.0.
+- Choice of terminal, IDE, desktop app, or cloud.
+- Works with a ChatGPT plan sign-in.
+- Sandboxing limits file access and writable folders.
+- AGENTS.md is a convention several tools share.
+
+**Cons**
+
+- OpenAI models only.
+- Cloud tasks run in a sandbox with limits on what they can reach.
+- Plan and sign-in options affect what you can use.
+- Results still need a human review before you merge.
+
+---
+
+## OpenAI Codex: Keep it safe
+
+> **Risk.** Autonomous mode edits files and runs commands without asking. Use it only in a disposable folder or container, never on your main machine with real credentials.
+
+---
+
+## Gemini CLI: What it is
+
+Google's open-source (Apache 2.0) terminal agent. It has built-in file operations, shell commands, web fetching, and Google Search grounding, and it supports MCP servers.
+
+### Get started
+
+```
+npm install -g @google/gemini-cli
+# or run without installing: npx @google/gemini-cli
+# also available through Homebrew, MacPorts, and Anaconda
+
+cd your-project
+gemini
+```
+
+---
+
+## Gemini CLI: How to use it
+
+- Sign in with a Google account when prompted.
+- Describe a task or ask about the codebase.
+- Use gemini -p "question" for a one-off, non-interactive prompt.
+- Choose a model with -m, and add project guidance in GEMINI.md.
+
+---
+
+## Gemini CLI: Pros and cons
+
+**Pros**
+
+- Open source under Apache 2.0.
+- Free tier with a personal Google login: 60 requests a minute and 1,000 a day.
+- 1M token context window with Gemini 3 models.
+- Web fetch, Google Search grounding, and MCP support built in.
+
+**Cons**
+
+- Gemini models only.
+- Free-tier request limits can interrupt long sessions.
+- Quality varies by task, so test it on your own work.
+- Fewer ready-made workflows than the most mature agents.
+
+---
+
+## Gemini CLI: Keep it safe
+
+> **Risk.** The free tier is a good reason to try it, not a reason to relax. It can edit files and run commands, so read each action it asks to take.
+
+---
+
+## Aider: What it is
+
+An open-source terminal pair programmer. You choose which files it can see, tell it what to change, and it edits them. By default it commits every change to git with a descriptive message, so each step is easy to undo.
+
+### Get started
+
+```
+python -m pip install aider-install   # Python 3.8-3.13
+aider-install
+
+cd your-project
+aider --model sonnet --api-key anthropic=<key>
+# other examples: --model o3-mini --api-key openai=<key>
+```
+
+---
+
+## Aider: How to use it
+
+- Add files with /add so it can edit them.
+- Ask questions without editing anything with /ask.
+- Request changes with /code.
+- Use /architect for a two-model plan-and-edit flow.
+- Undo an aider commit with /undo.
+
+---
+
+## Aider: Pros and cons
+
+**Pros**
+
+- Works with many model providers, so you pick the model.
+- Every edit is a git commit, so rollback is simple.
+- Open source; you pay only for the API you use.
+- Lightweight and runs in any terminal.
+
+**Cons**
+
+- Terminal only, with a plain interface.
+- You bring your own API key and manage which files are in context.
+- Needs a supported Python version.
+- Less hands-off than agents that plan and run everything themselves.
+
+---
+
+## Aider: Keep it safe
+
+> **Risk.** Because it commits each change, you get a built-in safety net. Still read each diff, and keep your API key out of any file you commit.
+
+---
+
+# 15. Codex: ecosystem
+## Surfaces, cloud, models, plugins and safety
+
+Everything around the terminal agent. The same shape as section 6 for Claude Code.
+
+<p class="small">Checked 2026-10-08 against OpenAI's docs. Sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Where Codex runs
+
+| Surface | How you reach it |
+|---|---|
+| **CLI** | `codex` in a terminal |
+| **IDE** | An integration for VS Code, Cursor and Windsurf |
+| **Desktop app** | `codex app`; from the CLI, `/app` continues a chat there |
+| **Cloud** | "Codex Web" at chatgpt.com/codex, and ChatGPT on web, mobile and desktop |
+
+<p class="small">Checked 2026-10-08. Codex is open source under Apache-2.0.</p>
+
+---
+
+## Codex cloud: tasks that run elsewhere
+
+1. In ChatGPT (web, mobile or desktop) choose **Work in > Cloud**.
+2. Pick or create an **environment**: your repositories, tools, internet access, package managers, network secrets and environment variables.
+3. Choose **Start a new task**, describe it, then review the result.
+
+Each task gets its own workspace; the environment is reusable. Creating an environment needs the web or desktop app. You can start a task from mobile.
+
+<p class="small">Slack: the cloud page only says "Use ChatGPT in Slack". It does not describe a Codex workflow, so none is claimed here. Checked 2026-10-08.</p>
+
+---
+
+## Which model, and how hard should it think?
+
+| Model | OpenAI's description |
+|---|---|
+| **Astra** | Most capable, for complex work across code, apps and research |
+| **GPT-6.1 Sol** | Near-Astra performance at a lower cost |
+| **GPT-6 Luna** | Most efficient, for focused, high-volume tasks |
+
+Switch with `/model` in a session or `codex --model gpt-6.1-sol`. **Reasoning effort** runs from Light through Medium and High to Max; **Ultra** is for work that splits into parallel sub-tasks.
+
+<p class="small">The models page says GPT-5.5 retires on October 14, 2026. Names as listed on 2026-10-08; check the page before scripting a model name.</p>
+
+---
+
+## Plugins, skills and apps
+
+| In the CLI | What it does |
+|---|---|
+| `/skills` | Browse skills. Typing `$` before a name invokes one explicitly |
+| `/plugins` | Manage installed plugins |
+| `codex plugin add / list / remove` | Install and manage plugins from a terminal |
+| `codex plugin marketplace add / list` | Add and list marketplaces |
+| `/apps` | Browse and insert apps |
+| `/mcp` | List the available MCP tools |
+
+<p class="small">Compare Claude Code's plugins in section 6. Checked 2026-10-08.</p>
+
+---
+
+## Safety by default: sandbox, network, approvals
+
+- **Sandbox** at the operating system level: macOS Seatbelt (`sandbox-exec`), Linux `bwrap` with `seccomp`, Windows native or WSL2.
+- **Network is off by default.** When you turn it on, a domain allowlist applies (exact hosts and wildcards); local and private destinations stay blocked unless allowed.
+- **Approvals** are required for edits outside the workspace, network access, commands outside a trusted set, and destructive tool calls.
+- Telemetry (OpenTelemetry) is **opt-in**; if enabled, prompts can contain source code, so redact unless your policy allows it.
+
+<p class="small">Checked 2026-10-08. The page makes no statement about training on your data or retention; check OpenAI's privacy terms for your plan.</p>
+
+---
+
+## Coming from Claude Code or Cursor
+
+- `/import` migrates settings from **Cursor or Claude Code**.
+- Instructions: `AGENTS.md` (`/init` creates it). Claude Code reads `CLAUDE.md`.
+- Hooks use the same JSON shape as Claude Code, and exit code 2 blocks.
+- Cursor also reads `.codex/agents/` subagents, and both read `.agents/skills/`.
+
+<p class="small">See section 7 for the full side-by-side. Checked 2026-10-08.</p>
+
+---
+
+# 16. Codex: field guide
+## Install to cost, for beginners
+
+The same walk-through as section 13, for Codex.
+
+<p class="small">Checked 2026-10-08 against OpenAI's docs.</p>
+
+---
+
+## Install and sign in
+
+```bash
+# macOS / Linux
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+# or: npm install -g @openai/codex
+# or: brew install --cask codex
+```
+
+Run `codex` and choose **Sign in with ChatGPT**. An API key also works but needs extra setup.
+
+---
+
+## Your first session
+
+1. Open a terminal in a git repository you know well, then run `codex`.
+2. Ask it to explain the project, to confirm it can read your code.
+3. Run `/init` to generate an `AGENTS.md`, then edit it with your real rules.
+4. Check the mode with `/permissions` before it edits anything.
+5. Make one small change on a new branch; review it with `/review` or `/diff`.
+6. Check usage with `/status` and `/usage`; use `/compact` when a chat gets long.
+
+---
+
+## Slash commands you will use (1/2)
+
+| Group | Commands |
+|---|---|
+| Session | `/model` `/fast` `/plan` `/goal` `/personality` `/new` `/clear` `/rename` `/resume` `/fork` `/side` `/app` |
+| Permissions | `/permissions` `/approve` `/review` |
+| Context | `/ide` `/mention` `/skills` `/apps` `/plugins` `/mcp` `/init` `/import` |
+
+<p class="small">From the Codex CLI slash-command page, checked 2026-10-08.</p>
+
+---
+
+## Slash commands you will use (2/2)
+
+| Group | Commands |
+|---|---|
+| Control | `/status` `/usage` `/compact` `/diff` `/ps` `/stop` `/quit` `/exit` `/archive` `/delete` `/logout` |
+| Agents and hooks | `/agent` `/subagents` `/hooks` |
+| Look and feel | `/vim` `/keymap` `/theme` `/statusline` `/title` `/pets` `/memories` `/experimental` `/debug-config` `/copy` `/raw` `/feedback` |
+| Windows only | `/sandbox-add-read-dir` `/setup-default-sandbox` |
+
+---
+
+## Shortcuts: what is confirmed
+
+| Key | Does |
+|---|---|
+| `@` | Mention a file |
+| `!` | Run a shell command |
+| `Esc` and `Ctrl+C` | Interrupt or exit |
+| `Esc` twice | Edit the previous message |
+| `?` | Show the shortcut overlay |
+| Image paste | Add a picture as context |
+
+`/keymap` rebinds keys.
+
+<p class="small">Listed on the Codex CLI page, checked 2026-10-08. The exact newline binding was not readable there, so it is left out; press `?` in Codex to see yours.</p>
+
+---
+
+## Plans and limits
+
+Codex is included in ChatGPT **Free, Go, Plus, Pro, Business, Edu and Enterprise** plans.
+
+| Plan | Price |
+|---|---|
+| Free | $0 |
+| Go | $8 a month |
+| Plus | $20 a month |
+| Pro | From $100 a month ($100, $200 or $500 tiers) |
+| Business | $20 per user a month, billed annually ($25 monthly) |
+
+Limits are counted per five hours and depend on the model. **Credits** extend usage beyond a plan.
+
+<p class="small">Prices from OpenAI's pricing page, 2026-10-08. They change; check it before you decide.</p>
+
+---
+
+## Habits that keep you safe
+
+- Keep the default sandbox. Turn the network on only for a task that needs it.
+- Work on a branch and commit first, so `/diff` and git show exactly what changed.
+- Read every command it asks to run outside the sandbox.
+- Keep secrets out of the repository and out of prompts.
+- Treat `--yolo` and `danger-full-access` like running as administrator: containers only.
+- Ask your IT team before using any assistant on work code (section 12).
+
+---
+
+# 17. Cursor: ecosystem
+## Editor, CLI, cloud agents, integrations and APIs
+
+The same shape as section 6 for Claude Code.
+
+<p class="small">Checked 2026-10-08 against Cursor's docs. Sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Where Cursor runs
+
+| Surface | How you reach it |
+|---|---|
+| **Editor** | The Cursor app; Tab, inline edit, chat and agent mode |
+| **CLI** | `agent` (install with `curl https://cursor.com/install -fsS \| bash`) |
+| **Cloud agents** | Isolated VMs, started from iOS, the web, the desktop Cloud dropdown, Slack `@cursor`, GitHub or Bitbucket `@cursor`, Linear, or the API |
+
+Cursor connects to GitHub, GitLab, Azure DevOps, Bitbucket, JetBrains, Slack and Linear. Cloud agents need a paid plan.
+
+---
+
+## Connecting GitHub
+
+1. A **Cursor admin** and a **GitHub org admin** open the Integrations dashboard.
+2. Click **Connect** next to GitHub and choose all repositories or selected ones.
+3. Return to Cursor and turn on **Bugbot** (automated review) or **Cloud Agents**.
+
+The app asks to clone code and create branches, create and review pull requests, track issues, watch CI, and read branch protection rules. GitHub Enterprise Server 3.8 or later is supported.
+
+<p class="small">Slack and Linear setup pages were not read, so their steps are not listed. Checked 2026-10-08.</p>
+
+---
+
+## Models and Auto
+
+- **Cursor's own pool:** Grok models and Composer 2.5, with generous included usage; fast variants cost 2x.
+- **Other pool:** Anthropic, OpenAI, Google, Meta, Moonshot and Z.ai models, charged at API rates.
+- **Auto** routes each request: **Cost**, **Balance** or **Intelligence**, billed at the list price of the model it picks.
+
+Choose a model in the agent panel; `Cmd+/` loops through models in the editor (macOS).
+
+<p class="small">Checked 2026-10-08. Model lists change often.</p>
+
+---
+
+## Build on it: the Cloud Agents API and SDKs
+
+| Option | What it is |
+|---|---|
+| Cloud Agents API | Create and manage agents programmatically (Beta, all plans) |
+| TypeScript SDK | One interface for local and cloud runtimes |
+| Python SDK | Sync and async clients |
+| SDK Bridge | An open protocol for SDKs in other languages |
+| Enterprise APIs | Bugbot, Admin, Analytics and AI Code Tracking |
+
+These run Cursor agent workflows (workspace, tools, commands, edits). They are not a plain model API. Compare the Agent SDK in section 6.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Rules, skills, plugins and the team marketplace
+
+- Rules in `.cursor/rules/*.mdc`, plus `AGENTS.md`.
+- Skills: `SKILL.md` in `.cursor/skills/` or `.agents/skills/`.
+- Plugins, skills and MCP servers are available on Individual plans.
+- **Teams** plans add a team marketplace for internal rules, skills and plugins, with shared team context for cloud agents and automations.
+
+See section 10 for the file formats.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Coming from Claude Code or Codex
+
+- Cursor reads subagents from `.claude/agents/` and `.codex/agents/` as well as `.cursor/agents/`.
+- It reads `AGENTS.md` and `SKILL.md` skills from `.agents/skills/`.
+- Hooks use camelCase events in `hooks.json`; exit code 2 blocks.
+- The CLI is `agent`; `-p` runs non-interactively.
+
+<p class="small">See section 7. Checked 2026-10-08.</p>
+
+---
+
+# 18. Cursor: field guide
+## Install to cost, for beginners
+
+The same walk-through as section 13, for Cursor.
+
+<p class="small">Checked 2026-10-08 against Cursor's docs.</p>
+
+---
+
+## Install and first session
+
+- **Editor:** download Cursor from cursor.com and open a project folder.
+- **CLI:** `curl https://cursor.com/install -fsS | bash`, then `agent`.
+
+First session:
+
+1. Open a repository you know well.
+2. Ask in Agent chat for an architecture overview.
+3. Add a rule (for example `.cursor/rules/`) or an `AGENTS.md` with your conventions.
+4. Switch modes with `Shift+Tab` (Agent, Plan, Ask) and use Plan for anything bigger than a small edit.
+5. Review the diff for every file before you accept it.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Plans and limits
+
+| Plan | Price | Notes |
+|---|---|---|
+| Hobby | Free | Limited Agent requests, Composer |
+| Pro | $20 a month | Extended Agent limits, frontier models, cloud agents, MCPs, skills, hooks |
+| Pro Plus | $60 a month | Individual tier; limits not listed on the page |
+| Ultra | $200 a month | Individual tier; limits not listed on the page |
+| Teams | $40 or $120 per user a month | Admin, analytics, privacy mode for the team, SSO |
+| Enterprise | Custom | Pooled usage, audit logs, SCIM, access controls |
+
+<p class="small">From Cursor's pricing and models pages, 2026-10-08. The pages do not give exact usage limits per tier.</p>
+
+---
+
+## Privacy and security
+
+- **Privacy Mode** is available to free and Pro users. With it on, "we will not train on your data."
+- Certifications: SOC 2 Type II, ISO/IEC 27001:2022 and ISO/IEC 42001:2023; reports on request at trust.cursor.com.
+- Cursor says it uses no infrastructure in China and no China-headquartered subprocessors.
+- Teams can enforce privacy mode for everyone; Enterprise adds encryption and CMEK controls.
+
+<p class="small">From cursor.com/security, checked 2026-10-08. The separate data-use page was not reachable, so check it for retention details.</p>
+
+---
+
+## Shortcuts and habits
+
+- Editor shortcuts are documented for **macOS only** (VS Code key bindings are the baseline). See the shortcuts slides in section 10.
+- Review every agent diff. Cursor makes accepting easy, so slow down.
+- Use Plan mode first, and keep agent tasks small.
+- Do not paste secrets. Check company policy: your code goes to cloud models.
+
+---
+
+# 19. Gemini CLI: ecosystem
+## IDEs, GitHub, models, extensions and more
+
+The same shape as section 6 for Claude Code.
+
+<p class="small">Checked 2026-10-08 against Google's Gemini CLI docs. Sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Where Gemini CLI runs
+
+| Surface | Notes |
+|---|---|
+| **Terminal** | `gemini` |
+| **IDEs** | VS Code and compatible editors (including Antigravity), JetBrains IDEs, Zed, other ACP editors |
+| **GitHub** | The `run-gemini-cli` action |
+| **Headless** | `-p` or a non-TTY; see section 11 |
+
+No hosted cloud agent was found in the docs read; remote subagents appear in the docs menu but were not read.
+
+---
+
+## IDE integration
+
+- Run `/ide install` (automatic) or `/ide enable` (after a manual install); `/ide status` checks it.
+- The CLI sees your 10 most recently opened files, cursor position and up to 16 KB of selected text.
+- Suggested edits open in your IDE's **native diff view**, where you can edit, accept or reject.
+- VS Code Command Palette entries start sessions and accept diffs.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Gemini CLI in GitHub
+
+The `run-gemini-cli` action can:
+
+- review pull requests when they open,
+- triage issues,
+- answer `@gemini-cli` mentions in comments.
+
+Set it up with `/setup-github`. It needs the secrets `GEMINI_API_KEY` and `GITHUB_TOKEN`, and you should add `.gemini/` and `gha-creds-*.json` to `.gitignore`. Compare Claude Code in GitHub Actions in section 6.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Models and Auto routing
+
+| Family | Models |
+|---|---|
+| Gemini 3 | `gemini-3-pro-preview`, `gemini-3-flash-preview` |
+| Gemini 2.5 | `gemini-2.5-pro`, `gemini-2.5-flash` |
+
+**Auto** (the recommended default) picks a Gemini 3 model for the task. Choose **Pro** for the hardest reasoning and **Flash** for speed. Switch with `/model` or `--model`; `/model` does not change sub-agent models.
+
+<p class="small">The page states no context window. Checked 2026-10-08.</p>
+
+---
+
+## Extensions and skills
+
+An **extension** bundles prompts, MCP servers, custom commands, themes, hooks, subagents and skills.
+
+- Manifest: `gemini-extension.json`; layout `commands/`, `skills/`, `GEMINI.md`.
+- Manage with `gemini extensions install / uninstall / list / update / enable / disable / link / new / validate`.
+- Skills load from `.gemini/skills/` or `.agents/skills/`.
+
+Compare plugins in section 6.
+
+---
+
+## Features worth a look
+
+The docs list features this deck does not cover in depth:
+
+| Feature | Why it matters |
+|---|---|
+| Checkpointing and Rewind | Go back after a bad edit |
+| Git worktrees | Parallel work without conflicts |
+| Plan mode and Model steering | Plan first, steer mid-task |
+| Trusted folders and `.geminiignore` | Limit what it can see |
+| Policy engine | Rules for tool use |
+| Token caching and Notifications | Cost and attention |
+
+<p class="small">Names from the docs menu, 2026-10-08. We have not read these pages, so no details are claimed.</p>
+
+---
+
+# 20. Gemini CLI: field guide
+## Install to cost, for beginners
+
+The same walk-through as section 13, for Gemini CLI.
+
+<p class="small">Checked 2026-10-08 against Google's docs.</p>
+
+---
+
+## Install and sign in
+
+```bash
+npm install -g @google/gemini-cli
+cd your-project
+gemini
+```
+
+On first run choose **Sign in with Google**. Some account types need a Google Cloud project. A Gemini API key or Vertex AI also work.
+
+---
+
+## Your first session
+
+1. Open a terminal in a git repository, then run `gemini`.
+2. Ask it to explain the project.
+3. Run `/init` to generate a `GEMINI.md`, then add your real rules.
+4. Check the approval mode: `Shift+Tab` cycles `default`, `auto_edit`, `yolo` and `plan`.
+5. Make one small change on a branch and read the diff.
+6. Check usage with `/stats model`; use `/compress` when a session gets long.
+
+---
+
+## Quotas and plans
+
+| Sign-in | Daily limit |
+|---|---|
+| Google account (Code Assist, free) | 1,000 requests |
+| Gemini API key (unpaid) | 250 model requests per user |
+| Google AI Pro | 1,500 requests |
+| Google AI Ultra | 2,000 requests |
+| Code Assist Standard / Enterprise | 1,500 / 2,000 per user |
+| Vertex AI or API key, pay as you go | Varies with tokens |
+
+`/stats model` shows your usage and limits.
+
+<p class="small">From Google's quota page, 2026-10-08. The guide in section 12 lists an older API-key figure; this one is current.</p>
+
+---
+
+## Privacy and safety
+
+- Which terms apply depends on how you sign in: individuals' Code Assist notice, the Google Privacy Policy for paid tiers, Gemini API terms (unpaid or paid) or Google Cloud terms for Vertex.
+- The page does **not** say whether prompts or code are used for training. Read the notice for your sign-in type.
+- You can opt out of sending usage statistics.
+- Safety tools: `--approval-mode`, sandboxing (`-s`, `GEMINI_SANDBOX`), trusted folders and `/permissions` (section 11).
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Habits that keep you safe
+
+- Prefer the default approval mode; treat `yolo` like running as administrator.
+- Use a sandbox for anything unattended.
+- Work on a branch, read every diff, run the tests.
+- Do not paste secrets or customer data. Check whether your sign-in type allows work code (section 12).
+- A free tier is a reason to try it, not a reason to relax.
+
+---
+
+# 21. GitHub Copilot: in depth
+## Instructions, skills, MCP, hooks, permissions and shortcuts
+
+The same ground section 9 covers for Codex: how Copilot is configured and run.
+
+<p class="small">Checked 2026-10-08 against GitHub's docs. Sources and gaps are in docs/superpowers/facts.md. Copilot is not one of the four agents the picker re-tints; it is covered in full here.</p>
+
+---
+
+## What Copilot is
+
+GitHub describes it as "an AI assistant that helps you write, understand, and ship software."
+
+| Mode | What it does |
+|---|---|
+| **Assistive** | Real-time suggestions and explanations you review |
+| **Agentic** | Researches a repository, proposes a plan, edits files, reviews pull requests |
+| **Customizations** | Instructions and repository context |
+| **Integrations** | Third-party agents and MCP servers |
+
+It runs in editors, in the **Copilot CLI**, on GitHub.com and as a **cloud agent**.
+
+---
+
+## Instructions
+
+| File | Applies to |
+|---|---|
+| `.github/copilot-instructions.md` | Every request in the repository |
+| `.github/instructions/NAME.instructions.md` | Requests that match its `applyTo` glob in the frontmatter |
+| `AGENTS.md` (anywhere; the nearest wins) | Agents |
+| `CLAUDE.md` or `GEMINI.md` in the repo root | Also read |
+
+Both the repo-wide file and a matching path file apply. Priority: **personal**, then **repository**, then **organization**. `excludeAgent` can keep a file away from `code-review` or `cloud-agent`.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Skills and custom agents
+
+Skills are "folders of instructions, scripts, and resources".
+
+| Where | Paths |
+|---|---|
+| Project | `.github/skills`, `.claude/skills`, `.agents/skills` |
+| Personal | `~/.copilot/skills`, `~/.agents/skills` |
+
+They work in the cloud agent, code review, Copilot CLI, the Copilot app, and agent mode in VS Code and JetBrains IDEs.
+
+<p class="small">GitHub's page does not name a `SKILL.md` file, so it is not claimed here. Checked 2026-10-08.</p>
+
+---
+
+## MCP
+
+| Surface | Where servers are configured |
+|---|---|
+| IDEs (VS Code, JetBrains) | `mcp.json` |
+| Copilot CLI | Local and remote servers; the **GitHub MCP server is built in** |
+| GitHub.com | Per repository; applies to the cloud agent and code review |
+
+Organizations control it with the **MCP servers in Copilot** policy, for Business and Enterprise plans only.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Hooks
+
+Available in the **cloud agent** and the **Copilot CLI**.
+
+- Repository: `.github/hooks/*.json`. Personal (CLI only): `~/.copilot/hooks/*.json`.
+- Events: `sessionStart`, `sessionEnd`, `userPromptSubmitted`, `preToolUse`, `postToolUse`, `agentStop`, `subagentStop`, `errorOccurred`.
+- Each file has `version: 1` and hooks of `type: "command"` with a `bash` or `powershell` script, plus optional `cwd`, `env`, `timeoutSec`.
+
+<p class="small">GitHub's page does not say how exit codes are treated, so blocking behavior is not claimed. Checked 2026-10-08.</p>
+
+---
+
+## Permissions and the Copilot CLI
+
+`Shift+Tab` cycles ask/execute and plan mode. Tool approval flags:
+
+| Flag | Effect |
+|---|---|
+| `--allow-all-tools` | Approve any tool automatically |
+| `--allow-tool='TOOL_SPEC'` | Allow one tool |
+| `--deny-tool='TOOL_SPEC'` | Block one tool |
+
+A tool spec is `shell(COMMAND)`, `write`, or an MCP server name. Launch the CLI only from trusted directories, never your home folder.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Non-interactive use
+
+```bash
+copilot -p "Summarise the failing tests"
+copilot --prompt "..."  # long form
+```
+
+`copilot config [KEY] [VALUE]` sets options outside a session, with `--global`, `--repo` or `--local`. Authenticate in CI with a fine-grained token that has the **Copilot Requests** permission, in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or `GITHUB_TOKEN` (classic tokens are not accepted).
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Shortcuts: VS Code
+
+| Action | Windows / Linux | macOS |
+|---|---|---|
+| Accept suggestion | `Tab` | `Tab` |
+| Dismiss | `Esc` | `Esc` |
+| Next / previous suggestion | `Alt+]` / `Alt+[` | `Option+]` / `Option+[` |
+| Trigger suggestion | `Alt+\` | `Option+\` |
+| Open Chat view | `Ctrl+Alt+I` | `Ctrl+Cmd+I` |
+| New chat | `Ctrl+N` | `Cmd+N` |
+| Inline chat | `Ctrl+I` | `Cmd+I` |
+| Quick Chat | `Ctrl+Shift+Alt+L` | `Shift+Option+Cmd+L` |
+
+Slash commands in chat: `/plan`, `/explain`, `/fix`, `/tests`, `/doc`, `/new`.
+
+---
+
+## Shortcuts: Copilot CLI
+
+| Key | Does |
+|---|---|
+| `Shift+Tab` | Cycle ask/execute and plan mode |
+| `Ctrl+C` twice | Exit |
+| `Shift+Enter` or `Alt+Enter` | New line |
+| `Ctrl+G` or `Ctrl+X` then `e` | Edit the prompt in an external editor |
+| `@ FILE` | Include a file |
+| `# NUMBER` | Add a GitHub issue or pull request |
+| `! COMMAND` | Run a local shell command |
+| `Ctrl+X` then `h` | Hide the sessions sidebar |
+
+Slash commands include `/compact`, `/context`, `/model`, `/mcp`, `/login` and `/feedback`.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+# 22. GitHub Copilot: ecosystem
+## Cloud agent, models, plans and integrations
+
+The same shape as section 6 for Claude Code.
+
+<p class="small">Checked 2026-10-08 against GitHub's docs.</p>
+
+---
+
+## Where Copilot runs
+
+| Surface | Notes |
+|---|---|
+| **Editors** | VS Code, Visual Studio, JetBrains IDEs, Xcode, Eclipse and more |
+| **Copilot CLI** | `copilot`, in the terminal |
+| **GitHub.com** | Chat, pull request review and code review |
+| **Cloud agent** | Works in the background on GitHub |
+| **Copilot app** | Named in the skills docs as a surface |
+
+<p class="small">Editor list from the earlier guide (2026-10-02); the overview page read on 2026-10-08 names IDE, GitHub.com, the CLI and code review.</p>
+
+---
+
+## The cloud agent
+
+- Start it from the **agents panel**, a conversation, or an **issue or pull request** on GitHub.com; code scanning alerts can be assigned to it too.
+- It researches, plans and implements "in the background" in an **ephemeral cloud environment**, running tests and linters.
+- Copilot creates the branch, writes commits and pushes. You review and ask for changes before the pull request, or request one up front.
+- **Limits:** 59 minutes per session, and one repository per task.
+
+Compare Claude Code on the web and Codex cloud.
+
+---
+
+## Cloud agent: guard rails
+
+- If a ruleset or branch protection rule is incompatible with the cloud agent, **access is blocked**. Admins can add Copilot as a bypass actor.
+- Owners and admins can **disable** the cloud agent for particular repositories.
+- Hooks (`.github/hooks/`) run in it, and so do MCP servers configured at the repository level.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Models
+
+| Provider | Families listed |
+|---|---|
+| OpenAI | GPT-5 and GPT-6 series |
+| Anthropic | Haiku, Opus, Sonnet, Fable |
+| Google | Gemini |
+| Microsoft | MAI-Code |
+| Moonshot AI | Kimi K3 |
+| xAI | Grok |
+
+What you can use depends on your plan and where you use Copilot. A 1M-token context is limited to VS Code and the CLI, and reasoning levels to VS Code, the CLI and the cloud agent; both use more credits. There is an auto model selection.
+
+<p class="small">Checked 2026-10-08. The page gives no plan-by-plan list.</p>
+
+---
+
+## Plans and AI credits
+
+| Plan | Price | Monthly AI credits |
+|---|---|---|
+| Free | $0 | Limited access |
+| Pro | $10 | 1,000 base + 500 flex |
+| Pro+ | $39 | 3,900 base + 3,100 flex |
+| Max | $100 | 10,000 base + 10,000 flex |
+| Business | $19 per seat | 1,900 per user |
+| Enterprise | $39 per seat | 3,900 per user |
+
+Free for **verified students**; verified teachers and maintainers of popular open source projects "may be eligible" for free Copilot Pro.
+
+<p class="small">From GitHub's plans page, 2026-10-08. The guide in section 14 describes an older "premium requests" model.</p>
+
+---
+
+## Integrations
+
+- **GitHub MCP server:** built in to the Copilot CLI; its toolsets can be trimmed to improve performance.
+- **Third-party agents and MCP servers** extend Copilot, with the org policy above.
+- **Code review and pull requests** are native to GitHub.
+- Business and Enterprise add central policy and management.
+
+---
+
+# 23. GitHub Copilot: field guide
+## Install to cost, for beginners
+
+The same walk-through as section 13, for Copilot.
+
+<p class="small">Checked 2026-10-08 against GitHub's docs.</p>
+
+---
+
+## Get started
+
+1. Choose a plan (Free is available) or request access through your organization.
+2. Install the Copilot extension in your editor and sign in, or install the CLI:
+
+```bash
+npm install -g @github/copilot        # Node.js 22+
+winget install GitHub.Copilot         # Windows
+brew install --cask copilot-cli       # macOS, Linux
+curl -fsSL https://gh.io/copilot-install | bash
+```
+
+3. In the CLI, run `copilot` and use `/login`.
+
+---
+
+## Your first session
+
+1. Open a repository you know well.
+2. Ask chat to explain the project and its entry points.
+3. Add `.github/copilot-instructions.md` with your real conventions (or an `AGENTS.md`).
+4. Use plan mode (`Shift+Tab` in the CLI, or `/plan` in VS Code) before anything bigger than a small edit.
+5. Read every suggestion and every diff; run the tests.
+6. For a larger task, assign an issue to the cloud agent and review the pull request.
+
+---
+
+## Your data and training
+
+GitHub's account page has a setting named **"Allow GitHub to use my data for AI model training."** As of **April 24, 2026** it is **enabled by default** for **Copilot Free, Pro, Pro+ and Max**.
+
+- To opt out: Copilot settings, then set that dropdown to **Disabled**.
+- Business and Enterprise do not see the setting; their data is covered by GitHub's Data Protection Agreement.
+
+<p class="small">From GitHub's policy docs, 2026-10-08. Retention periods quoted in community posts were not confirmed in GitHub's own docs, so they are not listed.</p>
+
+---
+
+## Habits that keep you safe
+
+- Suggestions are easy to accept by reflex. Read each one like code from a stranger.
+- Use `--deny-tool` and trusted folders in the CLI; avoid `--allow-all-tools` outside a throwaway directory.
+- Keep the cloud agent on a branch workflow with branch protection.
+- Never paste secrets, and decide whether to opt out of training before you use personal accounts on work code.
+- Ask IT first for work use (section 12).
+
+---
+
+# 24. Devin Desktop (Windsurf): in depth
+## Rules, skills, MCP, Cascade and shortcuts
+
+Windsurf's AI IDE was renamed **Devin Desktop**. This section covers the same ground as section 9 for Codex.
+
+<p class="small">Checked 2026-10-08 against docs.devin.ai/desktop. Sources and gaps are in docs/superpowers/facts.md. Several pages still say Windsurf.</p>
+
+---
+
+## What it is, and the rename
+
+"A next-generation AI IDE built to keep you in the flow", with an integrated agent, **Cascade**.
+
+- Formerly **Windsurf**. windsurf.com and docs.windsurf.com now redirect to devin.ai and docs.devin.ai.
+- Repository URLs keep the old name; the package is `devin-desktop`.
+- Mac, Windows 10 or later, and Linux (tar, deb, rpm).
+- Open the command palette with `Cmd+Shift+P` or `Ctrl+Shift+P`.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Cascade: modes and checkpoints
+
+| Feature | What the docs say |
+|---|---|
+| **Code mode** | "create and make modifications to your codebase" |
+| **Chat mode** | Questions about the codebase or coding in general |
+| **Planning** | A specialized agent keeps refining a long-term plan in the background |
+| **Tools** | Search, Analyze, Web Search, MCP and the terminal |
+| **Checkpoints** | Named snapshots; reverting is currently irreversible |
+| **`@` mentions** | Refer to earlier conversations |
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Rules
+
+| What | Where |
+|---|---|
+| Workspace rules | `.devin/rules/*.md` (preferred) or `.windsurf/rules/*.md` |
+| Legacy | `.windsurfrules` at the workspace root |
+| Global rules | `~/.codeium/windsurf/memories/global_rules.md` |
+| `AGENTS.md` | Any directory in the workspace |
+
+Limits: **12,000 characters** per workspace rule file, **6,000** for global rules. Workspace rules choose a `trigger`: `always_on`, `model_decision`, `glob` (matching files) or `manual` (type `@rule-name`). Global rules and root `AGENTS.md` are always on.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Memories, skills and workflows
+
+- **Memories** live in `~/.codeium/windsurf/memories/`, are workspace-specific, and "do NOT consume credits".
+- **Skills:** `.devin/skills/<name>/` (or `.windsurf/skills/`), global `~/.config/devin/skills/`, plus `.agents/skills/` and `.claude/skills/`. Each needs a `SKILL.md` with `name` and `description`. Cascade invokes one when your request matches, or you type `@skill-name`.
+- **Workflows:** a single `.md` file, run manually with a `/slash-command`.
+
+<p class="small">The docs read mention no hooks. Checked 2026-10-08.</p>
+
+---
+
+## MCP
+
+Config file: `~/.config/devin/mcp_config.json` on macOS and Linux, `%APPDATA%\devin\mcp_config.json` on Windows.
+
+```json
+{
+  "mcpServers": {
+    "name": { "command": "npx", "args": ["-y", "some-server"], "env": {}, "disabledTools": [] }
+  }
+}
+```
+
+Cascade can use at most **100 tools** at a time and has **no MCP marketplace** or one-click install (those are for the Devin Local agent). Admins can use custom registries, an allowlist or regex patterns.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Shortcuts, and what is not documented
+
+| Key | Does |
+|---|---|
+| `Cmd/Ctrl+L` | Open Cascade |
+| Enter twice | Send a queued message now |
+| `Cmd+Shift+P` / `Ctrl+Shift+P` | Command palette |
+
+**Not found in the docs we could read:** terminal command approval levels, hooks, a full shortcut list, and a privacy or training statement. Check devin.ai before relying on any of these.
+
+---
+
+# 25. Devin Desktop (Windsurf): ecosystem
+## Plans, models and admin controls
+
+<p class="small">Checked 2026-10-08 against devin.ai and docs.devin.ai.</p>
+
+---
+
+## Where it runs
+
+| Surface | Notes |
+|---|---|
+| **The IDE** | Devin Desktop on Mac, Windows and Linux |
+| **Projects** | Open local folders, clone repositories, connect over SSH |
+| **Agents** | Cascade (the original agent) and the newer **Devin Local** agent |
+| **Account** | Sign in with a Devin account or an API key |
+
+Some features, such as the MCP marketplace and custom MCP registries, are for Devin Local only.
+
+---
+
+## Plans
+
+| Plan | Price | Notes |
+|---|---|---|
+| Free | $0 | "Light quota to code with agents", limited models |
+| Pro | $20 a month | OpenAI, Claude, Gemini and open source models |
+| Max | $200 a month | Significantly higher quotas |
+| Teams | $80 a month plus $40 per developer seat | Up to 200 users; central billing and admin |
+| Enterprise | Custom | SAML/OIDC SSO, dedicated support |
+
+Pro and Max include free **SWE-2** access through **October 16, 2026**. Allowances refresh daily or weekly; overage uses API pricing.
+
+<p class="small">From devin.ai/pricing, 2026-10-08. No exact quota numbers are published.</p>
+
+---
+
+## Admin controls
+
+- Team admins manage MCP through **custom registries** and an **allowlist**: once anything is allowlisted, other servers are blocked.
+- Regex patterns give flexible policies.
+- Enterprise adds SSO and dedicated support.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Coming from Cursor or Claude Code
+
+- Setup can **import VS Code or Cursor settings** and keybindings.
+- Skills in `.claude/skills/` and `.agents/skills/` are read, and so is `AGENTS.md`.
+- Rules live in `.devin/rules/`, not `.cursor/rules/` or `CLAUDE.md`.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+# 26. Devin Desktop (Windsurf): field guide
+## Install to cost, for beginners
+
+<p class="small">Checked 2026-10-08 against docs.devin.ai.</p>
+
+---
+
+## Install and set up
+
+1. Download Devin Desktop for Mac, Windows or Linux from devin.ai.
+2. **Choose a theme**; optionally import VS Code or Cursor settings and keybindings.
+3. **Sign in** with a Devin account or an API key.
+4. **Start developing:** open a local folder, clone a repository or connect over SSH, then give the agent a task.
+
+---
+
+## Your first session
+
+1. Open a repository you know well and open Cascade (`Cmd/Ctrl+L`).
+2. In Chat mode, ask for an overview of the project.
+3. Add a rule in `.devin/rules/` (or an `AGENTS.md`) with your conventions.
+4. Switch to Code mode for a small change; create a **checkpoint** first.
+5. Review every change. Remember that reverting a checkpoint is irreversible.
+6. Watch your quota in the app.
+
+---
+
+## Habits that keep you safe
+
+- Name a checkpoint before any larger edit.
+- Read each terminal command before approving it; we could not confirm the approval levels in the docs read.
+- Keep rules short: 12,000 characters per file at most.
+- Never paste secrets. For work use, ask IT first (section 12); we found no privacy or training statement to cite.
+- The product was renamed in 2026, so package and docs names can differ.
+
+---
+
+# 27. Aider: in depth
+## Modes, conventions, repo map, git, scripting and commands
+
+Aider is an open-source terminal pair programmer. This section covers the same ground as section 9 for Codex.
+
+<p class="small">Checked 2026-10-08 against aider.chat. Sources and gaps are in docs/superpowers/facts.md. The docs read mention no hooks, subagents or MCP support.</p>
+
+---
+
+## Four chat modes
+
+| Mode | What it does | Switch |
+|---|---|---|
+| `code` | Makes changes to satisfy your request | `/code` |
+| `ask` | Discusses and answers; "never make changes" | `/ask` |
+| `architect` | An architect model proposes; an editor model makes the edits | `/architect` |
+| `help` | Answers questions about aider itself | `/help` |
+
+`/chat-mode <mode>` changes the mode for all later messages; `--chat-mode` sets it at launch. The prompt shows the mode (`ask>`, `architect>`). The suggested flow: discuss in `ask`, then switch to `code`.
+
+---
+
+## Conventions instead of CLAUDE.md
+
+Write your rules in a markdown file such as `CONVENTIONS.md` and load it read-only:
+
+```bash
+aider --read CONVENTIONS.md
+```
+
+or in chat: `/read CONVENTIONS.md`. To load it every time, put this in `.aider.conf.yml`:
+
+```yaml
+read: CONVENTIONS.md
+```
+
+Read-only files can use prompt caching. Aider keeps a shared conventions repository on GitHub.
+
+<p class="small">The pages read do not mention AGENTS.md. Checked 2026-10-08.</p>
+
+---
+
+## Git is the safety net
+
+- Every edit is **committed** with a descriptive message (Conventional Commits by default).
+- Files with uncommitted changes are committed first, so your work stays separate.
+- `(aider)` is appended to the author or committer name.
+- `/undo` discards aider's last commit; `/diff` shows changes; `/commit` saves outside edits; `/git` runs any git command.
+- `--attribute-author` and `--attribute-co-authored-by` change attribution. `--no-auto-commits` and `--no-git` exist but are discouraged.
+
+---
+
+## The repo map
+
+Aider sends the model "a concise map of your whole git repository" with the main classes and functions, types and call signatures.
+
+- A graph ranking algorithm picks the **most relevant** parts, where files are nodes and dependencies are edges.
+- The budget is `--map-tokens`, which defaults to **1k tokens**.
+- `/map` shows it and `/map-refresh` rebuilds it.
+
+You still choose which files it may edit with `/add`.
+
+---
+
+## Scripting and watch mode
+
+```bash
+aider --message "add docstrings to all functions" app.py
+aider --message-file task.txt --yes
+```
+
+Flags: `--message` or `-m`, `--message-file`, `--yes`, `--auto-commits`, `--dry-run`. The Python API "is not officially supported or documented".
+
+**`--watch-files`** lets you work in any editor: write a comment ending in `AI!` to make a change or `AI?` to ask a question; aider acts on it and removes the comment.
+
+---
+
+## Commands (1/2)
+
+| Group | Commands |
+|---|---|
+| Files | `/add` `/drop` `/ls` `/read-only` `/context` `/map` `/map-refresh` |
+| Modes | `/code` `/ask` `/architect` `/chat-mode` `/help` |
+| Run | `/run` or `!` `/test` `/lint` `/web` `/paste` `/voice` |
+
+<p class="small">From aider's commands page, checked 2026-10-08.</p>
+
+---
+
+## Commands (2/2)
+
+| Group | Commands |
+|---|---|
+| Models | `/model` `/editor-model` `/weak-model` `/models` `/reasoning-effort` `/think-tokens` |
+| Git and session | `/commit` `/undo` `/diff` `/git` `/reset` `/clear` `/save` `/load` `/tokens` `/settings` |
+| Utility | `/copy` `/copy-context` `/edit` `/multiline-mode` `/ok` `/report` `/exit` |
+
+---
+
+## Shortcuts
+
+| Key | Does |
+|---|---|
+| `Up` | History |
+| `Ctrl-R` | Search message history |
+| `Ctrl-C` | Interrupt safely |
+| `Ctrl-X Ctrl-E` | Open an external editor |
+| `Ctrl-A` / `Ctrl-E`, `Ctrl-P` / `Ctrl-N`, `Ctrl-K` | Emacs-style editing (default) |
+| `Meta-Enter` | Newline (standard) or submit (multiline mode) |
+| `{` ... `}` | Delimit a multiline block |
+
+Start with `--vim` for vi key bindings.
+
+---
+
+# 28. Aider: ecosystem
+## Models, providers, IDEs and privacy
+
+<p class="small">Checked 2026-10-08 against aider.chat.</p>
+
+---
+
+## Bring your own model
+
+Aider is not tied to one vendor. Providers listed include **OpenAI, Anthropic, Gemini, GROQ, LM Studio, xAI, Azure, Cohere, DeepSeek, Ollama, OpenRouter, GitHub Copilot, Vertex AI and Amazon Bedrock**, plus OpenAI-compatible APIs.
+
+- Pick with `--model`, an alias, or `/model`.
+- Keys come from environment variables, `--api-key` or a `.env` file.
+- OpenRouter offers free models with daily limits.
+- Weaker models than GPT-3.5 "may have problems".
+
+<p class="small">The docs' list of best-performing models looks dated, so it is not repeated. Test on your own task.</p>
+
+---
+
+## Where it runs
+
+| Surface | Notes |
+|---|---|
+| **Terminal** | `aider`, in any git repository |
+| **Any editor** | `--watch-files` and `AI!` / `AI?` comments |
+| **Scripts** | `--message` for batch jobs |
+
+There is no hosted cloud agent, desktop app or MCP support in the pages we read.
+
+---
+
+## Privacy
+
+- Analytics are **opt-in**. Aider "never collects your code, chat messages, keys or personal info."
+- Your code goes **directly to the model provider you configure**, not to aider.
+- `aider --analytics-disable` turns analytics off for good; `--analytics-log` shows what would be sent.
+
+So the privacy terms you care about are your model provider's.
+
+<p class="small">Checked 2026-10-08.</p>
+
+---
+
+## Coming from another tool
+
+- Aider has no hooks, subagents, skills or MCP in the docs read; its extension points are conventions files, `.aider.conf.yml` and scripting.
+- Git commits replace permission prompts: every change is a commit you can `/undo`.
+- Use `/architect` where others use plan mode.
+
+---
+
+# 29. Aider: field guide
+## Install to cost, for beginners
+
+<p class="small">Checked 2026-10-08 against aider.chat.</p>
+
+---
+
+## Install
+
+```bash
+python -m pip install aider-install
+aider-install
+# or: curl -LsSf https://aider.chat/install.sh | sh
+# Windows: powershell -ExecutionPolicy ByPass -c "irm https://aider.chat/install.ps1 | iex"
+```
+
+Then `cd your-project` and `aider --model sonnet --api-key anthropic=<key>`. Python 3.8 to 3.13 for the installer; pipx and pip support 3.9 to 3.12.
+
+---
+
+## Your first session
+
+1. Open a terminal in a git repository, then run `aider` with your model and key.
+2. `/add` the files you want it to edit.
+3. `/ask` for an overview or a plan, then `/code` to make the change.
+4. Read the commit it made; use `/diff` and `/undo` if it is wrong.
+5. Write a `CONVENTIONS.md` and load it with `--read`.
+6. Check spend with `/tokens`; `/clear` between unrelated tasks.
+
+---
+
+## Cost
+
+The software is free and open source. **You pay your model provider** for what you use, so cost follows the model you pick and how much context you send.
+
+- Use `/tokens` to see usage and `/drop` files you no longer need.
+- A smaller repo map budget (`--map-tokens`) sends less.
+- Free routes exist, such as OpenRouter free models, with daily limits.
+
+---
+
+## Habits that keep you safe
+
+- Aider only edits files you `/add`, and commits every change: keep that safety net on.
+- Never commit your API key. Use environment variables or an ignored `.env`.
+- Read each diff even though it is a commit.
+- Remember your code goes to the provider you chose. For work use, ask IT first (section 12).
+
+---
+
 # Putting it together
 
 ---

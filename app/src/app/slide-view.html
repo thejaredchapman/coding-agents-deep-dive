@@ -14,6 +14,7 @@
     @case ('hooks') { <app-diagram-hooks /> }
     @case ('flow') { <app-diagram-flow /> }
     @case ('ecosystem') { <app-diagram-ecosystem /> }
+    @case ('picker') { <app-needs-picker /> }
   }
 
   <div #content class="slide-content" [innerHTML]="slide.html" (click)="onContentClick($event)"></div>

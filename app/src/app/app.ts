@@ -40,9 +40,10 @@ export class App {
     if (this.pages.page() === 'learn') return 'Free learning page';
     return this.deck.current() ? `Slide ${this.deck.index() + 1} of ${this.deck.total()}: ${this.deck.current().title}` : '';
   });
-  protected readonly pageLabel = computed(() =>
-    this.pages.page() === 'providers' ? 'providers' : this.pages.page() === 'learn' ? 'free learning' : this.deck.currentSection(),
-  );
+  protected readonly pageLabel = computed(() => {
+    const page = this.pages.page();
+    return page === 'providers' ? 'providers' : page === 'learn' ? 'free learning' : this.deck.currentSection();
+  });
 
   private swipeStart: { x: number; y: number } | null = null;
 

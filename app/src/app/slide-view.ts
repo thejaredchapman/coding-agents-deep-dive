@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, afterRenderEffect, computed, inject, viewChild } from '@angular/core';
 import { ChecklistService } from './checklist.service';
 import { DeckService } from './deck.service';
+import { NeedsPicker } from './needs-picker';
 import { DiagramEcosystem, DiagramFlow, DiagramHooks, DiagramSubagents } from './diagrams';
 import { slidePath } from './slug';
 import { enhanceTables } from './table-enhancer';
@@ -8,7 +9,7 @@ import { ToolPicker } from './tool-picker';
 
 @Component({
   selector: 'app-slide-view',
-  imports: [DiagramSubagents, DiagramHooks, DiagramFlow, DiagramEcosystem, ToolPicker],
+  imports: [DiagramSubagents, DiagramHooks, DiagramFlow, DiagramEcosystem, ToolPicker, NeedsPicker],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   templateUrl: './slide-view.html',
