@@ -188,6 +188,36 @@ describe('App', () => {
     expect(el.querySelector('.sidebar button.active')?.textContent).toContain('Beta');
   });
 
+  it('groups the contents by topic and opens the current section\'s entries', async () => {
+    const titles = Array.from(el.querySelectorAll('.sidebar h3')).map((h) => h.textContent);
+    expect(titles).toContain('Start here');
+    expect(titles).toContain('Compare the agents');
+    expect(el.querySelectorAll('.sidebar .item').length).toBeGreaterThan(0);
+    expect(el.querySelector('.sidebar .item.cur')).not.toBeNull();
+  });
+
+  it('filters the contents, jumps to an entry, and closes the filter result with a clear box', async () => {
+    const input = el.querySelector<HTMLInputElement>('.sidebar input[type="search"]')!;
+    input.value = 'A2';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await fixture.whenStable();
+    const hit = Array.from(el.querySelectorAll<HTMLButtonElement>('.sidebar .item')).find((b) => b.textContent?.includes('A2'))!;
+    hit.click();
+    await fixture.whenStable();
+    expect(deck.index()).toBe(2);
+    input.value = 'zzzz';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await fixture.whenStable();
+    expect(el.querySelector('.sidebar .empty')?.textContent).toContain('zzzz');
+  });
+
+  it('collapses and expands a section with its toggle', async () => {
+    const toggle = el.querySelector<HTMLButtonElement>('.sidebar .toggle[aria-expanded="true"]')!;
+    toggle.click();
+    await fixture.whenStable();
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('adds copy buttons to code blocks and opens external links safely', async () => {
     deck.goTo(1);
     await fixture.whenStable();
