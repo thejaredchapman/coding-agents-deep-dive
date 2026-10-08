@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { DeckService } from './deck.service';
+import { GuideService } from './guide.service';
 import { useDialogFocus } from './dialog-focus';
 import { buildIndex, search } from './search';
 import { PageService } from './page.service';
@@ -27,6 +28,7 @@ export class CommandPalette {
   private readonly tool = inject(ToolService);
   private readonly theme = inject(ThemeService);
   private readonly pages = inject(PageService);
+  private readonly guide = inject(GuideService);
   protected readonly ui = inject(UiService);
   private readonly trap = useDialogFocus();
 
@@ -58,6 +60,18 @@ export class CommandPalette {
     return rows;
   });
 
+  /** Guide sections, searchable by title, group and the headings and text inside them. */
+  private readonly guideRows = computed<(Row & { haystack: string })[]>(() =>
+    this.guide.sections().map((sec) => ({
+      kind: 'action',
+      key: `g-${sec.id}`,
+      label: `Guide: ${sec.title}`,
+      hint: sec.group,
+      run: () => this.guide.show(sec.id),
+      haystack: [sec.title, sec.group, ...sec.content.flatMap((b) => [b.heading, b.text ?? '', ...(b.bullets ?? [])])].join(' ').toLowerCase(),
+    })),
+  );
+
   protected readonly rows = computed<Row[]>(() => {
     const q = this.query().trim().toLowerCase();
     const words = q.split(/\s+/).filter(Boolean);
@@ -70,7 +84,8 @@ export class CommandPalette {
       detail: h.snippet,
       run: () => this.deck.goTo(h.id - 1),
     }));
-    return q === '' ? actions.slice(0, 8) : [...actions.slice(0, 5), ...slides];
+    const guideHits = q === '' ? [] : this.guideRows().filter((g) => words.every((w) => g.haystack.includes(w))).slice(0, 4);
+    return q === '' ? actions.slice(0, 8) : [...actions.slice(0, 5), ...guideHits, ...slides];
   });
 
   constructor() {

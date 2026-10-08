@@ -301,4 +301,9 @@ Data lives in `app/public/providers.json`; `npm test` validates its shape.
 
 ## Guide content (merged from ai-coding-assistants-guide)
 
-`app/public/guide.json` was converted from that repo's `src/content.ts` on 2026-10-07 (Start-here pages and the seven assistant profiles). Its claims were sourced there from vendor docs read on 2026-10-02. They were **not re-verified** in this repo. Not imported: the Claude Code deep-dive chapters (install, models, CLAUDE.md, skills, MCP, permissions, safety, cost), which the deck covers with verified sources; in particular its model table is not carried over.
+`app/public/guide.json` was converted from that repo's `src/content.ts` on 2026-10-07: all 23 sections (Start here, Claude Code deep dive, assistant profiles). Its claims were sourced there from vendor docs read on 2026-10-02 and were **not re-verified** here, except:
+
+- **Corrected:** the current-models table now lists Haiku 5.5 (`claude-haiku-5-5`) as current and Haiku 4.5 as legacy, matching the Models row above. The older-models status table is unchanged and unchecked.
+- **Corrected:** the `/standup` skill's git command now uses `--since="yesterday midnight" --until="midnight"` (as in the exercises), and the cost-tracker install URL points to `thejaredchapman/claude-code-usage-guard` (the old URL 404s).
+- **Unverified:** "v2.1.283 and later start in auto mode".
+- The guide overlaps the deck (models, CLAUDE.md, skills, MCP, permissions). Where they differ, the deck's verified facts win.

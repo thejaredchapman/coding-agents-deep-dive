@@ -481,6 +481,20 @@ describe('App', () => {
       expect(el.querySelector('.pager a')?.getAttribute('href')).toBe('#/guide/safeguards');
     });
 
+    it('finds guide sections from the palette', async () => {
+      TestBed.inject(GuideService).data.set(guide);
+      press('/');
+      await fixture.whenStable();
+      const input = el.querySelector<HTMLInputElement>('input[role="combobox"]')!;
+      input.value = 'blast radius';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+      expect(el.textContent).toContain('Guide: Safeguards');
+      press('Enter', {}, input);
+      await fixture.whenStable();
+      expect(el.querySelector('h1')?.textContent).toBe('Safeguards');
+    });
+
     it('opens the guide with the G key', async () => {
       TestBed.inject(GuideService).data.set(guide);
       press('g');
