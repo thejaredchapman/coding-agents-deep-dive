@@ -11,7 +11,7 @@ import { TOOLS } from './tools';
     <svg viewBox="0 0 640 270" role="img" aria-labelledby="sa-t sa-d" class="diagram">
       <title id="sa-t">Parallel subagents</title>
       <desc id="sa-d">
-        Main Claude sends three tasks to three subagents that run in parallel. Each subagent returns a text result to the parent, which combines them.
+        The main agent sends three tasks to three subagents that run in parallel. Each subagent returns a text result to the parent, which combines them.
       </desc>
       <defs>
         <marker id="sa-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -19,7 +19,7 @@ import { TOOLS } from './tools';
         </marker>
       </defs>
       <rect x="20" y="90" width="150" height="70" rx="10" class="box accent" />
-      <text x="95" y="120" class="label strong on">Main Claude</text>
+      <text x="95" y="120" class="label strong on">Main agent</text>
       <text x="95" y="141" class="label small on">parent session</text>
       @for (t of tasks; track t.y) {
         <path [attr.d]="'M170 125 C 250 125, 250 ' + (t.y + 28) + ', 330 ' + (t.y + 28)" class="line" marker-end="url(#sa-arrow)" />
@@ -49,7 +49,7 @@ export class DiagramSubagents {
       <svg viewBox="0 0 700 250" role="img" aria-labelledby="hk-t hk-d" class="diagram">
         <title id="hk-t">Hook lifecycle, interactive</title>
         <desc id="hk-d">
-          A session starts, you submit a prompt, then for each tool call PreToolUse runs, the tool runs, and PostToolUse runs. When Claude finishes the turn, Stop runs. Use the controls below to step through. A hook that exits with code 2 at PreToolUse blocks the tool call.
+          A session starts, you submit a prompt, then for each tool call PreToolUse runs, the tool runs, and PostToolUse runs. When the agent finishes the turn, Stop runs. Use the controls below to step through. A hook that exits with code 2 at PreToolUse blocks the tool call.
         </desc>
         <defs>
           <marker id="hk-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -131,7 +131,7 @@ export class DiagramHooks {
     <svg viewBox="0 0 640 330" role="img" aria-labelledby="fl-t fl-d" class="diagram">
       <title id="fl-t">The five extension points working together</title>
       <desc id="fl-d">
-        CLAUDE.md sets standing rules. A skill is invoked, Claude calls an MCP tool, a PostToolUse hook logs the call, Claude spawns a subagent, and when the turn ends a Stop hook logs cost and tokens.
+        An instructions file sets standing rules. A skill is invoked, the agent calls an MCP tool, a PostToolUse hook logs the call, the agent spawns a subagent, and when the turn ends a Stop hook logs cost and tokens.
       </desc>
       <defs>
         <marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -151,7 +151,7 @@ export class DiagramHooks {
 })
 export class DiagramFlow {
   protected readonly steps = [
-    { y: 10, name: 'CLAUDE.md', what: 'standing rules, always active' },
+    { y: 10, name: 'Instructions file', what: 'standing rules, always active' },
     { y: 60, name: 'Skill', what: '/deploy-check is invoked' },
     { y: 110, name: 'MCP tool', what: 'github: list PRs' },
     { y: 160, name: 'PostToolUse hook', what: 'logs the call' },

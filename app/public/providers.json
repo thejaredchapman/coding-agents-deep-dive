@@ -2,6 +2,30 @@
   "checked": "2026-10-08",
   "providers": [
     {
+      "id": "aider",
+      "name": "Aider (open source)",
+      "product": "Aider",
+      "summary": "An open-source terminal pair programmer that works with the model you choose and commits every change to git.",
+      "links": [
+        {
+          "label": "Aider",
+          "url": "https://aider.chat",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://aider.chat/docs/",
+          "kind": "docs"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Aider-AI/aider",
+          "kind": "code"
+        }
+      ],
+      "learningNote": "We found no official course or academy. The documentation has a usage tips page: https://aider.chat/docs/usage/tips.html."
+    },
+    {
       "id": "claude",
       "name": "Anthropic",
       "product": "Claude Code",
@@ -76,6 +100,24 @@
       ]
     },
     {
+      "id": "devin",
+      "name": "Cognition",
+      "product": "Devin Desktop (formerly Windsurf)",
+      "summary": "An AI IDE with an agent called Cascade, renamed from Windsurf in 2026. Old windsurf.com addresses redirect here.",
+      "links": [
+        {
+          "label": "Devin Desktop",
+          "url": "https://devin.ai/desktop",
+          "kind": "product"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://docs.devin.ai/desktop/getting-started",
+          "kind": "docs"
+        }
+      ]
+    },
+    {
       "id": "gemini",
       "name": "Google",
       "product": "Gemini CLI",
@@ -120,48 +162,6 @@
           "kind": "code"
         }
       ]
-    },
-    {
-      "id": "devin",
-      "name": "Cognition",
-      "product": "Devin Desktop (formerly Windsurf)",
-      "summary": "An AI IDE with an agent called Cascade, renamed from Windsurf in 2026. Old windsurf.com addresses redirect here.",
-      "links": [
-        {
-          "label": "Devin Desktop",
-          "url": "https://devin.ai/desktop",
-          "kind": "product"
-        },
-        {
-          "label": "Documentation",
-          "url": "https://docs.devin.ai/desktop/getting-started",
-          "kind": "docs"
-        }
-      ]
-    },
-    {
-      "id": "aider",
-      "name": "Aider (open source)",
-      "product": "Aider",
-      "summary": "An open-source terminal pair programmer that works with the model you choose and commits every change to git.",
-      "links": [
-        {
-          "label": "Aider",
-          "url": "https://aider.chat",
-          "kind": "product"
-        },
-        {
-          "label": "Documentation",
-          "url": "https://aider.chat/docs/",
-          "kind": "docs"
-        },
-        {
-          "label": "GitHub",
-          "url": "https://github.com/Aider-AI/aider",
-          "kind": "code"
-        }
-      ],
-      "learningNote": "We found no official course or academy. The documentation has a usage tips page: https://aider.chat/docs/usage/tips.html."
     }
   ],
   "learning": [
@@ -281,6 +281,35 @@
       ]
     },
     {
+      "provider": "devin",
+      "title": "Devin University",
+      "url": "https://learndevin.com/",
+      "cost": "No price is stated on the page.",
+      "summary": "Interactive courses from Cognition. They teach Devin, the cloud agent, so they help with the Devin side of the product more than the desktop editor.",
+      "items": [
+        {
+          "title": "Devin Foundations (8 lessons)",
+          "url": "https://learndevin.com/course/devin-foundations"
+        },
+        {
+          "title": "Cloud 101 (7 lessons)",
+          "url": "https://learndevin.com/course/cloud-101"
+        },
+        {
+          "title": "Cloud 102 (8 lessons)",
+          "url": "https://learndevin.com/course/cloud-102"
+        },
+        {
+          "title": "Cloud 103 (7 lessons)",
+          "url": "https://learndevin.com/course/cloud-103"
+        },
+        {
+          "title": "Devin for Admins (11 lessons)",
+          "url": "https://learndevin.com/course/devin-for-admins"
+        }
+      ]
+    },
+    {
       "provider": "gemini",
       "title": "Hands-on with Gemini CLI (Google Codelab)",
       "url": "https://codelabs.developers.google.com/gemini-cli-hands-on",
@@ -334,35 +363,6 @@
         {
           "title": "Expand your team with Copilot",
           "url": "https://github.com/skills/expand-your-team-with-copilot"
-        }
-      ]
-    },
-    {
-      "provider": "devin",
-      "title": "Devin University",
-      "url": "https://learndevin.com/",
-      "cost": "No price is stated on the page.",
-      "summary": "Interactive courses from Cognition. They teach Devin, the cloud agent, so they help with the Devin side of the product more than the desktop editor.",
-      "items": [
-        {
-          "title": "Devin Foundations (8 lessons)",
-          "url": "https://learndevin.com/course/devin-foundations"
-        },
-        {
-          "title": "Cloud 101 (7 lessons)",
-          "url": "https://learndevin.com/course/cloud-101"
-        },
-        {
-          "title": "Cloud 102 (8 lessons)",
-          "url": "https://learndevin.com/course/cloud-102"
-        },
-        {
-          "title": "Cloud 103 (7 lessons)",
-          "url": "https://learndevin.com/course/cloud-103"
-        },
-        {
-          "title": "Devin for Admins (11 lessons)",
-          "url": "https://learndevin.com/course/devin-for-admins"
         }
       ]
     }

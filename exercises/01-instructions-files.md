@@ -1,7 +1,25 @@
-# Exercise 1 — CLAUDE.md
+# Exercise 1 — Instructions files
 
 **Time:** 15 minutes  
-**Goal:** Write a CLAUDE.md that meaningfully improves Claude's behavior in a real project.
+**Goal:** Write an instructions file that meaningfully improves your agent's behavior in a real project.
+
+---
+
+## Your tool
+
+The steps below were **run for real in Claude Code**. For every other tool the table gives the matching file and command from its own docs (checked 2026-10-08); we did not run those tools, so check your tool's docs if something differs.
+
+| Tool | Create this file | Draft one for you |
+|---|---|---|
+| Aider | `CONVENTIONS.md`, then `aider --read CONVENTIONS.md` | Write it by hand |
+| Claude Code | `CLAUDE.md` | `/init` |
+| Codex | `AGENTS.md` | `/init` |
+| Cursor | `.cursor/rules/<name>.mdc` or `AGENTS.md` | Write it by hand (no `/init` is documented) |
+| Devin Desktop | `.devin/rules/<name>.md` or `AGENTS.md` | Write it by hand |
+| Gemini CLI | `GEMINI.md` | `/init` |
+| GitHub Copilot | `.github/copilot-instructions.md` or `AGENTS.md` | Write it by hand |
+
+Part A (the audit) works the same in every tool. Where the steps say `CLAUDE.md`, read it as your tool's file.
 
 ---
 

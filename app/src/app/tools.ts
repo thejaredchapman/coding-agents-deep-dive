@@ -10,13 +10,13 @@ export interface ToolInfo {
 }
 
 export const TOOLS: readonly ToolInfo[] = [
-  { id: 'claude', name: 'Claude Code', glyph: '●', section: '8. Claude Code: shortcuts and commands' },
+  { id: 'aider', name: 'Aider', glyph: '✚', section: '27. Aider: in depth' },
+  { id: 'claude', name: 'Claude Code', glyph: '●', section: '30. Claude Code: in depth' },
   { id: 'codex', name: 'Codex', glyph: '▲', section: '9. Codex' },
   { id: 'cursor', name: 'Cursor', glyph: '■', section: '10. Cursor' },
+  { id: 'devin', name: 'Devin Desktop', glyph: '⬢', section: '24. Devin Desktop (Windsurf): in depth' },
   { id: 'gemini', name: 'Gemini CLI', glyph: '◆', section: '11. Gemini CLI' },
   { id: 'copilot', name: 'GitHub Copilot', glyph: '★', section: '21. GitHub Copilot: in depth' },
-  { id: 'devin', name: 'Devin Desktop', glyph: '⬢', section: '24. Devin Desktop (Windsurf): in depth' },
-  { id: 'aider', name: 'Aider', glyph: '✚', section: '27. Aider: in depth' },
 ];
 
 export function toolById(id: ToolId): ToolInfo {

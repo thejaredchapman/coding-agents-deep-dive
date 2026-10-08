@@ -5,6 +5,23 @@
 
 ---
 
+## Your tool
+
+The steps below were **run for real in Claude Code**. For every other tool the table gives the matching file and command from its own docs (checked 2026-10-08); we did not run those tools, so check your tool's docs if something differs.
+
+| Tool | Parts A and B (parallel reviewers) | Part C (define your own) |
+|---|---|---|
+| Aider | No subagents. Run the reviews one after another with `/ask`, or try `/architect` | Skip |
+| Claude Code | As written | `.claude/agents/reviewer.md` |
+| Codex | Ask for parallel agents in your prompt | `.codex/agents/reviewer.toml` with `name`, `description`, `developer_instructions` |
+| Cursor | Ask for parallel work, or use the built-in Explore subagent | `.cursor/agents/reviewer.md`, then `/reviewer` |
+| Devin Desktop | No subagent files documented in the pages we read | Skip |
+| Gemini CLI | Ask for parallel work, or `@codebase_investigator` | `.gemini/agents/reviewer.md`, then `@reviewer` |
+| GitHub Copilot | Assign an issue to the cloud agent for a parallel task | Skip: custom subagents are not described in the pages we read |
+
+
+---
+
 ## The pattern
 
 Subagents are useful when you have work that:
@@ -55,11 +72,13 @@ Have each return a JSON array of findings.
 Instead of describing the reviewer in every prompt, save it as a file. Create `.claude/agents/reviewer.md` in your project:
 
 ```markdown
+
 ---
 name: reviewer
 description: Reviews code for security, error handling and fragile logic. Use after code changes.
 tools: Read, Grep, Glob
 model: sonnet
+
 ---
 
 You are a code reviewer. Review the code you are pointed at and report findings as a list.

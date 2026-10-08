@@ -7,6 +7,24 @@ Do this in a scratch project, not your real one. Hooks run with your user permis
 
 ---
 
+## Your tool
+
+The steps below were **run for real in Claude Code**. For every other tool the table gives the matching file and command from its own docs (checked 2026-10-08); we did not run those tools, so check your tool's docs if something differs.
+
+| Tool | Where hooks go | Can it do the three hooks? |
+|---|---|---|
+| Aider | No hooks found | No |
+| Claude Code | `.claude/settings.json` | Yes, as written |
+| Codex | `~/.codex/hooks.json` or `<repo>/.codex/hooks.json`; same JSON shape | Yes: `Stop`, `PostToolUse`, `PreToolUse`; exit 2 blocks |
+| Cursor | `.cursor/hooks.json`; camelCase events | Yes: `stop`, `afterFileEdit`, `preToolUse` or `beforeShellExecution`; exit 2 blocks |
+| Devin Desktop | No hooks mentioned in the pages we read | No |
+| Gemini CLI | Settings `hooks`; `BeforeTool`, `AfterTool` | Edit logger and blocker: yes (exit 2 blocks). The usage report depends on its payload, which we did not check |
+| GitHub Copilot | `.github/hooks/*.json`; `postToolUse`, `preToolUse`, `agentStop` | Logger and reporter: yes. Blocking is not documented |
+
+The Stop-hook usage report reads Claude Code's `transcript_path` file; other tools' payloads differ.
+
+---
+
 ## Setup
 
 ```bash

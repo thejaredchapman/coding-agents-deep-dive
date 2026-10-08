@@ -5,6 +5,24 @@
 
 ---
 
+## Your tool
+
+The steps below were **run for real in Claude Code**. For every other tool the table gives the matching file and command from its own docs (checked 2026-10-08); we did not run those tools, so check your tool's docs if something differs.
+
+| Tool | Create | Run it |
+|---|---|---|
+| Aider | No skills. Put the steps in `CONVENTIONS.md` and ask for a standup | Ask in chat |
+| Claude Code | `.claude/skills/standup/SKILL.md` | `/standup` |
+| Codex | `.agents/skills/standup/SKILL.md` | `$standup` or `/skills` |
+| Cursor | `.cursor/skills/standup/SKILL.md` (or `.agents/skills/`) | `/standup` in Agent chat |
+| Devin Desktop | `.devin/skills/standup/SKILL.md` | `@standup` |
+| Gemini CLI | `.gemini/skills/standup/SKILL.md` (or `.agents/skills/`) | `/skills` lists it |
+| GitHub Copilot | `.github/skills/standup/` | Follow GitHub's page; it does not name `SKILL.md` |
+
+`$ARGUMENTS` and the `!` command injection used later are Claude Code features.
+
+---
+
 ## Setup
 
 A skill is a directory with a `SKILL.md` file inside it. Create the directory:
@@ -20,10 +38,12 @@ mkdir -p ~/.claude/skills/standup
 Create `~/.claude/skills/standup/SKILL.md`:
 
 ````markdown
+
 ---
 name: standup
 description: Generates a daily standup summary from recent git activity
 argument-hint: "[date]"
+
 ---
 
 # Daily Standup Generator

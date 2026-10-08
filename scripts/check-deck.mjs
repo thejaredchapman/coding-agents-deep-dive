@@ -31,7 +31,7 @@ const failures = [];
 // The cross-tool sections legitimately mention other tools' names and placeholders
 // (for example Gemini CLI's {{args}} and write_file), so scan the rest of the deck.
 function withoutCrossTool(text) {
-  const start = text.indexOf('# 7. Four coding agents');
+  const start = text.indexOf('# 7. Coding agents, side by side');
   const end = text.indexOf('# Putting it together');
   return start >= 0 && end > start ? text.slice(0, start) + text.slice(end) : text;
 }

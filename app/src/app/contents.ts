@@ -26,15 +26,15 @@ export interface ContentsGroup {
 const GROUPS: { name: string; blurb: string; keys: (number | string)[] }[] = [
   { name: 'Start here', blurb: 'What this is', keys: ['Intro'] },
   { name: 'AI coding assistants guide', blurb: 'Choose a tool, use it safely, seven profiles', keys: [12, 14] },
-  { name: 'Compare the agents', blurb: 'Claude Code, Codex, Cursor and Gemini CLI side by side', keys: [7] },
-  { name: 'The five extension points', blurb: 'With a hands-on exercise each', keys: [1, 2, 3, 4, 5] },
-  { name: 'Claude Code', blurb: 'Ecosystem, shortcuts and a beginner field guide', keys: [6, 8, 13] },
+  { name: 'Compare the agents', blurb: 'Seven tools side by side', keys: [7] },
+  { name: 'The five extension points', blurb: 'The idea in every tool, with an exercise each', keys: [1, 2, 3, 4, 5] },
+  { name: 'Aider', blurb: 'In depth, ecosystem and field guide', keys: [27, 28, 29] },
+  { name: 'Claude Code', blurb: 'In depth, ecosystem, shortcuts and field guide', keys: [30, 6, 8, 13] },
   { name: 'Codex', blurb: 'In depth, ecosystem and field guide', keys: [9, 15, 16] },
   { name: 'Cursor', blurb: 'In depth, ecosystem and field guide', keys: [10, 17, 18] },
+  { name: 'Devin Desktop (Windsurf)', blurb: 'In depth, ecosystem and field guide', keys: [24, 25, 26] },
   { name: 'Gemini CLI', blurb: 'In depth, ecosystem and field guide', keys: [11, 19, 20] },
   { name: 'GitHub Copilot', blurb: 'In depth, ecosystem and field guide', keys: [21, 22, 23] },
-  { name: 'Devin Desktop (Windsurf)', blurb: 'In depth, ecosystem and field guide', keys: [24, 25, 26] },
-  { name: 'Aider', blurb: 'In depth, ecosystem and field guide', keys: [27, 28, 29] },
   { name: 'Wrap up', blurb: 'Putting it together and where to learn more', keys: ['Putting it together', 'Keep learning', 'Questions?'] },
 ];
 

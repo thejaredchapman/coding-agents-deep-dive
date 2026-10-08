@@ -256,12 +256,12 @@ describe('App', () => {
   describe('tool personalization', () => {
     it('shows a picker on the cover and tints the page when a tool is chosen', async () => {
       const chips = Array.from(el.querySelectorAll<HTMLButtonElement>('.cover-picker .chip'));
-      expect(chips.map((c) => c.textContent?.trim())).toEqual(['●Claude Code', '▲Codex', '■Cursor', '◆Gemini CLI', '★GitHub Copilot', '⬢Devin Desktop', '✚Aider', 'All']);
-      chips[1].click();
+      expect(chips.map((c) => c.textContent?.trim())).toEqual(['✚Aider', '●Claude Code', '▲Codex', '■Cursor', '⬢Devin Desktop', '◆Gemini CLI', '★GitHub Copilot', 'All']);
+      chips[2].click();
       await fixture.whenStable();
       expect(document.documentElement.dataset['tool']).toBe('codex');
-      expect(chips[1].getAttribute('aria-pressed')).toBe('true');
-      chips[1].click(); // clicking again clears
+      expect(chips[2].getAttribute('aria-pressed')).toBe('true');
+      chips[2].click(); // clicking again clears
       await fixture.whenStable();
       expect(document.documentElement.dataset['tool']).toBeUndefined();
     });

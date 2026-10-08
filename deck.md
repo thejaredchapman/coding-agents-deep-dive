@@ -33,7 +33,7 @@ style: |
 # Coding Agents — Deep Dive
 ## The Five Extension Points
 
-Claude Code · Codex · Cursor · Gemini CLI · GitHub Copilot · Devin Desktop · Aider
+Aider · Claude Code · Codex · Cursor · Devin Desktop · Gemini CLI · GitHub Copilot
 
 Built for engineers who already use an AI coding agent and want to go further.
 
@@ -43,36 +43,36 @@ Built for engineers who already use an AI coding agent and want to go further.
 
 | Extension Point | What it does |
 |-----------------|-------------|
-| **CLAUDE.md** | Persistent instructions that shape every session |
+| **Instructions files** | Persistent rules that shape every session (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, rules files) |
 | **Subagents** | Spawn independent agents for parallel or isolated work |
-| **Skills** | Reusable slash commands that invoke complex workflows |
-| **MCP** | Connect Claude to external tools, APIs, and data |
-| **Hooks** | Shell scripts that fire on Claude Code lifecycle events |
+| **Skills** | Reusable workflows the agent runs on demand |
+| **MCP** | Connect the agent to external tools, APIs, and data |
+| **Hooks** | Commands that fire on agent lifecycle events |
 
-Each section: concept → how it works → hands-on exercise.
+Each section: the idea → the same idea in every tool → a hands-on exercise.
 
-Then: the Claude ecosystem, a side-by-side of **Claude Code, Codex, Cursor and Gemini CLI** with a shortcuts reference for each, an ecosystem and field guide for every tool (adding **GitHub Copilot, Devin Desktop and Aider**), and where to keep learning.
-
----
-
-# 1. CLAUDE.md
-## Your persistent context layer
+Then: each tool in depth, with its own ecosystem and field guide, in alphabetical order: **Aider, Claude Code, Codex, Cursor, Devin Desktop (formerly Windsurf), Gemini CLI and GitHub Copilot**. A side-by-side comparison, a guide to choosing a tool, and where to keep learning.
 
 ---
 
-## What is CLAUDE.md?
+# 1. Instructions files
+## Standing rules every agent reads
 
-Every session, Claude Code reads `CLAUDE.md` files automatically before doing anything else.
+---
+
+## What is an instructions file?
+
+Every session, a coding agent reads its **instructions file** before it does anything else. Each tool names it differently (see the next slides).
 
 - **Project root:** applies to the whole project
-- **Subdirectory:** applies when working in that folder
-- **`~/.claude/CLAUDE.md`:** global, applies everywhere
+- **Subdirectory:** applies when working in that folder, in most tools
+- **User or global:** applies everywhere
 
-It's not a prompt — it's a **standing set of rules** Claude treats as ground truth.
+It is not a prompt. It is a **standing set of rules** the agent treats as ground truth.
 
 ---
 
-## What belongs in CLAUDE.md?
+## What belongs in an instructions file?
 
 ```markdown
 # Project: payments-service
@@ -94,7 +94,7 @@ It's not a prompt — it's a **standing set of rules** Claude treats as ground t
 
 ---
 
-## What does NOT belong in CLAUDE.md?
+## What does NOT belong in an instructions file?
 
 - Secrets, API keys, credentials
 - Long prose that could be a README
@@ -102,6 +102,448 @@ It's not a prompt — it's a **standing set of rules** Claude treats as ground t
 - Everything — be surgical. Longer ≠ better.
 
 **The test:** would a new engineer need to know this on day one?
+
+---
+
+## The same idea in every tool (1/2)
+
+| Tool | File | Where it lives |
+| --- | --- | --- |
+| **Aider** | `CONVENTIONS.md` (any name) | Load it read-only with `--read` or `/read`; persist it with `read:` in `.aider.conf.yml` |
+| **Claude Code** | `CLAUDE.md` | Project root, subdirectories and `~/.claude/CLAUDE.md`; rules stack. `/init` drafts one |
+| **Codex** | `AGENTS.md` (and `AGENTS.override.md`) | `~/.codex/`, then each folder from the git root down to the working directory; closer files win. `/init` drafts one |
+| **Cursor** | `.cursor/rules/*.mdc` and `AGENTS.md` | Rules have `alwaysApply`, `globs` and `description` frontmatter; user and team rules too. Precedence: Team, Project, User |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## The same idea in every tool (2/2)
+
+| Tool | File | Where it lives |
+| --- | --- | --- |
+| **Devin Desktop** | `.devin/rules/*.md` (or `.windsurf/rules/`) and `AGENTS.md` | Global rules in `~/.codeium/windsurf/memories/global_rules.md`; 12,000 characters per workspace file, 6,000 global |
+| **Gemini CLI** | `GEMINI.md` | `~/.gemini/`, the workspace and its parents, and when a tool touches a path; `@file.md` imports. `/init` drafts one |
+| **GitHub Copilot** | `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `AGENTS.md` | Path files use `applyTo` globs. Priority: personal, repository, organization |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## One file for every tool: AGENTS.md
+
+| Tool | Reads `AGENTS.md`? |
+| --- | --- |
+| **Aider** | Not mentioned in the pages we read. Use `CONVENTIONS.md` |
+| **Claude Code** | Yes (v2.1.277 and later). If both files exist it reads `CLAUDE.md` only, so put `@AGENTS.md` inside `CLAUDE.md` |
+| **Codex** | Yes. It is Codex's own file |
+| **Cursor** | Yes. Nested files work and the deeper one wins |
+| **Devin Desktop** | Yes, in any directory of the workspace |
+| **Gemini CLI** | Yes, once you add it to `context.fileName` in `settings.json` |
+| **GitHub Copilot** | Yes. The nearest file wins; it also reads `CLAUDE.md` and `GEMINI.md` in the repo root |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## 🛠 Exercise 1 — Instructions files
+
+See `exercises/01-instructions-files.md`
+
+**Goal:** Write an instructions file for an existing project that makes your agent meaningfully better at working in it.
+
+Time: 15 minutes
+
+The steps were run for real in Claude Code. A table at the top of the exercise gives the matching file and command for each other tool.
+
+---
+
+# 2. Subagents
+## Parallel and isolated work
+
+---
+
+## What is a subagent?
+
+When an agent spawns a subagent, it launches a **new, independent session** with its own context, tools and instructions.
+
+The parent waits (or continues) while the subagent works. Results come back as text.
+
+```
+Main agent
+  ├── Subagent A: "audit the auth module for security issues"
+  ├── Subagent B: "generate test cases for the payment service"
+  └── Subagent C: "write migration docs for this PR"
+       ↓ all run in parallel ↓
+  Parent collects results and synthesizes
+```
+
+---
+
+## When to use subagents
+
+✅ **Parallel work** — tasks that don't depend on each other
+
+✅ **Context isolation** — task needs a clean slate (no prior conversation baggage)
+
+✅ **Specialization** — different subagents get different instructions
+
+✅ **Long-running tasks** — don't fill the main context window
+
+❌ **Sequential work** — each step depends on the previous one
+
+❌ **Simple one-step tasks** — spawning has overhead
+
+---
+
+## The same idea in every tool (1/2)
+
+| Tool | Where subagents are defined | How you use one |
+| --- | --- | --- |
+| **Aider** | No subagents | `/architect` pairs an architect model with an editor model; otherwise it is one session |
+| **Claude Code** | `.claude/agents/*.md` (YAML frontmatter) | Name it (`@agent-reviewer`), let it delegate by `description`, or run `claude --agent`. Built in: Explore, Plan, general-purpose |
+| **Codex** | `.codex/agents/*.toml` | `name`, `description` and `developer_instructions` are required. Built in: default, worker, explorer. `/agent` and `/subagents` switch threads |
+| **Cursor** | `.cursor/agents/*.md`; also reads `.claude/agents/` and `.codex/agents/` | `/name`, by name in a prompt, or automatic. Built in: Explore, Bash, Browser |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## The same idea in every tool (2/2)
+
+| Tool | Where subagents are defined | How you use one |
+| --- | --- | --- |
+| **Devin Desktop** | Not found in the pages we read | Cascade keeps a background planning agent; no subagent files are documented |
+| **Gemini CLI** | `.gemini/agents/*.md` | Automatic or `@agent-name`. Built in: codebase_investigator, cli_help, generalist. `/agents` manages them |
+| **GitHub Copilot** | Not described in the pages we read | The cloud agent runs a whole task in the background. Hooks have a `subagentStop` event, so subagents exist |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Subagent output
+
+Subagents return their final message as a string. The parent can:
+- Parse structured output (JSON, markdown)
+- Synthesize multiple results
+- Use output as context for next steps
+
+**Key rule:** subagents start cold — they don't see the parent conversation. Brief them explicitly in the spawn prompt.
+
+---
+
+## 🛠 Exercise 2 — Subagents
+
+See `exercises/02-subagents.md`
+
+**Goal:** Use a subagent to do a code review in parallel with your main task.
+
+Time: 15 minutes
+
+Run in Claude Code; the exercise maps each step to the other tools.
+
+---
+
+# 3. Skills
+## Reusable workflows on demand
+
+---
+
+## What is a skill?
+
+A skill is a folder with a `SKILL.md` file that defines a reusable workflow. You invoke it by name, and the agent can also load it on its own when its `description` matches what you are doing.
+
+A skill folder can also hold extra files (`reference.md`, `scripts/`) that `SKILL.md` points to.
+
+Six of the seven tools in this deck support skills. The table shows where they live.
+
+---
+
+## Anatomy of a Skill
+
+```markdown
+---
+name: deploy-check
+description: Runs the pre-deploy verification sequence and reports READY or BLOCKED
+---
+
+# Deploy Checklist
+
+## Steps
+
+1. Run `npm test` and confirm all tests pass
+2. Check `git status` — no uncommitted changes
+3. Verify environment variables are set: DATABASE_URL, API_KEY
+4. Run `npm run build` and confirm no errors
+5. Check the last 5 commits for any migration files
+6. Report: READY or BLOCKED with reasons
+
+Report format:
+**Status:** READY | BLOCKED
+**Blockers:** (if any)
+**Last commit:** (hash + message)
+```
+
+The block between the `---` lines is YAML frontmatter. `description` is what the agent reads to decide when the skill applies.
+
+---
+
+## The same idea in every tool (1/2)
+
+| Tool | Where skills live | How you run one |
+| --- | --- | --- |
+| **Aider** | None in the pages we read | `/load` runs a saved file of commands, which is a different feature |
+| **Claude Code** | `.claude/skills/<name>/SKILL.md` and `~/.claude/skills/` | `/name`, or automatically when the description matches |
+| **Codex** | `.agents/skills` (repo) and `~/.agents/skills` (global) | `$name` or `/skills`; loaded progressively |
+| **Cursor** | `.cursor/skills/` or `.agents/skills/`, and the `~/` versions | Type `/` in Agent chat |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## The same idea in every tool (2/2)
+
+| Tool | Where skills live | How you run one |
+| --- | --- | --- |
+| **Devin Desktop** | `.devin/skills/<name>/` (or `.windsurf/skills/`), `~/.config/devin/skills/`; also reads `.agents/skills/` and `.claude/skills/` | `@skill-name`, or automatically. Workflows are separate `/slash-commands` |
+| **Gemini CLI** | `.gemini/skills/` or `.agents/skills/`, and `~/.gemini/skills/` | `/skills` lists and manages them |
+| **GitHub Copilot** | `.github/skills`, `.claude/skills`, `.agents/skills`; `~/.copilot/skills`, `~/.agents/skills` | Cloud agent, Copilot CLI, code review and agent mode. The page does not name `SKILL.md` |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Skills vs. instruction files
+
+|  | Instructions file | Skill |
+| - | --- | --- |
+| **When active** | Every session automatically | Only when invoked or when its description matches |
+| **Purpose** | Standing rules and context | On-demand workflows |
+| **Complexity** | Rules, not procedures | Step-by-step workflows |
+| **Example** | "Always use pnpm" | "/deploy-check runs a 6-step verification" |
+
+---
+
+## 🛠 Exercise 3 — Skills
+
+See `exercises/03-skills.md`
+
+**Goal:** Build a `/standup` skill that generates a daily standup summary from git log.
+
+Time: 15 minutes
+
+Run in Claude Code; the exercise maps each step to the other tools.
+
+---
+
+# 4. MCP
+## Model Context Protocol
+
+---
+
+## What is MCP?
+
+MCP (Model Context Protocol) is a standard for connecting AI models to external tools, data sources, and APIs.
+
+An MCP server exposes **tools**, functions the agent can call like any other tool.
+
+```
+Your agent
+    │
+    ├── mcp: filesystem    → read/write files
+    ├── mcp: github        → PRs, issues, commits
+    ├── mcp: postgres      → query your database
+    ├── mcp: slack         → send messages, read channels
+    └── mcp: your-server   → whatever you build
+```
+
+---
+
+## MCP vs. plain API calls
+
+| | Direct Bash/API | MCP Tool |
+|-|-----------------|----------|
+| **Discovery** | The agent has to know the command | The agent sees the tool's description |
+| **Auth** | Handle in scripts | Server handles it |
+| **Error handling** | Ad hoc | Structured error responses |
+| **Reuse** | Per-project | Register once, available everywhere |
+| **Composability** | Manual | Tools combine naturally |
+
+---
+
+## The same idea in every tool (1/2)
+
+| Tool | Add a server | Config lives in |
+| --- | --- | --- |
+| **Aider** | Not found in the docs we read | — |
+| **Claude Code** | `claude mcp add <name> -- <command>` | `.mcp.json` (project) or `~/.claude.json` |
+| **Codex** | `codex mcp add <name> -- <command>` or `--url <url>` | `~/.codex/config.toml` or `.codex/config.toml`, under `[mcp_servers.<name>]` |
+| **Cursor** | Edit the JSON (no add command is documented) | `.cursor/mcp.json` or `~/.cursor/mcp.json` |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## The same idea in every tool (2/2)
+
+| Tool | Add a server | Config lives in |
+| --- | --- | --- |
+| **Devin Desktop** | Edit the JSON; at most 100 tools in Cascade | `~/.config/devin/mcp_config.json` (macOS, Linux) or `%APPDATA%\devin\mcp_config.json` |
+| **Gemini CLI** | `gemini mcp add <name> <command>` or `<url> --transport http` | `/mcp` shows status in a session |
+| **GitHub Copilot** | IDE `mcp.json`; the CLI has the GitHub server built in | Per repository on GitHub.com; Business and Enterprise admins set a policy |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Building an MCP server (TypeScript)
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+const server = new McpServer({ name: "time-server", version: "1.0.0" });
+
+server.registerTool(
+  "get_time",
+  {
+    description: "Get the current date and time",
+    inputSchema: { timezone: z.string().optional() },
+  },
+  async ({ timezone }) => ({
+    content: [{ type: "text", text: new Date().toLocaleString("en-US", { timeZone: timezone }) }],
+  })
+);
+
+await server.connect(new StdioServerTransport());
+```
+
+Then register it with your tool, for example `claude mcp add time-server -- node dist/index.js` or `codex mcp add time-server -- node dist/index.js`.
+
+---
+
+## Transports
+
+| Transport | Use case |
+|-----------|---------|
+| **stdio** | Local servers run as child processes (most common) |
+| **HTTP** | Remote servers, multiple clients. The recommended remote transport |
+| **SSE** | Older remote transport. Deprecated in favor of HTTP |
+
+The agent starts a stdio server itself and talks to it over stdin and stdout, so a stdio server must never print anything else to stdout.
+
+---
+
+## 🛠 Exercise 4 — MCP
+
+See `exercises/04-mcp.md`
+
+**Goal:** Register a pre-built MCP server (filesystem or GitHub) and use it in a real task.
+
+Time: 20 minutes
+
+Run in Claude Code; the exercise maps each step to the other tools.
+
+---
+
+# 5. Hooks
+## Lifecycle automation
+
+---
+
+## What are Hooks?
+
+Hooks are commands an agent runs automatically at specific points in its lifecycle. Unlike an instructions file, a hook is **enforced**: the model can't ignore it.
+
+```
+SessionStart      → a session begins or resumes
+UserPromptSubmit  → you send a prompt, before the agent sees it
+PreToolUse        → before a tool runs (can block it)
+PostToolUse       → after a tool succeeds
+Stop              → the agent finishes a turn
+SubagentStop      → a subagent finishes
+PreCompact        → before the context is compacted
+```
+
+These are the Claude Code and Codex names; the next slide shows the other tools. The hook receives a JSON payload on stdin describing what happened.
+
+---
+
+## The same idea in every tool
+
+| Tool | Hooks | Configured in | Exit 2 blocks? |
+| --- | --- | --- | --- |
+| **Aider** | None found | — | — |
+| **Claude Code** | Yes, 30+ events | `.claude/settings.json` and friends | Yes |
+| **Codex** | Yes, same JSON shape as Claude Code | `hooks.json` or `config.toml`, in `~/.codex/` or `<repo>/.codex/` | Yes |
+| **Cursor** | Yes, camelCase events (`preToolUse`, `afterFileEdit`, `stop`) | `.cursor/hooks.json` | Yes |
+| **Devin Desktop** | Not mentioned in the pages we read | — | — |
+| **Gemini CLI** | Yes (`BeforeTool`, `AfterTool`, `BeforeAgent`, `SessionStart` ...) | Settings; `/hooks` manages | Yes |
+| **GitHub Copilot** | Cloud agent and CLI (`preToolUse`, `postToolUse`, `agentStop` ...) | `.github/hooks/*.json`, `~/.copilot/hooks/` | Not stated |
+
+<p class="small">Checked 2026-10-08 against each tool's own docs; sources and gaps are in docs/superpowers/facts.md.</p>
+
+---
+
+## Hook use cases
+
+Event names are Claude Code's and Codex's.
+
+| Event | What you can do |
+|-------|----------------|
+| **SessionStart** | Load project context, check the environment |
+| **UserPromptSubmit** | Validate or enrich prompts, block bad ones |
+| **PreToolUse** | Block dangerous commands, rewrite tool input, add logging |
+| **PostToolUse** | Run a formatter or linter after edits, update trackers |
+| **Stop** | Log cost and tokens, send notifications, trigger CI |
+| **SubagentStop** | Collect or check subagent results |
+| **PreCompact** | Save state before the context is summarized |
+
+---
+
+## Hook exit codes
+
+| Exit code | Meaning |
+| --- | --- |
+| **0** | Success. If stdout is JSON, the agent parses it |
+| **2** | **Block**, on events that can be blocked |
+| **Other** | Non-blocking error. The action proceeds |
+
+This is the contract in Claude Code, Codex, Cursor and Gemini CLI. GitHub Copilot's page does not say how exit codes are treated. Claude Code's per-event effects are in section 30.
+
+---
+
+## 🛠 Exercise 5 — Hooks
+
+See `exercises/05-hooks.md`
+
+**Goal:** Write a usage-reporting Stop hook, a file-edit logger, and a command blocker.
+
+Time: 15 minutes
+
+Run in Claude Code; the exercise maps each step to the other tools that have hooks.
+
+---
+
+# 30. Claude Code: in depth
+## CLAUDE.md, subagents, skills, MCP and hooks in Claude Code
+
+Sections 1 to 5 teach each idea for every tool. This section holds Claude Code's own detail, the way sections 9, 10, 11, 15 to 29 do for the other tools.
+
+<p class="small">Verified by real runs of <code>claude -p</code> where noted in the exercises; sources in docs/superpowers/facts.md.</p>
+
+---
+
+## What is CLAUDE.md?
+
+Every session, Claude Code reads `CLAUDE.md` files automatically before doing anything else.
+
+- **Project root:** applies to the whole project
+- **Subdirectory:** applies when working in that folder
+- **`~/.claude/CLAUDE.md`:** global, applies everywhere
+
+It's not a prompt — it's a **standing set of rules** Claude treats as ground truth.
 
 ---
 
@@ -130,54 +572,6 @@ Other coding agents read `AGENTS.md`. Claude Code reads it too (v2.1.277 and lat
 To use one file for every tool, keep `AGENTS.md` as the source and put `@AGENTS.md` in your `CLAUDE.md`.
 
 Also useful: `CLAUDE.local.md` for private instructions you don't commit, `.claude/rules/` for rules scoped to certain files, and `/init` to draft a CLAUDE.md from your codebase.
-
----
-
-## 🛠 Exercise 1 — CLAUDE.md
-
-See `exercises/01-claude-md.md`
-
-**Goal:** Write a CLAUDE.md for an existing project that makes Claude meaningfully better at working in it.
-
-Time: 15 minutes
-
----
-
-# 2. Subagents
-## Parallel and isolated work
-
----
-
-## What is a subagent?
-
-When Claude Code spawns a subagent, it launches a **new, independent Claude session** with its own context, tools, and instructions.
-
-The parent waits (or continues) while the subagent works. Results come back as text.
-
-```
-Main Claude
-  ├── Subagent A: "audit the auth module for security issues"
-  ├── Subagent B: "generate test cases for the payment service"
-  └── Subagent C: "write migration docs for this PR"
-       ↓ all run in parallel ↓
-  Parent collects results and synthesizes
-```
-
----
-
-## When to use subagents
-
-✅ **Parallel work** — tasks that don't depend on each other
-
-✅ **Context isolation** — task needs a clean slate (no prior conversation baggage)
-
-✅ **Specialization** — different subagents get different CLAUDE.md instructions
-
-✅ **Long-running tasks** — don't fill the main context window
-
-❌ **Sequential work** — each step depends on the previous one
-
-❌ **Simple one-step tasks** — spawning has overhead
 
 ---
 
@@ -228,80 +622,6 @@ problem, suggested fix. Do not edit files.
 | **No file needed** | `claude --agents '{"reviewer": {...}}'` for one session |
 
 Built in: **Explore** (read-only search), **Plan** (research in plan mode), **general-purpose**. Subagents can spawn subagents, up to three levels deep by default.
-
----
-
-## Subagent output
-
-Subagents return their final message as a string. The parent can:
-- Parse structured output (JSON, markdown)
-- Synthesize multiple results
-- Use output as context for next steps
-
-**Key rule:** subagents start cold — they don't see the parent conversation. Brief them explicitly in the spawn prompt.
-
----
-
-## 🛠 Exercise 2 — Subagents
-
-See `exercises/02-subagents.md`
-
-**Goal:** Use a subagent to do a code review in parallel with your main task.
-
-Time: 15 minutes
-
----
-
-# 3. Skills
-## Reusable slash commands
-
----
-
-## What is a Skill?
-
-A Skill is a folder with a `SKILL.md` file that defines a reusable workflow. Type `/my-skill` and Claude Code loads the instructions inside it. Claude can also load a skill on its own when its `description` matches what you're doing.
-
-Skills live in `.claude/skills/` (project) or `~/.claude/skills/` (personal).
-
-```
-~/.claude/skills/
-  deploy-check/SKILL.md   → /deploy-check
-  standup/SKILL.md        → /standup
-
-.claude/skills/
-  seed-db/SKILL.md        → /seed-db (project-only)
-```
-
-A skill folder can also hold extra files (`reference.md`, `scripts/`) that `SKILL.md` points to.
-
----
-
-## Anatomy of a Skill
-
-```markdown
----
-name: deploy-check
-description: Runs the pre-deploy verification sequence and reports READY or BLOCKED
----
-
-# Deploy Checklist
-
-## Steps
-
-1. Run `npm test` and confirm all tests pass
-2. Check `git status` — no uncommitted changes
-3. Verify environment variables are set: DATABASE_URL, API_KEY
-4. Run `npm run build` and confirm no errors
-5. Check the last 5 commits for any migration files
-6. Report: READY or BLOCKED with reasons
-
-Report format:
-**Status:** READY | BLOCKED
-**Blockers:** (if any)
-**Last commit:** (hash + message)
-```
-
-The block between the `---` lines is YAML frontmatter. `description` is what Claude reads to decide when the skill applies.
 
 ---
 
@@ -358,51 +678,6 @@ Positional arguments are `$0`, `$1`, and so on. A line starting with `` !`git di
 
 ---
 
-## 🛠 Exercise 3 — Skills
-
-See `exercises/03-skills.md`
-
-**Goal:** Build a `/standup` skill that generates a daily standup summary from git log.
-
-Time: 15 minutes
-
----
-
-# 4. MCP
-## Model Context Protocol
-
----
-
-## What is MCP?
-
-MCP (Model Context Protocol) is a standard for connecting AI models to external tools, data sources, and APIs.
-
-An MCP server exposes **tools** — functions Claude can call like any other tool.
-
-```
-Claude Code
-    │
-    ├── mcp: filesystem    → read/write files
-    ├── mcp: github        → PRs, issues, commits
-    ├── mcp: postgres      → query your database
-    ├── mcp: slack         → send messages, read channels
-    └── mcp: your-server   → whatever you build
-```
-
----
-
-## MCP vs. plain API calls
-
-| | Direct Bash/API | MCP Tool |
-|-|-----------------|----------|
-| **Discovery** | Claude has to know the command | Claude sees the tool's description |
-| **Auth** | Handle in scripts | Server handles it |
-| **Error handling** | Ad hoc | Structured error responses |
-| **Reuse** | Per-project | Register once, available everywhere |
-| **Composability** | Manual | Tools combine naturally |
-
----
-
 ## Registering an MCP server
 
 Use `claude mcp add`:
@@ -444,92 +719,6 @@ Inside a session, `/mcp` shows status and handles sign-in for servers that need 
 ```
 
 `${VAR}` and `${VAR:-default}` expand from the environment, so tokens stay out of git. Teammates approve project servers the first time they use them.
-
----
-
-## Building an MCP server (TypeScript)
-
-```typescript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-
-const server = new McpServer({ name: "time-server", version: "1.0.0" });
-
-server.registerTool(
-  "get_time",
-  {
-    description: "Get the current date and time",
-    inputSchema: { timezone: z.string().optional() },
-  },
-  async ({ timezone }) => ({
-    content: [{ type: "text", text: new Date().toLocaleString("en-US", { timeZone: timezone }) }],
-  })
-);
-
-await server.connect(new StdioServerTransport());
-```
-
-Then register it: `claude mcp add time-server -- node dist/index.js`.
-
----
-
-## Transports
-
-| Transport | Use case |
-|-----------|---------|
-| **stdio** | Local servers run as child processes (most common) |
-| **HTTP** | Remote servers, multiple clients. The recommended remote transport |
-| **SSE** | Older remote transport. Deprecated in favor of HTTP |
-
-Claude Code starts a stdio server itself and talks to it over stdin and stdout, so a stdio server must never print anything else to stdout.
-
----
-
-## 🛠 Exercise 4 — MCP
-
-See `exercises/04-mcp.md`
-
-**Goal:** Register a pre-built MCP server (filesystem or GitHub) and use it in a real task.
-
-Time: 20 minutes
-
----
-
-# 5. Hooks
-## Lifecycle automation
-
----
-
-## What are Hooks?
-
-Hooks are commands Claude Code runs automatically at specific points in its lifecycle. Unlike CLAUDE.md, a hook is **enforced**: the model can't ignore it.
-
-```
-SessionStart      → a session begins or resumes
-UserPromptSubmit  → you send a prompt, before Claude sees it
-PreToolUse        → before a tool runs (can block it)
-PostToolUse       → after a tool succeeds
-Stop              → Claude finishes a turn
-SubagentStop      → a subagent finishes
-PreCompact        → before the context is compacted
-```
-
-There are more than 30 events in total. The hook receives a JSON payload on stdin describing what happened.
-
----
-
-## Hook use cases
-
-| Event | What you can do |
-|-------|----------------|
-| **SessionStart** | Load project context, check the environment |
-| **UserPromptSubmit** | Validate or enrich prompts, block bad ones |
-| **PreToolUse** | Block dangerous commands, rewrite tool input, add logging |
-| **PostToolUse** | Run a formatter or linter after edits, update trackers |
-| **Stop** | Log cost and tokens, send notifications, trigger CI |
-| **SubagentStop** | Collect or check subagent results |
-| **PreCompact** | Save state before the context is summarized |
 
 ---
 
@@ -603,33 +792,15 @@ To report cost or tokens, open `transcript_path` (a JSONL file) and read the `me
 
 ---
 
-## Hook exit codes
-
-| Exit code | Meaning |
-|-----------|---------|
-| **0** | Success. If stdout is JSON, Claude Code parses it |
-| **2** | **Block**, on events that can be blocked |
-| **Other** | Non-blocking error. The action proceeds |
-
-What exit 2 does depends on the event:
+## What exit 2 does, by event
 
 | Event | Exit 2 effect |
-|-------|---------------|
+| --- | --- |
 | `PreToolUse` | Blocks the tool call |
 | `UserPromptSubmit` | Blocks the prompt |
 | `Stop` | Prevents Claude from stopping |
 | `PostToolUse` | Shows the message to Claude (the tool already ran) |
 | `PreCompact` | Blocks compaction |
-
----
-
-## 🛠 Exercise 5 — Hooks
-
-See `exercises/05-hooks.md`
-
-**Goal:** Write a usage-reporting Stop hook, a file-edit logger, and a command blocker.
-
-Time: 15 minutes
 
 ---
 
@@ -810,8 +981,40 @@ The same engine is available as a Python and TypeScript library: the Agent SDK.
 
 ---
 
-# 7. Four coding agents, side by side
-## Claude Code · Codex · Cursor · Gemini CLI
+# 7. Coding agents, side by side
+## Seven tools at a glance, then four in detail
+
+---
+
+## All seven tools at a glance
+
+| Tool | Made by | Runs in | Models |
+|---|---|---|---|
+| **Aider** | Open source | Terminal; any editor through `--watch-files` | Any provider you configure |
+| **Claude Code** | Anthropic | Terminal, VS Code, JetBrains, desktop app, web | Anthropic |
+| **Codex** | OpenAI | CLI, IDE, desktop app, cloud | OpenAI |
+| **Cursor** | Anysphere | Editor, CLI, cloud agents | Its own models plus OpenAI, Anthropic, Google and others |
+| **Devin Desktop** | Cognition | Its own IDE (formerly Windsurf) | On Pro: OpenAI, Claude, Gemini and open source models |
+| **Gemini CLI** | Google | Terminal, IDEs, GitHub Action | Gemini |
+| **GitHub Copilot** | GitHub (Microsoft) | Editors, Copilot CLI, GitHub.com, cloud agent | OpenAI, Anthropic, Google, Microsoft, Moonshot AI, xAI |
+
+<p class="small">Compared as of 2026-10-08, from each tool's own docs. The slides after the next one compare Claude Code, Codex, Cursor and Gemini CLI row by row; Aider, Copilot and Devin Desktop have the same depth in sections 21 to 29.</p>
+
+---
+
+## Starting for free, tool by tool
+
+| Tool | What the docs say |
+|---|---|
+| **Aider** | The software is free and open source; you pay your model provider (OpenRouter has free models with daily limits) |
+| **Claude Code** | Needs a Claude subscription or a Console account (from the 2026-10-02 guide; not re-verified) |
+| **Codex** | Included in ChatGPT Free, Go, Plus, Pro, Business, Edu and Enterprise |
+| **Cursor** | Hobby plan is free, with limited Agent requests |
+| **Devin Desktop** | Free plan with a "light quota" and limited models |
+| **Gemini CLI** | 1,000 requests a day with a Google login; 250 with an unpaid API key |
+| **GitHub Copilot** | Copilot Free; students are free, and some teachers and open source maintainers can qualify |
+
+<p class="small">Compared as of 2026-10-08. Limits and plans change; each tool's field guide has the figures and sources.</p>
 
 ---
 
@@ -4088,17 +4291,17 @@ The software is free and open source. **You pay your model provider** for what y
 ## The full picture
 
 ```
-CLAUDE.md      → standing rules (always active)
+Instructions file → standing rules (always active)
     ↓
-Skill invoked  → /deploy-check
+Skill invoked     → /deploy-check
     ↓
-Claude calls   → MCP tool (github: list PRs)
+Agent calls       → MCP tool (github: list PRs)
     ↓
-PostToolUse    → hook logs the call
+PostToolUse       → hook logs the call
     ↓
-Claude spawns  → Subagent: "review this PR for security issues"
+Agent spawns      → Subagent: "review this PR for security issues"
     ↓
-Turn ends      → Stop hook fires, logs cost + tokens
+Turn ends         → Stop hook fires, logs cost + tokens
 ```
 
 ---
@@ -4133,11 +4336,120 @@ Turn ends      → Stop hook fires, logs cost + tokens
 ---
 
 # Keep learning
-## Claude Academy
+## Every tool's own program
 
 ---
 
-## Courses that match this deck
+## Free learning, by tool
+
+Each provider's own program. The Free learning page in the app says what each one states about cost.
+
+| Tool | Program |
+|---|---|
+| **Aider** | No official course found; the docs have a [usage tips page](https://aider.chat/docs/usage/tips.html) |
+| **Claude Code** | [Claude Academy](https://academy.claude.com/courses) |
+| **Codex** | [OpenAI Academy](https://academy.openai.com) |
+| **Cursor** | [Cursor Learn](https://cursor.com/learn) |
+| **Devin Desktop** | [Devin University](https://learndevin.com/) |
+| **Gemini CLI** | [Hands-on with Gemini CLI (Google Codelab)](https://codelabs.developers.google.com/gemini-cli-hands-on); [Gemini CLI: Code & Create with an Open-Source Agent (DeepLearning.AI)](https://www.deeplearning.ai/courses/gemini-cli-code-and-create-with-an-open-source-agent); [Google Skills](https://www.skills.google) |
+| **GitHub Copilot** | [GitHub Skills: Copilot courses](https://learn.github.com/skills) |
+
+<p class="small">Checked 2026-10-08. Where a page states no price, we do not guess one.</p>
+
+---
+
+## OpenAI Academy
+
+**Cost:** OpenAI's help center states that Academy courses are free. You need a ChatGPT account to start a course and save your progress. The Academy home page itself does not state this.
+
+OpenAI's learning hub, with course pathways, live events and communities. Its Build with AI pathway teaches Codex across the software development lifecycle, or building with the OpenAI API.
+
+- Apply AI at Work: prompting and review habits, repeatable workflows, directing work with agents
+- Build with AI: Codex across the software development lifecycle, or the OpenAI API
+- Lead AI Adoption: a roadmap and an initial AI strategy draft
+- Teach and learn with AI: teaching, academic work and career preparation
+
+[Open the program page](https://academy.openai.com)
+
+---
+
+## Cursor Learn
+
+**Cost:** No price is stated on the page. The lessons are public on cursor.com.
+
+Official tutorials for developers who write software with AI models and tools. It covers how models work, coding with agents, and reviewing and testing AI-written code, with examples in Cursor that apply to any model or product.
+
+[How AI models work](https://cursor.com/learn/how-ai-models-work) · [Hallucination and limitations](https://cursor.com/learn/hallucination-limitations) · [Tokens and pricing](https://cursor.com/learn/tokens-pricing) · [Context](https://cursor.com/learn/context) · [Tool calling](https://cursor.com/learn/tool-calling) · [Agents](https://cursor.com/learn/agents) · [Working with agents](https://cursor.com/learn/working-with-agents) · [Understanding your codebase](https://cursor.com/learn/understanding-your-codebase) · [Creating features](https://cursor.com/learn/creating-features) · [Finding and fixing bugs](https://cursor.com/learn/finding-fixing-bugs) · [Reviewing and testing](https://cursor.com/learn/reviewing-testing) · [Customizing agents](https://cursor.com/learn/customizing-agents) · [Putting it together](https://cursor.com/learn/putting-it-together)
+
+[Open the program page](https://cursor.com/learn)
+
+---
+
+## Devin University
+
+**Cost:** No price is stated on the page.
+
+Interactive courses from Cognition. They teach Devin, the cloud agent, so they help with the Devin side of the product more than the desktop editor.
+
+- [Devin Foundations (8 lessons)](https://learndevin.com/course/devin-foundations)
+- [Cloud 101 (7 lessons)](https://learndevin.com/course/cloud-101)
+- [Cloud 102 (8 lessons)](https://learndevin.com/course/cloud-102)
+- [Cloud 103 (7 lessons)](https://learndevin.com/course/cloud-103)
+- [Devin for Admins (11 lessons)](https://learndevin.com/course/devin-for-admins)
+
+[Open the program page](https://learndevin.com/)
+
+---
+
+## Hands-on with Gemini CLI (Google Codelab)
+
+**Cost:** No price is stated on the page. You need a Gmail account and the Chrome browser.
+
+A guided codelab for users and developers of all levels, including beginners. You install and configure Gemini CLI, explore its tools, built-in commands and MCP servers, customize it with a GEMINI.md file, and try developer and non-developer use cases.
+
+
+
+[Open the program page](https://codelabs.developers.google.com/gemini-cli-hands-on)
+
+---
+
+## Gemini CLI: Code & Create with an Open-Source Agent (DeepLearning.AI)
+
+**Cost:** Price not listed on the page. Sign-up is required, and the graded assignment needs a PRO membership.
+
+A beginner course taught by a Google developer advocate and hosted by DeepLearning.AI: 1 hour 23 minutes, 11 video lessons and a graded assignment. You use Gemini CLI with MCP and extensions to build web features and dashboards and to create content.
+
+
+
+[Open the program page](https://www.deeplearning.ai/courses/gemini-cli-code-and-create-with-an-open-source-agent)
+
+---
+
+## Google Skills
+
+**Cost:** The home page offers free and paid routes: it advertises a GEAR program with 35 monthly credits for hands-on learning "at no cost", and lists Subscriptions. Check the catalog for the price of a specific course.
+
+Google's learning platform for AI and cloud, with hands-on labs, skill badges and certificates. Search the catalog for Gemini CLI content.
+
+
+
+[Open the program page](https://www.skills.google)
+
+---
+
+## GitHub Skills: Copilot courses
+
+**Cost:** The Getting started with GitHub Copilot course page states it is free (a public, MIT-licensed repository) and takes under an hour. It runs in GitHub Codespaces, and we did not check Codespaces limits.
+
+Interactive exercises on GitHub itself. The Copilot ones teach you to use Copilot to explain, write, plan and review code, then go on to MCP, agent mode, customization and the Copilot app.
+
+[Getting started with GitHub Copilot](https://github.com/skills/getting-started-with-github-copilot) · [Integrate MCP with Copilot](https://github.com/skills/integrate-mcp-with-copilot) · [Customize your GitHub Copilot experience](https://github.com/skills/customize-your-github-copilot-experience) · [Build applications with Copilot agent mode](https://github.com/skills/build-applications-w-copilot-agent-mode) · [Test and debug with GitHub Copilot](https://github.com/skills/test-and-debug-with-github-copilot) · [Expand your team with Copilot](https://github.com/skills/expand-your-team-with-copilot)
+
+[Open the program page](https://learn.github.com/skills)
+
+---
+
+## Claude Academy: courses that match this deck
 
 Free courses from Anthropic at [academy.claude.com](https://academy.claude.com/courses).
 
@@ -4155,31 +4467,32 @@ Free courses from Anthropic at [academy.claude.com](https://academy.claude.com/c
 
 ---
 
-## The rest of the catalog
+## Claude Academy: the rest of the catalog
 
 The Academy has 27 courses (counted on 2026-10-07). Beyond the ones above, there is a whole **AI Fluency** track on working with AI well (the "4D" framework: Delegation, Description, Discernment, Diligence), with versions for builders, educators, students, small businesses and nonprofits.
 
 Browse everything: [academy.claude.com/courses](https://academy.claude.com/courses)
 
-For the other tools in this deck, use each vendor's own docs (linked on the Resources slide). The Academy teaches Claude's products.
-
 ---
 
 ## Resources
 
+- **Aider docs:** [aider.chat/docs](https://aider.chat/docs/)
 - **Claude Code docs:** [code.claude.com/docs](https://code.claude.com/docs)
-- **MCP SDK:** github.com/modelcontextprotocol/typescript-sdk
-- **MCP server registry:** github.com/modelcontextprotocol/servers
 - **Codex docs:** [learn.chatgpt.com/docs](https://learn.chatgpt.com/docs)
 - **Cursor docs:** [cursor.com/docs](https://cursor.com/docs)
+- **Devin Desktop docs:** [docs.devin.ai/desktop](https://docs.devin.ai/desktop/getting-started)
 - **Gemini CLI docs:** [geminicli.com/docs](https://geminicli.com/docs/)
+- **GitHub Copilot docs:** [docs.github.com/copilot](https://docs.github.com/en/copilot)
+- **MCP SDK:** github.com/modelcontextprotocol/typescript-sdk
+- **MCP server registry:** github.com/modelcontextprotocol/servers
 - **Claude Academy:** [academy.claude.com](https://academy.claude.com/courses)
 
 ---
 
 # Questions?
 
-Five extension points. One afternoon to learn them.
-CLAUDE.md · Subagents · Skills · MCP · Hooks
+Five extension points. Seven tools. One afternoon to learn them.
+Instructions files · Subagents · Skills · MCP · Hooks
 
 <p class="small">Built by Jared Chapman · github.com/thejaredchapman</p>

@@ -13,6 +13,24 @@ You add servers with `claude mcp add`. Each server lands in one of three scopes:
 
 ---
 
+## Your tool
+
+The steps below were **run for real in Claude Code**. For every other tool the table gives the matching file and command from its own docs (checked 2026-10-08); we did not run those tools, so check your tool's docs if something differs.
+
+| Tool | Register the filesystem server | Check it |
+|---|---|---|
+| Aider | No MCP support found in the docs we read | — |
+| Claude Code | `claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Documents` | `claude mcp list`, `/mcp` |
+| Codex | `codex mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Documents` | `codex mcp list`, `/mcp` |
+| Cursor | Add it to `.cursor/mcp.json` under `mcpServers` | Cursor settings |
+| Devin Desktop | Add it to `~/.config/devin/mcp_config.json` under `mcpServers` | Cascade's tool list |
+| Gemini CLI | `gemini mcp add filesystem npx -y @modelcontextprotocol/server-filesystem ~/Documents` | `/mcp` |
+| GitHub Copilot | `mcp.json` in your IDE, or the Copilot CLI | `/mcp` in the CLI |
+
+Scopes, `.mcp.json` and `--scope` below are Claude Code's. Other tools have their own config files (see section 4).
+
+---
+
 ## Option A — Filesystem MCP (easiest)
 
 The filesystem MCP server lets Claude read and write files in directories you name, even outside the current project. You don't install it first; `npx` fetches it.
