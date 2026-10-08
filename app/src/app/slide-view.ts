@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewEncapsulation, afterRenderEffect, computed, inject, viewChild } from '@angular/core';
 import { ChecklistService } from './checklist.service';
 import { DeckService } from './deck.service';
+import { GuideService } from './guide.service';
+import { guideIdsForSlide } from './related';
 import { DiagramEcosystem, DiagramFlow, DiagramHooks, DiagramSubagents } from './diagrams';
 import { slidePath } from './slug';
 import { enhanceTables } from './table-enhancer';
@@ -17,12 +19,21 @@ import { ToolPicker } from './tool-picker';
 export class SlideView {
   protected readonly deck = inject(DeckService);
   protected readonly checklist = inject(ChecklistService);
+  protected readonly guide = inject(GuideService);
   private readonly content = viewChild<ElementRef<HTMLElement>>('content');
 
   /** A file-path style breadcrumb such as ~/deep-dive/05-hooks/what-are-hooks.md. */
   protected readonly path = computed(() => {
     const slide = this.deck.current();
     return slide ? slidePath(slide.section, slide.title) : '';
+  });
+
+  /** Guide chapters that cover the open slide's topic, so a reader can move from the deck to the guide. */
+  protected readonly related = computed(() => {
+    const slide = this.deck.current();
+    if (!slide) return [];
+    const wanted = guideIdsForSlide(slide.id, slide.section);
+    return this.guide.sections().filter((s) => wanted.includes(s.id)).map((s) => ({ title: s.title, href: this.guide.href(s.id) }));
   });
 
   constructor() {

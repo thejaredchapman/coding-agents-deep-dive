@@ -495,6 +495,23 @@ describe('App', () => {
       expect(el.querySelector('h1')?.textContent).toBe('Safeguards');
     });
 
+    it('links a deck slide to the matching guide chapter and back', async () => {
+      TestBed.inject(GuideService).data.set({ ...guide, sections: [...guide.sections, { id: 'codex', title: 'OpenAI Codex', group: 'Assistant profiles', content: [{ heading: 'What it is', text: 'Agent.' }] }] });
+      deck.goTo(1);
+      await fixture.whenStable();
+      expect(el.querySelector('.guide-links')).toBeNull();
+      deck.goTo(4);
+      await fixture.whenStable();
+      expect(el.querySelector('.guide-links a')?.getAttribute('href')).toBe('#/guide/codex');
+      TestBed.inject(ToolService).select('codex');
+      window.location.hash = '#/guide/codex';
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+      await fixture.whenStable();
+      expect(el.querySelector('h1 .you')?.textContent).toContain('your agent');
+      expect(el.querySelector('.related a')?.getAttribute('href')).toBe('#/67');
+      expect(el.querySelector('.toc a.mine')?.textContent).toContain('OpenAI Codex');
+    });
+
     it('opens the guide with the G key', async () => {
       TestBed.inject(GuideService).data.set(guide);
       press('g');

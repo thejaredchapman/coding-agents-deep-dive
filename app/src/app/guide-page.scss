@@ -72,3 +72,9 @@ pre { margin: 0; padding: 1rem; overflow-x: auto; background: var(--code-bg); bo
   .toc a, .group { white-space: nowrap; }
   .group { display: none; }
 }
+
+.you { margin-left: 0.5rem; padding: 0.05em 0.45em; border: 1px solid var(--accent); border-radius: 4px; color: var(--accent); font: 600 0.62rem var(--mono); text-transform: none; letter-spacing: 0; vertical-align: middle; }
+.toc a.mine { color: var(--ink); }
+h1 .you { font-size: 0.7rem; }
+.related { margin: 0 0 1.4rem; padding: 0.6rem 0.9rem; border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 6px; background: var(--raised); font-size: 0.88rem; color: var(--muted); }
+.related a { color: var(--accent); font-weight: 600; margin-right: 0.4rem; }

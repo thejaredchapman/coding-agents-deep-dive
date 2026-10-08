@@ -11,14 +11,17 @@
         @for (g of guide.groups(); track g.name) {
           <p class="group">{{ g.name }}/</p>
           @for (s of g.sections; track s.id) {
-            <a [href]="guide.href(s.id)" [attr.aria-current]="guide.current()?.id === s.id ? 'page' : null">{{ s.title }}</a>
+            <a [href]="guide.href(s.id)" [class.mine]="isMine(s.id)" [attr.aria-current]="guide.current()?.id === s.id ? 'page' : null">{{ s.title }}@if (isMine(s.id)) { <span class="you">you</span> }</a>
           }
         }
       </nav>
 
       <div class="body">
         @if (guide.current(); as section) {
-          <h1>{{ section.title }}</h1>
+          <h1>{{ section.title }}@if (isMine(section.id)) { <span class="you">your agent</span> }</h1>
+          @if (deckHref(); as href) {
+            <p class="related"><a [href]="href">Go deeper in the slides →</a> The deck covers this topic with exercises and verified sources.</p>
+          }
           @for (block of section.content; track $index) {
             <section class="block" [id]="blockId(block)">
               <h2>{{ block.heading }}</h2>
@@ -35,7 +38,7 @@
                 <ol class="ranked" aria-live="polite">
                   @for (t of ranked(); track t.id) {
                     <li [class.dim]="picked().length > 0 && t.hits.length === 0">
-                      <a [href]="guide.href(t.id)">{{ t.name }}</a>
+                      <a [href]="guide.href(t.id)">{{ t.name }}</a>@if (isMine(t.id)) { <span class="you">your agent</span> }
                       <span class="score">{{ t.hits.length }}/{{ picked().length || '–' }}</span>
                       @if (picked().length > 0) {
                         <span class="meter" aria-hidden="true"><span [style.width.%]="(t.hits.length / picked().length) * 100"></span></span>

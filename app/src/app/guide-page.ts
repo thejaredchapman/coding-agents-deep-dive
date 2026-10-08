@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { GuideBlock } from './guide.model';
 import { GuideService, rankTools } from './guide.service';
+import { GUIDE_TO_DECK, toolForGuideId } from './related';
+import { ToolService } from './tool.service';
 
 @Component({
   selector: 'app-guide-page',
@@ -10,10 +12,23 @@ import { GuideService, rankTools } from './guide.service';
 })
 export class GuidePage {
   protected readonly guide = inject(GuideService);
+  protected readonly tool = inject(ToolService);
   protected readonly picked = signal<string[]>([]);
   protected readonly copied = signal<string | null>(null);
 
   protected readonly ranked = computed(() => rankTools(this.guide.data()?.toolFit ?? [], this.picked()));
+
+  /** The deck address for the slide that covers the open chapter in depth, if there is one. */
+  protected readonly deckHref = computed(() => {
+    const slide = GUIDE_TO_DECK[this.guide.current()?.id ?? ''];
+    return slide ? `#/${slide}` : null;
+  });
+
+  /** True when this guide chapter is the profile of the agent the reader picked. */
+  protected isMine(id: string): boolean {
+    const tool = toolForGuideId(id);
+    return tool !== null && this.tool.selected() === tool;
+  }
 
   protected toggle(id: string): void {
     this.picked.update((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));

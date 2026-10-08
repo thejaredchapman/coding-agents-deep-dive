@@ -29,6 +29,13 @@
     </section>
   }
 
+  @if (related().length) {
+    <p class="guide-links">
+      Also in the guide:
+      @for (r of related(); track r.href) { <a [href]="r.href">{{ r.title }}</a> }
+    </p>
+  }
+
   @if (slide.checklist?.length) {
     <fieldset class="checklist">
       <legend>
