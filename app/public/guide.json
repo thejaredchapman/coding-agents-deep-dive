@@ -1,0 +1,1068 @@
+{
+  "source": "Imported from thejaredchapman/ai-coding-assistants-guide. Facts were read from each vendor's own docs by that guide on 2026-10-02 and have not been re-verified here.",
+  "imported": "2026-10-07",
+  "splash": {
+    "tagline": "What AI coding assistants are, what they can do, and how to use any of them responsibly.",
+    "what": {
+      "title": "What is a coding assistant?",
+      "text": "A coding assistant is an AI that helps you write, read, fix, and explain code. You describe what you want in plain language and it responds with code, explanations, or actions. Some only suggest text as you type. Others can act: open files, edit them, run commands, and check their own work."
+    },
+    "meaning": {
+      "title": "What using one really means",
+      "bullets": [
+        "You become the reviewer. Your job shifts from typing every line to deciding what is right.",
+        "You stay accountable. The tool drafts, you ship.",
+        "The more it can do, the more it can do wrong. Autonomy and risk grow together.",
+        "Clear instructions give clear results. Vague requests give vague code."
+      ]
+    },
+    "competitors": {
+      "title": "The landscape",
+      "cols": [
+        "Tool",
+        "Made by",
+        "Style"
+      ],
+      "rows": [
+        [
+          "Aider",
+          "Open source",
+          "Terminal pair programmer that commits every change to git"
+        ],
+        [
+          "Claude Code",
+          "Anthropic",
+          "Agent for terminal, IDEs, desktop, and web"
+        ],
+        [
+          "Codex",
+          "OpenAI",
+          "Terminal, IDE, desktop, and cloud coding agent"
+        ],
+        [
+          "Cursor",
+          "Anysphere",
+          "AI code editor with Tab, chat, and an agent mode"
+        ],
+        [
+          "Gemini CLI",
+          "Google",
+          "Open-source terminal agent"
+        ],
+        [
+          "GitHub Copilot",
+          "GitHub / Microsoft",
+          "Suggestions and chat in your editor, plus agent tasks"
+        ],
+        [
+          "Windsurf (now Devin Desktop)",
+          "Cognition",
+          "Standalone AI IDE with an agent"
+        ]
+      ]
+    },
+    "why": {
+      "title": "What to look for in any of them",
+      "bullets": [
+        "Control: can you choose when it asks before editing files or running commands?",
+        "Privacy: where does your code go, and is it used for training?",
+        "Fit: does it work in the editor or terminal you already use?",
+        "Cost: is pricing per seat, per use, or bring-your-own key, and what are the limits?",
+        "Approval: is it on your organization's approved list?"
+      ],
+      "note": "No tool is best for everyone. Pick for your work, your team, and your rules."
+    },
+    "disclaimer": {
+      "title": "Professional use: check with IT first",
+      "text": "If you are using an AI coding assistant for work, check with your IT or security team before you use it. Your organization may restrict which tools are allowed, what data and code can be shared with them, and how the output may be used. It is your responsibility to follow those rules. This guide is general information, not legal, security, or compliance advice."
+    }
+  },
+  "needs": [
+    {
+      "id": "suggest",
+      "label": "Suggestions while I type"
+    },
+    {
+      "id": "agent",
+      "label": "Hand off big multi-file tasks"
+    },
+    {
+      "id": "terminal",
+      "label": "Work in the terminal"
+    },
+    {
+      "id": "editor",
+      "label": "Stay in my current editor"
+    },
+    {
+      "id": "cheap",
+      "label": "Free or very low cost"
+    },
+    {
+      "id": "models",
+      "label": "Choose any model"
+    },
+    {
+      "id": "oss",
+      "label": "Open source"
+    },
+    {
+      "id": "cloud",
+      "label": "Run tasks in the cloud"
+    },
+    {
+      "id": "custom",
+      "label": "Rules, skills, MCP customization"
+    },
+    {
+      "id": "git",
+      "label": "Every change is a git commit"
+    },
+    {
+      "id": "github",
+      "label": "GitHub-centered workflow"
+    },
+    {
+      "id": "bigctx",
+      "label": "Very large context window"
+    },
+    {
+      "id": "team",
+      "label": "Team or enterprise plans"
+    }
+  ],
+  "toolFit": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "needs": [
+        "agent",
+        "terminal",
+        "editor",
+        "cloud",
+        "custom",
+        "github",
+        "team"
+      ]
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot",
+      "needs": [
+        "suggest",
+        "agent",
+        "editor",
+        "cheap",
+        "cloud",
+        "custom",
+        "github",
+        "team"
+      ]
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "needs": [
+        "suggest",
+        "agent",
+        "models",
+        "custom",
+        "team"
+      ]
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf (Devin Desktop)",
+      "needs": [
+        "agent",
+        "custom"
+      ]
+    },
+    {
+      "id": "codex",
+      "name": "OpenAI Codex",
+      "needs": [
+        "agent",
+        "terminal",
+        "editor",
+        "oss",
+        "cloud",
+        "custom",
+        "team"
+      ]
+    },
+    {
+      "id": "gemini-cli",
+      "name": "Gemini CLI",
+      "needs": [
+        "agent",
+        "terminal",
+        "cheap",
+        "oss",
+        "custom",
+        "bigctx"
+      ]
+    },
+    {
+      "id": "aider",
+      "name": "Aider",
+      "needs": [
+        "terminal",
+        "cheap",
+        "models",
+        "oss",
+        "git"
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "pick",
+      "title": "Pick Your Tool",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "Step 0: is it approved?",
+          "text": "Before you compare features, check with your IT or security team. If a tool is not approved for work, it does not matter how good it is.",
+          "warn": "Using an unapproved tool on work code can break company policy. It is your responsibility to check first."
+        },
+        {
+          "heading": "Tick what matters to you",
+          "picker": true,
+          "note": "This ranks tools by how many of your needs match what the vendors' docs describe. It is a starting point, not a verdict. Try your top two on a small real task."
+        },
+        {
+          "heading": "The rubric: need to best fit",
+          "cols": [
+            "If you need",
+            "Look at",
+            "Why",
+            "Watch out for"
+          ],
+          "table": [
+            [
+              "Suggestions while I type",
+              "GitHub Copilot, Cursor",
+              "Built for help inside the editor as you work.",
+              "Suggestions can look right and be wrong. Read each one."
+            ],
+            [
+              "Hand off a big multi-file task",
+              "Claude Code, Codex, Cursor, GitHub Copilot agent",
+              "Agent modes plan, edit several files, and prepare changes for review.",
+              "The more it does alone, the more you must review."
+            ],
+            [
+              "Stay in the terminal",
+              "Claude Code, Codex, Gemini CLI, Aider",
+              "Command-line tools that fit scripts and remote machines.",
+              "Steeper learning curve for beginners."
+            ],
+            [
+              "Stay in my current editor",
+              "GitHub Copilot, Claude Code (VS Code, JetBrains), Codex (IDE), Cline, Continue",
+              "Extensions bring the assistant to the editor you use.",
+              "Check your editor is supported on your plan."
+            ],
+            [
+              "Spend little or nothing",
+              "GitHub Copilot Free, Gemini CLI free tier, Aider with your own key",
+              "Free tiers, or you pay only for the API you use.",
+              "Free tiers have request limits."
+            ],
+            [
+              "Choose any model",
+              "Aider, Cursor",
+              "Aider works with many providers. Cursor lists 50+ models.",
+              "You manage keys, cost, and quality yourself."
+            ],
+            [
+              "Open source I can inspect",
+              "Aider, Codex CLI, Gemini CLI",
+              "Source code is public (Apache-2.0 for Codex CLI and Gemini CLI).",
+              "Open source does not mean no data leaves your machine."
+            ],
+            [
+              "Easy undo of every change",
+              "Aider",
+              "Commits each change to git automatically.",
+              "Use a git branch with any tool."
+            ],
+            [
+              "Run tasks in the cloud",
+              "Codex (Codex Web), Claude Code (web), GitHub Copilot agent",
+              "Long tasks run off your machine and report back.",
+              "Cloud runs have limited access and still need review."
+            ],
+            [
+              "Heavy customization",
+              "Claude Code, Cursor, Windsurf",
+              "Rules, skills, MCP servers, memories, and workflows.",
+              "More setup, and more places for mistakes."
+            ],
+            [
+              "Very large codebase",
+              "Gemini CLI",
+              "1M token context window with Gemini 3 models.",
+              "Bigger context is not the same as better answers."
+            ],
+            [
+              "GitHub-centered team",
+              "GitHub Copilot, Claude Code (GitHub Actions)",
+              "Works with pull requests, issues, and code review.",
+              "Check which features your plan includes."
+            ],
+            [
+              "I am new to coding",
+              "Any tool, set to approve every step",
+              "Manual mode (Claude Code), Review mode (Codex), or Aider's commit-per-change keep you in control.",
+              "Never use auto or full-auto modes until you can review the result."
+            ],
+            [
+              "I work at a company with rules",
+              "Whichever your IT team approves",
+              "Approval is the first gate, before features or price.",
+              "Using an unapproved tool can break policy, and the responsibility is yours."
+            ]
+          ]
+        },
+        {
+          "heading": "Score your own shortlist",
+          "text": "Give each finalist 1 to 5 on every row, then add them up. Weigh the rows that matter most to you.",
+          "cols": [
+            "Criterion",
+            "Ask yourself"
+          ],
+          "table": [
+            [
+              "Approval",
+              "Is it allowed by IT? A no here ends the comparison."
+            ],
+            [
+              "Data and privacy",
+              "Where does my code go? Is it used for training? Can I keep secrets out?"
+            ],
+            [
+              "Control",
+              "Can I make it ask before editing files or running commands?"
+            ],
+            [
+              "Fit",
+              "Does it work in my editor or terminal, on my operating system?"
+            ],
+            [
+              "Quality on my code",
+              "Did it do well on a small real task from my own project?"
+            ],
+            [
+              "Cost",
+              "Per seat, per use, or bring-your-own key? What are the limits?"
+            ],
+            [
+              "Customization",
+              "Can I give it my team's rules and recipes?"
+            ],
+            [
+              "Team support",
+              "Is there an admin, billing, and a plan for teams?"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "title": "Compare Them All",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "At a glance",
+          "cols": [
+            "Tool",
+            "Lives in",
+            "Best for",
+            "Models"
+          ],
+          "table": [
+            [
+              "Claude Code",
+              "Terminal, VS Code, JetBrains, desktop, web",
+              "Big multi-file tasks and customizable workflows",
+              "Anthropic"
+            ],
+            [
+              "GitHub Copilot",
+              "Your editor and GitHub",
+              "Help while you code, plus agent tasks on GitHub",
+              "Set by GitHub and your plan"
+            ],
+            [
+              "Cursor",
+              "Its own editor",
+              "People who want AI built into the editor",
+              "50+ models from several providers"
+            ],
+            [
+              "Windsurf (Devin Desktop)",
+              "Its own standalone IDE",
+              "Agent-driven edits inside an IDE",
+              "Set by the product and your plan"
+            ],
+            [
+              "Codex",
+              "Terminal, IDE, desktop app, cloud",
+              "Delegating tasks, including in the cloud",
+              "OpenAI"
+            ],
+            [
+              "Gemini CLI",
+              "Terminal",
+              "Free-tier terminal work and very large context",
+              "Google Gemini"
+            ],
+            [
+              "Aider",
+              "Terminal",
+              "Git-friendly pairing with the model you choose",
+              "Many providers"
+            ]
+          ],
+          "note": "Details come from each vendor's own docs, read on 2 Oct 2026. This space moves fast, so check the vendor site before you decide."
+        },
+        {
+          "heading": "Which one should you pick?",
+          "bullets": [
+            "Want help while you type in an editor: GitHub Copilot or Cursor.",
+            "Want to hand off a whole task and review the result: Claude Code, Codex, or an IDE agent like Cursor or Windsurf.",
+            "Want to pay little or nothing: Gemini CLI's free tier, GitHub Copilot Free, or Aider with a cheap model.",
+            "Want to choose or switch models freely: Aider or Cursor.",
+            "Work in a locked-down company: ask IT which tools are approved before you install anything."
+          ]
+        },
+        {
+          "heading": "The same rules apply to all of them",
+          "bullets": [
+            "Work on a git branch and commit before you start.",
+            "Read every change before you accept it.",
+            "Never paste secrets or customer data into any assistant.",
+            "Start with the most cautious permission setting, and check what the default is first."
+          ],
+          "warn": "Every tool on these pages can be wrong, and the ones that run commands can also break things. The safer the setting, the slower it feels. That trade is worth it until you trust the workflow."
+        }
+      ]
+    },
+    {
+      "id": "more-tools",
+      "title": "More Assistants",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "Also worth knowing",
+          "text": "These did not get a full page, but you may meet them at work. Facts come from each vendor's own pages, read on 2 Oct 2026.",
+          "cols": [
+            "Tool",
+            "Made by",
+            "What it is",
+            "Worth knowing"
+          ],
+          "table": [
+            [
+              "Amazon Q Developer",
+              "AWS",
+              "Code suggestions, inline chat, agentic tasks, and vulnerability scanning in IDEs, a CLI, and the AWS console",
+              "Has a free tier. AWS plans to end IDE plugin support on 30 Apr 2027 and points users to Kiro."
+            ],
+            [
+              "Kiro",
+              "AWS",
+              "Agentic platform with an IDE, CLI, web, and mobile. Turns prompts into specs, designs, and tasks first.",
+              "Credit-based pricing, with models from several providers."
+            ],
+            [
+              "Cline",
+              "Cline Bot Inc.",
+              "Open-source (Apache 2.0) agent for VS Code, JetBrains, a CLI, and a desktop app",
+              "Asks approval for every edit and command unless you turn on auto-approve. Works with many providers."
+            ],
+            [
+              "Continue",
+              "Open source",
+              "Chat, edit, agent mode, and autocomplete in VS Code and JetBrains, plus a CLI",
+              "You choose your own models."
+            ],
+            [
+              "Zed",
+              "Zed Industries",
+              "A code editor with an agent panel, edit prediction, and an inline assistant",
+              "Bring your own API keys, use local models, or use Zed-hosted ones. Supports external agents."
+            ]
+          ],
+          "note": "Other tools exist too, including JetBrains' own AI features, which I could not confirm from their page."
+        },
+        {
+          "heading": "Why a long list does not mean a better choice",
+          "bullets": [
+            "Most of these use the same few underlying models, so the difference is the workflow around them.",
+            "Pick two, try both on one small real task, and keep the one that fits.",
+            "Ask IT which are approved before you try any of them at work."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "it-review",
+      "title": "IT Review Checklist",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "Why this page exists",
+          "text": "If you use an AI coding assistant for work, your IT or security team decides what is allowed. This checklist helps you ask good questions, so approval takes days, not months.",
+          "warn": "It is your responsibility to get approval before you use a tool on work code or data. These are questions to ask, not answers. This guide is not legal, security, or compliance advice."
+        },
+        {
+          "heading": "Questions to bring to IT",
+          "cols": [
+            "Topic",
+            "Ask"
+          ],
+          "table": [
+            [
+              "Approval",
+              "Is this tool on the approved list? Is a specific plan or account type required?"
+            ],
+            [
+              "Account type",
+              "Must I use a company account, not a personal one? Who pays?"
+            ],
+            [
+              "Data handling",
+              "Where is my code sent and stored? For how long? Is it used to train models?"
+            ],
+            [
+              "Allowed data",
+              "What data classes can I put in a prompt? Which are never allowed (customer data, secrets, regulated data)?"
+            ],
+            [
+              "Access control",
+              "Is single sign-on required? Who can add or remove users?"
+            ],
+            [
+              "Logging",
+              "Are prompts and actions logged? Who can see the logs?"
+            ],
+            [
+              "Extensions",
+              "Are plugins, MCP servers, and extensions approved one by one, or blocked?"
+            ],
+            [
+              "Permissions",
+              "Which modes are allowed? Is auto or full-auto approval banned?"
+            ],
+            [
+              "Network",
+              "Does it need to reach the internet? Does it work behind our proxy?"
+            ],
+            [
+              "Legal",
+              "Who owns the output? Are there license or IP rules for AI-written code?"
+            ],
+            [
+              "Compliance",
+              "Do we have rules (SOC 2, HIPAA, PCI, export controls) that limit use?"
+            ],
+            [
+              "Disclosure",
+              "Do I need to say when AI helped write code?"
+            ]
+          ]
+        },
+        {
+          "heading": "Before you ask",
+          "bullets": [
+            "Know which tool, which plan, and which task you want to use it for.",
+            "Be ready to say what code or data it would see.",
+            "Read the vendor's security and privacy page so your questions are specific.",
+            "Write down the answer, with the date and who gave it."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "responsible",
+      "title": "Using AI Responsibly",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "What using AI responsibly means",
+          "text": "A coding assistant works like a fast, tireless, eager intern. It will try anything you let it, and it cannot always tell a good idea from a bad one. Using it responsibly means you stay the person in charge of what ships.",
+          "bullets": [
+            "You own the result. If Claude writes it and you ship it, it is your code.",
+            "Check the work. Run it, test it, read it. Confident does not mean correct.",
+            "Protect other people's data. Customers, coworkers, and patients did not agree to be pasted into a prompt.",
+            "Follow your company policy on AI tools, and say so when AI helped build something.",
+            "Respect licenses. Do not ship code you cannot trace to a source you are allowed to use."
+          ]
+        },
+        {
+          "heading": "The risks, in plain English",
+          "cols": [
+            "What can go wrong",
+            "What it looks like"
+          ],
+          "table": [
+            [
+              "It is confidently wrong",
+              "Invents a function or setting that does not exist, and says it with total certainty."
+            ],
+            [
+              "It deletes or overwrites",
+              "A cleanup request removes files you needed. Without git, they may be gone."
+            ],
+            [
+              "It runs commands as you",
+              "Anything you can do on your computer, it can do: install software, move files, change settings."
+            ],
+            [
+              "It leaks secrets",
+              "Passwords and API keys in a file it reads can end up in a prompt, a log, or committed code."
+            ],
+            [
+              "It is tricked by content",
+              "Text in a web page, issue, or file can contain hidden instructions aimed at the AI (prompt injection)."
+            ],
+            [
+              "It adds risky packages",
+              "It may install a library that is outdated, unmaintained, or malicious."
+            ],
+            [
+              "You stop understanding your code",
+              "If nobody can explain it, nobody can fix it at 2am."
+            ]
+          ]
+        },
+        {
+          "heading": "Habits that keep you safe",
+          "bullets": [
+            "Start with the most cautious approval setting your tool offers, and read every change and every command.",
+            "Use git for everything, and commit before big changes.",
+            "Never run it as administrator or in a folder with files you cannot lose.",
+            "Never paste passwords, keys, customer data, or health data.",
+            "Ask it to explain anything you do not understand, before you accept it.",
+            "If something feels off, stop with Escape and ask what it is doing."
+          ],
+          "warn": "The risk is not that Claude is careless. It is that it is fast. A mistake you would catch on step two can pile up to step twenty before you look up."
+        }
+      ]
+    },
+    {
+      "id": "safeguards",
+      "title": "Safeguards",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "Keep secrets out of reach",
+          "bullets": [
+            "Do not keep passwords, keys, or tokens in the project folder. Use a secrets manager or environment variables outside the repo.",
+            "Add secret files such as .env to .gitignore so they never reach git.",
+            "Many tools can be told to ignore files or deny reading them. Check your tool's docs for how, and turn it on.",
+            "If a secret ever reaches a prompt or a commit, treat it as leaked and rotate it."
+          ],
+          "code": "# Claude Code example: block reading a secrets file\n# .claude/settings.json\n{\n  \"permissions\": {\n    \"deny\": [\"Read(./.env)\"]\n  }\n}",
+          "note": "Deny rules block in every Claude Code mode, including bypass. Check the permissions docs for the exact rule syntax in your version."
+        },
+        {
+          "heading": "Limit the blast radius",
+          "bullets": [
+            "Work on a git branch, and commit before you start.",
+            "Use a sandbox, container, or throwaway folder for riskier modes. Claude Code has /sandbox, and Codex sandboxes file access.",
+            "Never run an agent as an administrator.",
+            "Keep production credentials off any machine where an agent runs unattended."
+          ]
+        },
+        {
+          "heading": "Verify AI-written code",
+          "text": "AI code can look right and be wrong. Treat it like a pull request from someone you have not met.",
+          "bullets": [
+            "Read the diff. If you cannot explain a change, do not merge it.",
+            "Run the tests, and add a test for anything new.",
+            "Run your linter and a security scanner.",
+            "Check any new dependency: does it exist, is it maintained, is it the real package?",
+            "Keep changes small, so review stays possible."
+          ]
+        },
+        {
+          "heading": "Watch for prompt injection",
+          "text": "Text in a web page, an issue, a file, or an MCP tool result can contain hidden instructions aimed at the AI. If your assistant reads outside content, it may try to follow them.",
+          "warn": "Be extra careful when an agent can both read untrusted content and take actions like running commands or sending data. Keep approvals on in that situation."
+        }
+      ]
+    },
+    {
+      "id": "cost-all",
+      "title": "Saving Money (Any Tool)",
+      "group": "Start here",
+      "content": [
+        {
+          "heading": "How the tools charge",
+          "cols": [
+            "Tool",
+            "Cost model, per vendor docs"
+          ],
+          "table": [
+            [
+              "GitHub Copilot",
+              "A free tier, and paid plans with larger AI credit allowances. Students, teachers, and open source maintainers can qualify for premium features at no cost."
+            ],
+            [
+              "Gemini CLI",
+              "Free with a personal Google login: 60 requests a minute and 1,000 a day. An API key has a free tier of 1,000 requests a day."
+            ],
+            [
+              "Amazon Q Developer",
+              "Free tier of 50 agentic chat interactions a month; paid options for more."
+            ],
+            [
+              "Kiro",
+              "Credit-based, with different credit costs for different models."
+            ],
+            [
+              "Aider, Cline, Continue",
+              "The software is open source. You pay your model provider for what you use."
+            ],
+            [
+              "Claude Code",
+              "A Claude subscription or Anthropic Console account. API pricing is per million tokens, with batch requests 50% off."
+            ],
+            [
+              "Codex",
+              "Sign in with a ChatGPT plan, or use an API key."
+            ],
+            [
+              "Cursor, Windsurf",
+              "Plans and limits change, so read the current pricing page."
+            ]
+          ]
+        },
+        {
+          "heading": "Habits that save money on any tool",
+          "bullets": [
+            "Use the smallest model that does the job, and move up only when you must.",
+            "Plan before you build. A reviewed plan avoids expensive rework.",
+            "Start a fresh conversation for each task, because long history costs more on every request.",
+            "Be specific. Naming the file and the goal beats \"look around and fix it\".",
+            "Keep instruction files short, since they load every session.",
+            "Connect only the extensions and servers you need.",
+            "Watch your usage screen or command, and set alerts where the tool offers them."
+          ],
+          "note": "Claude-specific commands such as /cost and /clear are covered in the Claude Code deep dive."
+        }
+      ]
+    },
+    {
+      "id": "claude-code",
+      "title": "Claude Code: Pros & Cons",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "Anthropic's agentic coding tool. It reads your codebase, edits files, runs commands, and connects to your dev tools. It runs in the terminal, VS Code, JetBrains, a desktop app, and the web, and all of them share the same engine, CLAUDE.md files, settings, and MCP servers."
+        },
+        {
+          "heading": "Get started",
+          "code": "curl -fsSL https://claude.ai/install.sh | bash   # macOS, Linux, WSL\ncd your-project\nclaude"
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Run claude in a project and log in when prompted.",
+            "Press Shift+Tab to see and change the permission mode.",
+            "Use plan mode for anything bigger than a small edit.",
+            "Put rules in CLAUDE.md, recipes in skills, and automatic actions in hooks.",
+            "Use /clear between tasks and /cost to watch spend."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Works across files and tools, including git, commits, and pull requests.",
+            "Extensible: CLAUDE.md, skills, hooks, subagents, MCP servers, and an Agent SDK.",
+            "Several permission modes let you set how closely it is watched.",
+            "Same setup in terminal, IDEs, desktop, and web.",
+            "Can also read an AGENTS.md written for other tools."
+          ],
+          "cons": [
+            "Anthropic models by default; other providers only through some setups.",
+            "Most surfaces need a Claude subscription or Anthropic Console account.",
+            "Costs can grow on long sessions with lots of context.",
+            "Terminal-first, which is a learning curve for beginners."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "Recent versions can start in auto mode. Switch to Manual with claude --permission-mode default until you have a git branch and tests to catch mistakes."
+        }
+      ]
+    },
+    {
+      "id": "copilot",
+      "title": "GitHub Copilot",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "GitHub's assistant. Per GitHub's docs it responds while you work (suggesting code, answering questions, explaining code), handles multi-step agent tasks (researching a repo, proposing plans, editing files, preparing pull requests), and can be customized with instructions, prompts, and custom agents. It also works with MCP servers and third-party coding agents."
+        },
+        {
+          "heading": "Get started",
+          "code": "# 1. Try Copilot Free or subscribe to a paid plan.\n# 2. Through an organization? Request access at\n#    github.com/settings/copilot\n# 3. Install the extension in your editor and sign in.\n#\n# Documented editors: VS Code, Visual Studio, JetBrains IDEs,\n# Xcode, Eclipse, Vim/Neovim, Azure Data Studio."
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Accept suggestions as you type, and read each one first.",
+            "Ask chat to explain code, plan a task, or refactor.",
+            "Use agent features for multi-step work and review the pull request it prepares.",
+            "Add custom instructions so it follows your conventions."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "A free tier exists, so you can try it at no cost.",
+            "Students, teachers, and open source maintainers can qualify for premium features at no cost.",
+            "Works in many editors, from VS Code and JetBrains to Xcode and Neovim.",
+            "Built into GitHub, so it fits pull requests and code review.",
+            "Business and Enterprise plans for organizations."
+          ],
+          "cons": [
+            "What you get depends on your plan, including its AI credit allowance.",
+            "Models and features vary by plan, so check what yours includes.",
+            "Suggestions can look right and still be wrong.",
+            "Less of a standalone, scriptable terminal workflow than the CLI agents."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "Suggestions are easy to accept by reflex. Read them as carefully as code from a stranger, especially around security and data handling."
+        }
+      ]
+    },
+    {
+      "id": "cursor",
+      "title": "Cursor",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "An AI code editor that Cursor describes as \"a coding agent for building ambitious software\". It offers Tab and inline editing, chat, an agent mode for complex tasks, codebase understanding, and code review. It supports 50+ models from Anthropic, OpenAI, Google, and others."
+        },
+        {
+          "heading": "Get started",
+          "code": "# Download Cursor from cursor.com\n# macOS 12+ (.dmg), Windows 10+ (.exe),\n# Linux (apt, dnf, or AppImage)\n# Open the app, finish setup, and open your project folder."
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Use Tab and inline editing for quick changes as you type.",
+            "Use chat to ask about the project.",
+            "Use agent mode for bigger tasks, and review the diff.",
+            "Customize it with rules, skills, MCP servers, and plugins."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Choose from 50+ models across several providers.",
+            "Tab, chat, and agent are all inside one editor.",
+            "Customizable with plugins, skills, MCP, and rules.",
+            "Connects to GitHub, GitLab, Azure DevOps, Bitbucket, Slack, Linear, and more."
+          ],
+          "cons": [
+            "You work inside its editor, so you have to switch.",
+            "Plans and usage limits change, so read the current pricing page.",
+            "Your code goes to cloud models, so check company policy first.",
+            "Agent edits can be large and easy to over-accept."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "Cursor makes accepting changes very smooth. Slow down on agent edits and read the diff for every file before you accept."
+        }
+      ]
+    },
+    {
+      "id": "windsurf",
+      "title": "Windsurf (Devin Desktop)",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "Windsurf is now called Devin Desktop, an AI IDE with an agent called Cascade. Cognition, the maker of Devin, acquired Windsurf in July 2025 and announced the rename in June 2026, according to press reports. The docs describe it as a standalone IDE, not VS Code-based, and some URLs and package names still say \"windsurf\"."
+        },
+        {
+          "heading": "Get started",
+          "code": "# Download for Mac, Windows, or Linux from the Windsurf / Devin Desktop site.\n# Setup: pick a theme, optionally import VS Code or Cursor settings,\n# sign in, then start your first AI session."
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Describe a task to the agent in plain language.",
+            "Watch which files it touches and review each change.",
+            "Add memories and rules so it follows your conventions.",
+            "Use workflows for repeated tasks and MCP servers for outside tools."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Memories and rules customize how it behaves.",
+            "Workflows automate repetitive tasks.",
+            "One-click app deploys.",
+            "Can import your VS Code or Cursor settings."
+          ],
+          "cons": [
+            "The product was renamed in 2026, so names in docs and packages can differ.",
+            "It is a standalone IDE, so you have to adopt it.",
+            "Some extensions are incompatible, including other AI completion tools.",
+            "Agent actions still need careful review."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "When an agent can run terminal commands, read each command before approving it. Never approve a command you do not understand."
+        }
+      ]
+    },
+    {
+      "id": "codex",
+      "title": "OpenAI Codex",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "OpenAI's coding agent. It comes as a terminal CLI, an IDE integration (VS Code, Cursor, Windsurf), a desktop app, and Codex Web, a cloud agent at chatgpt.com/codex. The CLI is open source under the Apache-2.0 license."
+        },
+        {
+          "heading": "Get started",
+          "code": "# macOS / Linux\ncurl -fsSL https://chatgpt.com/codex/install.sh | sh\n# or: npm install -g @openai/codex\n# or: brew install --cask codex\n\ncd your-project\ncodex"
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Sign in with ChatGPT, or use an API key.",
+            "Describe a task, for example \"Tell me about this project\".",
+            "Pick permissions: Review mode asks before acting, Autonomous mode does not. Adjust per session with /permissions.",
+            "Run /init to create an AGENTS.md of project instructions."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Open-source CLI under Apache-2.0.",
+            "Choice of terminal, IDE, desktop app, or cloud.",
+            "Works with a ChatGPT plan sign-in.",
+            "Sandboxing limits file access and writable folders.",
+            "AGENTS.md is a convention several tools share."
+          ],
+          "cons": [
+            "OpenAI models only.",
+            "Cloud tasks run in a sandbox with limits on what they can reach.",
+            "Plan and sign-in options affect what you can use.",
+            "Results still need a human review before you merge."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "Autonomous mode edits files and runs commands without asking. Use it only in a disposable folder or container, never on your main machine with real credentials."
+        }
+      ]
+    },
+    {
+      "id": "gemini-cli",
+      "title": "Gemini CLI",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "Google's open-source (Apache 2.0) terminal agent. It has built-in file operations, shell commands, web fetching, and Google Search grounding, and it supports MCP servers."
+        },
+        {
+          "heading": "Get started",
+          "code": "npm install -g @google/gemini-cli\n# or run without installing: npx @google/gemini-cli\n# also available through Homebrew, MacPorts, and Anaconda\n\ncd your-project\ngemini"
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Sign in with a Google account when prompted.",
+            "Describe a task or ask about the codebase.",
+            "Use gemini -p \"question\" for a one-off, non-interactive prompt.",
+            "Choose a model with -m, and add project guidance in GEMINI.md."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Open source under Apache 2.0.",
+            "Free tier with a personal Google login: 60 requests a minute and 1,000 a day.",
+            "1M token context window with Gemini 3 models.",
+            "Web fetch, Google Search grounding, and MCP support built in."
+          ],
+          "cons": [
+            "Gemini models only.",
+            "Free-tier request limits can interrupt long sessions.",
+            "Quality varies by task, so test it on your own work.",
+            "Fewer ready-made workflows than the most mature agents."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "The free tier is a good reason to try it, not a reason to relax. It can edit files and run commands, so read each action it asks to take."
+        }
+      ]
+    },
+    {
+      "id": "aider",
+      "title": "Aider",
+      "group": "Assistant profiles",
+      "content": [
+        {
+          "heading": "What it is",
+          "text": "An open-source terminal pair programmer. You choose which files it can see, tell it what to change, and it edits them. By default it commits every change to git with a descriptive message, so each step is easy to undo."
+        },
+        {
+          "heading": "Get started",
+          "code": "python -m pip install aider-install   # Python 3.8-3.13\naider-install\n\ncd your-project\naider --model sonnet --api-key anthropic=<key>\n# other examples: --model o3-mini --api-key openai=<key>"
+        },
+        {
+          "heading": "How to use it",
+          "bullets": [
+            "Add files with /add so it can edit them.",
+            "Ask questions without editing anything with /ask.",
+            "Request changes with /code.",
+            "Use /architect for a two-model plan-and-edit flow.",
+            "Undo an aider commit with /undo."
+          ]
+        },
+        {
+          "heading": "Pros and cons",
+          "pros": [
+            "Works with many model providers, so you pick the model.",
+            "Every edit is a git commit, so rollback is simple.",
+            "Open source; you pay only for the API you use.",
+            "Lightweight and runs in any terminal."
+          ],
+          "cons": [
+            "Terminal only, with a plain interface.",
+            "You bring your own API key and manage which files are in context.",
+            "Needs a supported Python version.",
+            "Less hands-off than agents that plan and run everything themselves."
+          ]
+        },
+        {
+          "heading": "Keep it safe",
+          "warn": "Because it commits each change, you get a built-in safety net. Still read each diff, and keep your API key out of any file you commit."
+        }
+      ]
+    }
+  ]
+}

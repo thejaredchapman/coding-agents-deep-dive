@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@a
 import { CommandPalette } from './command-palette';
 import { DeckService } from './deck.service';
 import { ExplorerView } from './explorer-view';
+import { GuidePage } from './guide-page';
 import { LearnPage } from './learn-page';
 import { PageService } from './page.service';
 import { ProvidersPage } from './providers-page';
@@ -17,7 +18,7 @@ const BRAND = 'Coding Agents — Deep Dive';
 
 @Component({
   selector: 'app-root',
-  imports: [Sidebar, SlideView, ToolPicker, CommandPalette, ExplorerView, ProvidersPage, LearnPage],
+  imports: [Sidebar, SlideView, ToolPicker, CommandPalette, ExplorerView, ProvidersPage, LearnPage, GuidePage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -38,11 +39,13 @@ export class App {
   protected readonly announcement = computed(() => {
     if (this.pages.page() === 'providers') return 'Providers page';
     if (this.pages.page() === 'learn') return 'Free learning page';
+    if (this.pages.page() === 'guide') return 'Guide page';
     return this.deck.current() ? `Slide ${this.deck.index() + 1} of ${this.deck.total()}: ${this.deck.current().title}` : '';
   });
-  protected readonly pageLabel = computed(() =>
-    this.pages.page() === 'providers' ? 'providers' : this.pages.page() === 'learn' ? 'free learning' : this.deck.currentSection(),
-  );
+  protected readonly pageLabel = computed(() => {
+    const page = this.pages.page();
+    return page === 'providers' ? 'providers' : page === 'learn' ? 'free learning' : page === 'guide' ? 'guide' : this.deck.currentSection();
+  });
 
   private swipeStart: { x: number; y: number } | null = null;
 
@@ -52,6 +55,7 @@ export class App {
       const slide = this.deck.current();
       if (page === 'providers') document.title = `Providers · ${BRAND}`;
       else if (page === 'learn') document.title = `Free learning · ${BRAND}`;
+      else if (page === 'guide') document.title = `Guide · ${BRAND}`;
       else document.title = !slide || slide.title === BRAND ? BRAND : `${slide.title} · ${BRAND}`;
     });
   }
@@ -78,6 +82,7 @@ export class App {
     // Page shortcuts work everywhere; slide keys only make sense on the deck, so other pages scroll normally.
     if (event.key === 'p') return this.pages.show('providers');
     if (event.key === 'l') return this.pages.show('learn');
+    if (event.key === 'g') return this.pages.show('guide');
     if (event.key === 'd') return this.pages.show('deck');
     if (this.pages.page() !== 'deck' && ['ArrowRight', 'ArrowLeft', 'PageDown', 'PageUp', ' ', 'm'].includes(event.key)) return;
 

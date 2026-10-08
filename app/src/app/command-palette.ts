@@ -41,6 +41,7 @@ export class CommandPalette {
       { kind: 'action', key: 'a-theme', label: `Switch to ${this.theme.theme() === 'dark' ? 'light' : 'dark'} theme`, hint: 'T', run: () => this.theme.toggle() },
       { kind: 'action', key: 'a-providers', label: 'Open the providers page: official links for each tool', hint: 'P', run: () => this.pages.show('providers') },
       { kind: 'action', key: 'a-learn', label: 'Open the free learning page', hint: 'L', run: () => this.pages.show('learn') },
+      { kind: 'action', key: 'a-guide', label: 'Open the guide: pick a tool, IT checklist, safeguards, profiles', hint: 'G', run: () => this.pages.show('guide') },
       { kind: 'action', key: 'a-slides', label: 'Back to the slides', hint: 'D', run: () => this.pages.show('deck') },
       { kind: 'action', key: 'a-explorer', label: 'Open the shortcut and command explorer', hint: 'E', run: () => this.ui.openExplorer() },
       { kind: 'action', key: 'a-help', label: 'Show keyboard shortcuts for this app', hint: '?', run: () => this.ui.openHelp() },

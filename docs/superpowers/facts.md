@@ -298,3 +298,7 @@ Data lives in `app/public/providers.json`; `npm test` validates its shape.
 | Google: Hands-on with Gemini CLI codelab | Page read: audience, what you learn, prerequisites (Gmail account, Chrome). | No price or duration stated. |
 | Google: DeepLearning.AI Gemini CLI course | Page read: Beginner, 1h23m, 11 video lessons, graded assignment needs PRO; hosted by DeepLearning.AI, taught by a Google developer advocate. | Price not listed. |
 | Google Skills (skills.google) | Home page read in a real browser 2026-10-07: GEAR program, 35 monthly credits "at no cost", Subscriptions. | The deep link /paths/1282/course_templates/1448 redirected to the home page, so the specific Gemini CLI course was dropped. |
+
+## Guide content (merged from ai-coding-assistants-guide)
+
+`app/public/guide.json` was converted from that repo's `src/content.ts` on 2026-10-07 (Start-here pages and the seven assistant profiles). Its claims were sourced there from vendor docs read on 2026-10-02. They were **not re-verified** in this repo. Not imported: the Claude Code deep-dive chapters (install, models, CLAUDE.md, skills, MCP, permissions, safety, cost), which the deck covers with verified sources; in particular its model table is not carried over.

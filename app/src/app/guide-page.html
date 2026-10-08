@@ -1,0 +1,105 @@
+<article class="page guide">
+  <p class="crumb">~/deep-dive/guide{{ guide.current() ? '/' + guide.current()!.id : '' }}.md</p>
+
+  @if (!guide.data()) {
+    <h1>Guide</h1>
+    <p class="muted">The guide did not load. Reload the page to try again.</p>
+  } @else {
+    <div class="cols">
+      <nav class="toc" aria-label="Guide sections">
+        <a class="home" [href]="guide.href(null)" [attr.aria-current]="guide.current() ? null : 'page'">welcome</a>
+        @for (g of guide.groups(); track g.name) {
+          <p class="group">{{ g.name }}/</p>
+          @for (s of g.sections; track s.id) {
+            <a [href]="guide.href(s.id)" [attr.aria-current]="guide.current()?.id === s.id ? 'page' : null">{{ s.title }}</a>
+          }
+        }
+      </nav>
+
+      <div class="body">
+        @if (guide.current(); as section) {
+          <h1>{{ section.title }}</h1>
+          @for (block of section.content; track $index) {
+            <section class="block" [id]="blockId(block)">
+              <h2>{{ block.heading }}</h2>
+              @if (block.text) { <p>{{ block.text }}</p> }
+              @if (block.picker) {
+                <div class="needs" role="group" aria-label="What matters to you">
+                  @for (n of guide.data()!.needs; track n.id) {
+                    <label [class.on]="picked().includes(n.id)">
+                      <input type="checkbox" [checked]="picked().includes(n.id)" (change)="toggle(n.id)" />
+                      <span>{{ n.label }}</span>
+                    </label>
+                  }
+                </div>
+                <ol class="ranked" aria-live="polite">
+                  @for (t of ranked(); track t.id) {
+                    <li [class.dim]="picked().length > 0 && t.hits.length === 0">
+                      <a [href]="guide.href(t.id)">{{ t.name }}</a>
+                      <span class="score">{{ t.hits.length }}/{{ picked().length || '–' }}</span>
+                      @if (picked().length > 0) {
+                        <span class="meter" aria-hidden="true"><span [style.width.%]="(t.hits.length / picked().length) * 100"></span></span>
+                        <span class="why">{{ t.hits.length ? 'matches: ' + needLabels(t.hits) : 'no matches' }}</span>
+                      }
+                    </li>
+                  }
+                </ol>
+              }
+              @if (block.bullets) {
+                <ul>@for (b of block.bullets; track $index) { <li>{{ b }}</li> }</ul>
+              }
+              @if (block.table) {
+                <div class="table-wrap" tabindex="0" role="region" [attr.aria-label]="block.heading">
+                  <table>
+                    @if (block.cols) {
+                      <thead><tr>@for (c of block.cols; track $index) { <th scope="col">{{ c }}</th> }</tr></thead>
+                    }
+                    <tbody>
+                      @for (row of block.table; track $index) {
+                        <tr>@for (cell of row; track $index) { @if ($index === 0) { <th scope="row">{{ cell }}</th> } @else { <td>{{ cell }}</td> } }</tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+              @if (block.code) {
+                <div class="code">
+                  <button type="button" (click)="copy(section.id + $index, block.code!)">{{ copied() === section.id + $index ? 'copied' : 'copy' }}</button>
+                  <pre><code>{{ block.code }}</code></pre>
+                </div>
+              }
+              @if (block.pros || block.cons) {
+                <div class="proscons">
+                  @if (block.pros) { <div class="pros"><h3>Pros</h3><ul>@for (p of block.pros; track $index) { <li>{{ p }}</li> }</ul></div> }
+                  @if (block.cons) { <div class="cons"><h3>Cons</h3><ul>@for (p of block.cons; track $index) { <li>{{ p }}</li> }</ul></div> }
+                </div>
+              }
+              @if (block.warn) { <p class="warn" role="note"><strong>Risk.</strong> {{ block.warn }}</p> }
+              @if (block.note) { <p class="note">{{ block.note }}</p> }
+            </section>
+          }
+          <nav class="pager" aria-label="Previous and next section">
+            @if (guide.neighbours().prev; as prev) { <a [href]="guide.href(prev.id)">‹ {{ prev.title }}</a> } @else { <span></span> }
+            @if (guide.neighbours().next; as next) { <a [href]="guide.href(next.id)">{{ next.title }} ›</a> }
+          </nav>
+        } @else {
+          <h1>Guide</h1>
+          <p class="lead">{{ guide.data()!.splash.tagline }}</p>
+          <p class="warn" role="note"><strong>{{ guide.data()!.splash.disclaimer.title }}.</strong> {{ guide.data()!.splash.disclaimer.text }}</p>
+          <section class="block"><h2>{{ guide.data()!.splash.what.title }}</h2><p>{{ guide.data()!.splash.what.text }}</p></section>
+          <section class="block">
+            <h2>{{ guide.data()!.splash.meaning.title }}</h2>
+            <ul>@for (b of guide.data()!.splash.meaning.bullets; track $index) { <li>{{ b }}</li> }</ul>
+          </section>
+          <section class="block">
+            <h2>{{ guide.data()!.splash.why.title }}</h2>
+            <ul>@for (b of guide.data()!.splash.why.bullets; track $index) { <li>{{ b }}</li> }</ul>
+            <p class="note">{{ guide.data()!.splash.why.note }}</p>
+          </section>
+          <a class="cta" [href]="guide.href('pick')">Pick your tool →</a>
+          <p class="source">{{ guide.data()!.source }}</p>
+        }
+      </div>
+    </div>
+  }
+</article>

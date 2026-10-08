@@ -13,6 +13,7 @@
     <a [href]="pages.href('deck')" [attr.aria-current]="pages.page() === 'deck' ? 'page' : null">slides</a>
     <a [href]="pages.href('providers')" [attr.aria-current]="pages.page() === 'providers' ? 'page' : null">providers</a>
     <a [href]="pages.href('learn')" [attr.aria-current]="pages.page() === 'learn' ? 'page' : null">free learning</a>
+    <a [href]="pages.href('guide')" [attr.aria-current]="pages.page() === 'guide' ? 'page' : null">guide</a>
   </nav>
   <app-tool-picker class="top-picker" label="Your coding agent" />
   <div class="actions">
@@ -46,6 +47,8 @@
     <main id="slide" class="pane" tabindex="-1">
       @if (pages.page() === 'providers') {
         <app-providers-page />
+      } @else if (pages.page() === 'guide') {
+        <app-guide-page />
       } @else {
         <app-learn-page />
       }
@@ -103,7 +106,7 @@
       <dt><kbd>e</kbd></dt><dd>shortcut and command explorer</dd>
       <dt><kbd>m</kbd></dt><dd>jump to my agent's section</dd>
       <dt><kbd>s</kbd></dt><dd>show or hide contents</dd>
-      <dt><kbd>p</kbd> <kbd>l</kbd> <kbd>d</kbd></dt><dd>providers · free learning · slides</dd>
+      <dt><kbd>p</kbd> <kbd>l</kbd> <kbd>g</kbd> <kbd>d</kbd></dt><dd>providers · free learning · guide · slides</dd>
       <dt><kbd>t</kbd></dt><dd>switch day and night</dd>
       <dt><kbd>?</kbd></dt><dd>this help</dd>
       <dt><kbd>esc</kbd></dt><dd>close</dd>

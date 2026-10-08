@@ -4,6 +4,8 @@ import { App } from './app';
 import { DeckData } from './deck.model';
 import { DeckService } from './deck.service';
 import { ExplorerService } from './explorer';
+import { GuideData } from './guide.model';
+import { GuideService } from './guide.service';
 import { PageService } from './page.service';
 import { ProvidersData } from './providers.model';
 import { ProvidersService } from './providers.service';
@@ -23,6 +25,27 @@ const data: DeckData = {
       title: 'Compare',
       html: '<table><thead><tr><th></th><th>Claude Code</th><th>Codex</th><th>Cursor</th></tr></thead><tbody><tr><td>MCP</td><td>claude mcp add</td><td>codex mcp add</td><td>mcp.json</td></tr></tbody></table>',
     },
+  ],
+};
+
+const guide: GuideData = {
+  source: 'Imported.',
+  imported: '2026-10-07',
+  splash: {
+    tagline: 'Use any assistant responsibly.',
+    what: { title: 'What is one?', text: 'An AI that helps with code.' },
+    meaning: { title: 'What it means', bullets: ['You review.'] },
+    why: { title: 'What to look for', bullets: ['Control.'], note: 'No tool is best.' },
+    disclaimer: { title: 'Check with IT first', text: 'Follow your rules.' },
+  },
+  needs: [{ id: 'cheap', label: 'Free or low cost' }, { id: 'terminal', label: 'Work in the terminal' }],
+  toolFit: [
+    { id: 'aider', name: 'Aider', needs: ['cheap', 'terminal'] },
+    { id: 'cursor', name: 'Cursor', needs: [] },
+  ],
+  sections: [
+    { id: 'pick', title: 'Pick Your Tool', group: 'Start here', content: [{ heading: 'Tick what matters', picker: true }] },
+    { id: 'safeguards', title: 'Safeguards', group: 'Start here', content: [{ heading: 'Limit the blast radius', bullets: ['Use a branch.'], warn: 'Agents run commands.' }] },
   ],
 };
 
@@ -397,7 +420,8 @@ describe('App', () => {
   describe('providers and free learning pages', () => {
     it('has links to the pages in the tab line, with the current one marked', async () => {
       const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('nav.pages a'));
-      expect(links.map((a) => a.textContent?.trim())).toEqual(['slides', 'providers', 'free learning']);
+      expect(links.map((a) => a.textContent?.trim())).toEqual(['slides', 'providers', 'free learning', 'guide']);
+      expect(links[3].getAttribute('href')).toBe('#/guide');
       expect(links[0].getAttribute('aria-current')).toBe('page');
       expect(links[1].getAttribute('href')).toBe('#/providers');
       expect(links[2].getAttribute('href')).toBe('#/learn');
@@ -436,6 +460,32 @@ describe('App', () => {
       // programs that list items offer a disclosure; items with a url are links
       expect(el.querySelectorAll('details').length).toBe(2);
       expect(el.querySelector('details a[href="https://academy.claude.com/courses/claude-code-101"]')).not.toBeNull();
+    });
+
+    it('shows the guide, ranks tools against ticked needs, and links between sections', async () => {
+      TestBed.inject(GuideService).data.set(guide);
+      TestBed.inject(PageService).show('guide');
+      await fixture.whenStable();
+      expect(el.querySelector('h1')?.textContent).toBe('Guide');
+      expect(el.querySelector('.warn')?.textContent).toContain('Check with IT first');
+      window.location.hash = '#/guide/pick';
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+      await fixture.whenStable();
+      expect(el.querySelector('h1')?.textContent).toBe('Pick Your Tool');
+      const boxes = el.querySelectorAll<HTMLInputElement>('.needs input');
+      expect(boxes.length).toBe(2);
+      boxes[0].click();
+      await fixture.whenStable();
+      expect(el.querySelector('.ranked li a')?.textContent).toBe('Aider');
+      expect(el.querySelector('.ranked li .score')?.textContent).toBe('1/1');
+      expect(el.querySelector('.pager a')?.getAttribute('href')).toBe('#/guide/safeguards');
+    });
+
+    it('opens the guide with the G key', async () => {
+      TestBed.inject(GuideService).data.set(guide);
+      press('g');
+      await fixture.whenStable();
+      expect(el.querySelector('app-guide-page')).not.toBeNull();
     });
 
     it('marks the reader\'s own agent on both pages', async () => {
