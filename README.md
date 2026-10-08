@@ -1,6 +1,6 @@
 # Coding Agents — Deep Dive
 
-A 107-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
+A 208-slide Marp training deck on the five extension points of AI coding agents — instructions files, subagents, skills, MCP and hooks — with a hands-on exercise for each. It covers **Claude Code, Codex, Cursor and Gemini CLI** side by side, for engineers who already use one of them and want to go further, or who are moving between them.
 
 The five-section walkthrough is taught with Claude Code examples, because the exercises need one concrete tool. The cross-tool sections then give each tool the same depth, with its own shortcuts reference. All facts come from each vendor's official docs, checked on 2026-10-07 (see `docs/superpowers/facts.md` for the sources).
 
@@ -19,6 +19,9 @@ The five-section walkthrough is taught with Claude Code examples, because the ex
 | 9. Codex | 10 | — |
 | 10. Cursor | 11 | — |
 | 11. Gemini CLI | 11 | — |
+| 12. Choosing and using any tool (pick a tool, compare, IT checklist, safeguards, cost habits, responsible use) | 30 | — |
+| 13. Claude Code field guide (install to cost, for beginners) | 41 | — |
+| 14. More assistants (profiles of seven, with pros and cons) | 30 | — |
 | Putting it together, Keep learning (Claude Academy) | 8 | — |
 
 Each exercise ends with a **Go deeper** link to a Claude Academy course and a **Coming from another tool?** note for Codex, Cursor and Gemini CLI.
@@ -27,7 +30,7 @@ Each exercise ends with a **Go deeper** link to a Claude Academy course and a **
 
 ## Interactive app (Angular)
 
-`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a file-tree contents pane, a statusline, day and night themes, a command palette (`/` or `Ctrl+K`), a tool picker that re-tints the deck for Claude Code, Codex, Cursor or Gemini CLI, an explorer of every extension point, an interactive hooks diagram, copy buttons on code, and saved exercise checklists. Three reference pages sit beside the deck: **Providers** (`#/providers`, official links for each tool), **Free learning** (`#/learn`, each provider's own program with a cost note and a link) and **Guide** (`#/guide`, merged in from the former ai-coding-assistants-guide: every chapter of that guide: an interactive tool picker, comparison, IT review checklist, safeguards, cost habits, a Claude Code deep dive (install, models, CLAUDE.md, skills, MCP, permissions, safety, cost) and a profile for seven assistants including Copilot, Windsurf and Aider; searchable from the palette). The guide and the deck link to each other where they cover the same topic (CLAUDE.md, skills, MCP, models, permissions and each tool), and your chosen agent is marked on its guide profile. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
+`app/` is an Angular 22 app that presents the same slides with keyboard and swipe navigation, a file-tree contents pane, a statusline, day and night themes, a command palette (`/` or `Ctrl+K`), a tool picker that re-tints the deck for Claude Code, Codex, Cursor or Gemini CLI, an explorer of every extension point, an interactive hooks diagram, copy buttons on code, and saved exercise checklists. Two reference pages sit beside the deck: **Providers** (`#/providers`, official links for each tool) and **Free learning** (`#/learn`, each provider's own program with a cost note and a link). The former ai-coding-assistants-guide is part of the deck itself (sections 12 to 14); its tool picker is an interactive slide that ranks tools against the needs you tick and marks your agent. `deck.md` stays the source of truth: a script turns it into `app/public/slides.json`.
 
 ```bash
 npm install                 # build-time tools (marked)
@@ -38,7 +41,7 @@ npm run app:test            # Vitest component and service tests
 npm test                    # tests for the slide build script
 ```
 
-Keys: `→` `Space` next, `←` previous, `Home` `End`, `/` or `Ctrl+K` search, `E` explorer, `M` tool picker, `S` contents, `T` theme, `P` providers, `L` free learning, `G` guide, `D` back to the deck, `?` help. On a touch screen, swipe. Deep links work: `#/36` opens slide 36. The build is static files; host the `browser` folder anywhere (the base href is relative).
+Keys: `→` `Space` next, `←` previous, `Home` `End`, `/` or `Ctrl+K` search, `E` explorer, `M` tool picker, `S` contents, `T` theme, `P` providers, `L` free learning, `D` back to the deck, `?` help. On a touch screen, swipe. Deep links work: `#/36` opens slide 36. The build is static files; host the `browser` folder anywhere (the base href is relative).
 
 After you edit `deck.md`, run `npm run build:slides` (or `app:build`) to refresh the app's data.
 
@@ -64,7 +67,7 @@ node scripts/check-deck.mjs --links  # also checks every Claude Academy link
 npm run check:links                  # live check of every https link in the deck, exercises, README and providers.json
 ```
 
-`check:links` fails on 404s and network errors. Sites that refuse automated requests (401/403/429) are listed as "blocked"; open those in a browser. The guide's content lives in `app/public/guide.json` (hand-maintained; its facts were read from vendor docs on 2026-10-02 and are not re-verified here,). The provider and free-learning data lives in `app/public/providers.json`; every claim in it is recorded with its source in `docs/superpowers/facts.md`.
+`check:links` fails on 404s and network errors. Sites that refuse automated requests (401/403/429) are listed as "blocked"; open those in a browser. The merged guide chapters (sections 12 to 14) were written from vendor docs on 2026-10-02 and are not re-verified, except the models table, corrected on 2026-10-07. The provider and free-learning data lives in `app/public/providers.json`; every claim in it is recorded with its source in `docs/superpowers/facts.md`.
 
 Needs Node 18 or later and no dependencies.
 
@@ -77,7 +80,7 @@ Needs Node 18 or later and no dependencies.
 
 ## Delivery
 
-The 107 slides are too many for one session. Pick a path:
+The 208 slides are too many for one session. Pick a path:
 
 - **90-minute core:** sections 1–5 with their exercises (about 40 slides)
 - **Ecosystem add-on:** section 6

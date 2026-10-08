@@ -15,6 +15,7 @@ const DIAGRAMS = [
   [/^What are Hooks\?$/, 'hooks'],
   [/^The full picture$/, 'flow'],
   [/^The same five ideas everywhere$/, 'ecosystem'],
+  [/^Pick Your Tool: Tick what matters to you \(1\/2\)$/, 'picker'],
 ];
 
 function stripFences(text) {

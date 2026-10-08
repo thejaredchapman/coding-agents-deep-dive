@@ -1,9 +1,9 @@
 import { Injectable, effect, inject, signal, untracked } from '@angular/core';
 import { DeckService } from './deck.service';
 
-export type Page = 'deck' | 'providers' | 'learn' | 'guide';
+export type Page = 'deck' | 'providers' | 'learn';
 
-/** Which page is showing, kept in the URL hash: #/12 is a slide, #/providers, #/learn and #/guide (or #/guide/<section>) are pages. */
+/** Which page is showing, kept in the URL hash: #/12 is a slide, #/providers and #/learn are pages. */
 @Injectable({ providedIn: 'root' })
 export class PageService {
   private readonly deck = inject(DeckService);
@@ -31,7 +31,6 @@ export class PageService {
     const hash = window.location.hash;
     if (hash === '#/providers') return 'providers';
     if (hash === '#/learn') return 'learn';
-    if (hash === '#/guide' || hash.startsWith('#/guide/')) return 'guide';
     return 'deck';
   }
 }

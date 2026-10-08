@@ -14,6 +14,7 @@
     @case ('hooks') { <app-diagram-hooks /> }
     @case ('flow') { <app-diagram-flow /> }
     @case ('ecosystem') { <app-diagram-ecosystem /> }
+    @case ('picker') { <app-needs-picker /> }
   }
 
   <div #content class="slide-content" [innerHTML]="slide.html" (click)="onContentClick($event)"></div>
@@ -27,13 +28,6 @@
         Press <kbd>/</kbd> to search, <kbd>e</kbd> for the shortcut explorer.
       </p>
     </section>
-  }
-
-  @if (related().length) {
-    <p class="guide-links">
-      Also in the guide:
-      @for (r of related(); track r.href) { <a [href]="r.href">{{ r.title }}</a> }
-    </p>
   }
 
   @if (slide.checklist?.length) {

@@ -301,7 +301,7 @@ Data lives in `app/public/providers.json`; `npm test` validates its shape.
 
 ## Guide content (merged from ai-coding-assistants-guide)
 
-`app/public/guide.json` was converted from that repo's `src/content.ts` on 2026-10-07: all 23 sections (Start here, Claude Code deep dive, assistant profiles). Its claims were sourced there from vendor docs read on 2026-10-02 and were **not re-verified** here, except:
+Sections 12 to 14 of `deck.md` were converted from that repo's `src/content.ts` on 2026-10-07: all 23 chapters (Start here, Claude Code deep dive, assistant profiles) plus its welcome text, as 101 slides. The tool picker's data lives in `app/src/app/needs-picker.data.ts`. Its claims were sourced there from vendor docs read on 2026-10-02 and were **not re-verified** here, except:
 
 - **Corrected:** the current-models table now lists Haiku 5.5 (`claude-haiku-5-5`) as current and Haiku 4.5 as legacy, matching the Models row above. The older-models status table is unchanged and unchecked.
 - **Corrected:** the `/standup` skill's git command now uses `--since="yesterday midnight" --until="midnight"` (as in the exercises), and the cost-tracker install URL points to `thejaredchapman/claude-code-usage-guard` (the old URL 404s).

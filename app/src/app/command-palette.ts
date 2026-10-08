@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { DeckService } from './deck.service';
-import { GuideService } from './guide.service';
 import { useDialogFocus } from './dialog-focus';
 import { buildIndex, search } from './search';
 import { PageService } from './page.service';
@@ -28,7 +27,6 @@ export class CommandPalette {
   private readonly tool = inject(ToolService);
   private readonly theme = inject(ThemeService);
   private readonly pages = inject(PageService);
-  private readonly guide = inject(GuideService);
   protected readonly ui = inject(UiService);
   private readonly trap = useDialogFocus();
 
@@ -43,7 +41,6 @@ export class CommandPalette {
       { kind: 'action', key: 'a-theme', label: `Switch to ${this.theme.theme() === 'dark' ? 'light' : 'dark'} theme`, hint: 'T', run: () => this.theme.toggle() },
       { kind: 'action', key: 'a-providers', label: 'Open the providers page: official links for each tool', hint: 'P', run: () => this.pages.show('providers') },
       { kind: 'action', key: 'a-learn', label: 'Open the free learning page', hint: 'L', run: () => this.pages.show('learn') },
-      { kind: 'action', key: 'a-guide', label: 'Open the guide: pick a tool, IT checklist, safeguards, profiles', hint: 'G', run: () => this.pages.show('guide') },
       { kind: 'action', key: 'a-slides', label: 'Back to the slides', hint: 'D', run: () => this.pages.show('deck') },
       { kind: 'action', key: 'a-explorer', label: 'Open the shortcut and command explorer', hint: 'E', run: () => this.ui.openExplorer() },
       { kind: 'action', key: 'a-help', label: 'Show keyboard shortcuts for this app', hint: '?', run: () => this.ui.openHelp() },
@@ -60,18 +57,6 @@ export class CommandPalette {
     return rows;
   });
 
-  /** Guide sections, searchable by title, group and the headings and text inside them. */
-  private readonly guideRows = computed<(Row & { haystack: string })[]>(() =>
-    this.guide.sections().map((sec) => ({
-      kind: 'action',
-      key: `g-${sec.id}`,
-      label: `Guide: ${sec.title}`,
-      hint: sec.group,
-      run: () => this.guide.show(sec.id),
-      haystack: [sec.title, sec.group, ...sec.content.flatMap((b) => [b.heading, b.text ?? '', ...(b.bullets ?? [])])].join(' ').toLowerCase(),
-    })),
-  );
-
   protected readonly rows = computed<Row[]>(() => {
     const q = this.query().trim().toLowerCase();
     const words = q.split(/\s+/).filter(Boolean);
@@ -84,8 +69,7 @@ export class CommandPalette {
       detail: h.snippet,
       run: () => this.deck.goTo(h.id - 1),
     }));
-    const guideHits = q === '' ? [] : this.guideRows().filter((g) => words.every((w) => g.haystack.includes(w))).slice(0, 4);
-    return q === '' ? actions.slice(0, 8) : [...actions.slice(0, 5), ...guideHits, ...slides];
+    return q === '' ? actions.slice(0, 8) : [...actions.slice(0, 5), ...slides];
   });
 
   constructor() {

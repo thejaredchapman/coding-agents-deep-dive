@@ -35,16 +35,6 @@ describe('PageService', () => {
     expect(pages.href('deck')).toBe('#/1');
   });
 
-  it('treats #/guide and #/guide/<section> as the guide', () => {
-    window.location.hash = '#/guide/safeguards';
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
-    expect(pages.page()).toBe('guide');
-    window.location.hash = '#/guide';
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
-    expect(pages.page()).toBe('guide');
-    expect(pages.href('guide')).toBe('#/guide');
-  });
-
   it('follows hash changes such as the Back button', () => {
     window.location.hash = '#/learn';
     window.dispatchEvent(new HashChangeEvent('hashchange'));
