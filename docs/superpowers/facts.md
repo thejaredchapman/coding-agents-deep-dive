@@ -307,3 +307,52 @@ Sections 12 to 14 of `deck.md` were converted from that repo's `src/content.ts` 
 - **Corrected:** the `/standup` skill's git command now uses `--since="yesterday midnight" --until="midnight"` (as in the exercises), and the cost-tracker install URL points to `thejaredchapman/claude-code-usage-guard` (the old URL 404s).
 - **Unverified:** "v2.1.283 and later start in auto mode".
 - The guide overlaps the deck (models, CLAUDE.md, skills, MCP, permissions). Where they differ, the deck's verified facts win.
+
+## Parity research for Codex, Cursor and Gemini CLI (2026-10-07, before any slides are built)
+
+Goal: give each tool the same three layers Claude Code has: an **ecosystem** section (where it runs, cloud and integrations, models, plugins, programmatic use), a **field guide** (install, first session, models, safety and data, cost and limits) and **shortcuts**. Rows marked **cross-check** came from a fetch summary that contradicted itself or the page, so re-read the page before quoting it.
+
+### Codex (OpenAI)
+
+| Topic | Finding | Source |
+|---|---|---|
+| Install | Mac/Linux `curl -fsSL https://chatgpt.com/codex/install.sh \| sh`; Windows `powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 \| iex"`; also `npm install -g @openai/codex`, `brew install --cask codex`, GitHub Releases. Sign in: run `codex`, choose "Sign in with ChatGPT"; API key also possible. Apache-2.0. | https://github.com/openai/codex |
+| Surfaces | CLI (`codex`), IDE integration (VS Code, Cursor, Windsurf), desktop app (`codex app`), cloud ("Codex Web", chatgpt.com/codex). | same |
+| Cloud | Start from ChatGPT web, mobile or desktop: "Work in > Cloud", pick or create an environment, "Start a new task". Environments hold repos, tools, internet access, package managers, network secrets and env vars; each task gets its own workspace. Full environment creation needs web or desktop. Slack: the page only says "Use ChatGPT in Slack"; Codex-specific Slack workflow not stated. | https://learn.chatgpt.com/docs/cloud |
+| Models | Astra ("most capable"), GPT-6.1 Sol, GPT-6 Luna ("most efficient"). Switch with `/model` or `codex --model gpt-6.1-sol`. Reasoning effort: Light/Low, Medium, High/Extra High, Max, Ultra (for parallel sub-tasks). The page says GPT-5.5 retires 2026-10-14. **Cross-check:** one summary wrote "GPT-6 Sol" and another "GPT-6.1 Sol"; confirm exact names. | https://learn.chatgpt.com/docs/models |
+| Pricing and limits | Codex is included in ChatGPT Free, Go, Plus, Pro, Business, Edu and Enterprise. Free $0, Go $8, Plus $20, Pro from $100 ($100/$200/$500 tiers), Business $20 per user per month annual ($25 monthly). Limits per five hours, for example Plus on GPT-6 Luna 350 to 3,000 local messages and on GPT-6.1 Sol 15 to 160. Credits extend usage (Luna 2.5 in / 0.25 cached / 12.5 out per million tokens; Sol 50 / 2.5 / 250). | https://learn.chatgpt.com/docs/pricing |
+| Safety | OS sandbox: macOS Seatbelt (`sandbox-exec`), Linux `bwrap` plus `seccomp`, Windows native or WSL2. Default `workspace-write`; network off by default; domain allowlists with wildcards; private destinations blocked by default. Asks approval for edits outside the workspace, network, commands outside a trusted set, destructive tool calls. OTel telemetry is opt-in. **No training or retention statement on that page.** | https://learn.chatgpt.com/docs/agent-approvals-security |
+| Slash commands (CLI) | `/model /fast /plan /goal /personality /new /clear /rename /resume /fork /side /app /permissions /approve /review /ide /mention /skills /apps /plugins /mcp /status /usage /compact /diff /ps /stop /quit /exit /archive /delete /vim /keymap /theme /statusline /title /pets /memories /experimental /debug-config /copy /raw /feedback /init /import /logout /agent /subagents /hooks`, plus Windows `/sandbox-add-read-dir` and `/setup-default-sandbox`. `/import` migrates from Cursor or Claude Code. **Cross-check:** the summary called this page "Claude Code's command-line interface"; that is wrong, the page is Codex CLI. Official page: https://developers.openai.com/codex/cli/slash-commands (redirects to learn.chatgpt.com). | https://learn.chatgpt.com/docs/cli/slash-commands |
+| Shortcuts | The CLI page lists: `Esc`, `Ctrl+C`, a newline key, `@` file mention, `!` shell command, image paste, `Esc` twice to edit the previous message, `?` for the shortcut overlay; `/keymap` rebinds. **Cross-check:** the fetch summary garbled the newline row ("submit"); other sources say `Ctrl+J` or `Alt+Enter`. Confirm the exact bindings from the page text or a local `codex` run before a slide quotes them. | https://learn.chatgpt.com/docs/codex/cli |
+| Programmatic | `codex exec` (known), `--remote`, plugin marketplace. SDK, GitHub Action and Slack pages were not reached (the `/docs/sdk` URL returned 404). | n/a |
+
+### Cursor
+
+| Topic | Finding | Source |
+|---|---|---|
+| What it is | "a coding agent for building ambitious software"; connects to GitHub, GitLab, Azure DevOps, Bitbucket, JetBrains, Slack, Linear. | https://cursor.com/docs |
+| Models | Cursor models pool (Grok 4.7/4.6/4.5, Composer 2.5; fast variants at 2x) and an "other models" pool at API rates (Anthropic, OpenAI, Google, Meta, Moonshot, Z.ai). Auto modes: Cost, Balance, Intelligence, billed at the list price of the routed model. | https://cursor.com/docs/models |
+| Pricing | Hobby free (limited Agent requests, Composer); Pro $20; Pro Plus $60; Ultra $200; Teams $40 or $120 per user; Enterprise custom. Cloud agents, MCPs, skills and hooks are listed under Individual. The pricing page does not give exact usage limits per tier. | https://cursor.com/docs/models, https://cursor.com/pricing |
+| Privacy | Privacy Mode is available to free and Pro users; with it on, "we will not train on your data". SOC 2 Type II, ISO/IEC 27001:2022, ISO/IEC 42001:2023; reports at trust.cursor.com; no infrastructure in China. Details live on a separate data-use page not fetched (`/docs/account/privacy` returned 404). | https://cursor.com/security |
+| Integrations | GitHub app connects repos for Cloud Agents and Bugbot; setup needs a Cursor admin and a GitHub org admin; GHES 3.8+ supported. Slack and Linear are named in the overview; their pages were not fetched. | https://cursor.com/docs/integrations/github |
+| Programmatic | Cloud Agents API (Beta, all plans), TypeScript SDK, Python SDK, SDK Bridge, plus Enterprise APIs (Bugbot, Admin, Analytics, AI Code Tracking) and an Origin API in early beta. | https://cursor.com/docs/api |
+| Shortcuts | The keyboard page lists macOS keys only (VS Code key bindings as the baseline); Windows and Linux keys are still not documented there. | https://cursor.com/docs/configuration/kbd |
+
+### Gemini CLI (Google)
+
+| Topic | Finding | Source |
+|---|---|---|
+| Install and sign-in | `npm install -g @google/gemini-cli`, then `gemini`; "Sign in with Google"; some account types need a Google Cloud project; API key and Vertex AI routes exist. | https://geminicli.com/docs/get-started/ |
+| Models | Gemini 3 (`gemini-3-pro-preview`, `gemini-3-flash-preview`) and Gemini 2.5 (`gemini-2.5-pro`, `gemini-2.5-flash`). Auto is the recommended default. Switch with `/model` or `--model`; `/model` does not change sub-agent models. The page does not state a context window. | https://geminicli.com/docs/cli/model/ |
+| Quota | Google account (Code Assist): 1,000 requests a day. Unpaid Gemini API key: 250 model requests per user per day. Google AI Pro 1,500; AI Ultra 2,000; Code Assist Standard 1,500; Enterprise 2,000; pay-as-you-go varies. `/stats model` shows usage. **The merged guide's "API key 1,000 a day" is out of date.** | https://geminicli.com/docs/resources/quota-and-pricing/ |
+| Privacy | The page does not say whether prompts or code are used for training; it points to the privacy notice for each sign-in type (free individuals, paid tiers, API unpaid and paid, Vertex). Usage statistics can be turned off. | https://geminicli.com/docs/resources/tos-privacy/ |
+| IDE | VS Code and compatible editors (including Antigravity), JetBrains IDEs, Zed, other ACP editors. Shares open files, cursor and up to 16 KB of selection; native diff view. `/ide install`, `/ide enable`, `/ide status`. | https://geminicli.com/docs/ide-integration/ |
+| GitHub | `run-gemini-cli` action: PR review, issue triage, `@gemini-cli` mentions; set up with `/setup-github`; secrets `GEMINI_API_KEY` and `GITHUB_TOKEN`; add `.gemini/` and `gha-creds-*.json` to `.gitignore`. | https://github.com/google-github-actions/run-gemini-cli |
+| Docs map | Features include Checkpointing, Git worktrees, Model routing, Model steering, Notifications, Plan mode, Remote subagents, Rewind, Sandboxing, Telemetry, Token caching, Trusted folders, `.geminiignore`, Policy engine. Gaps in our deck: checkpointing and rewind, worktrees, remote subagents, trusted folders, policy engine. | https://geminicli.com/docs/ |
+
+### Not found or not verified
+
+- Codex: SDK, GitHub and Slack integration pages; the exact text of the CLI shortcuts; training and retention statements.
+- Cursor: Windows and Linux keys; the data-use page; Slack and Linear integration pages.
+- Gemini CLI: training use of prompts for each sign-in type; any hosted or cloud agent beyond the GitHub Action and remote subagents.
+- Copilot, Windsurf and Aider: no new research. Their only coverage is the merged profiles (2026-10-02, unverified).
