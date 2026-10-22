@@ -1,0 +1,37 @@
+<article class="page">
+  <p class="crumb">~/deep-dive/providers.md</p>
+  <h1>Providers</h1>
+  <p class="lead">
+    Where each tool comes from, with the official places to find it. Every link opens the provider's own site.
+    <span class="checked">Links checked <time [attr.datetime]="data.checked()">{{ data.checked() }}</time>.</span>
+  </p>
+
+  @if (data.providers().length === 0) {
+    <p class="muted">The provider list did not load. Reload the page to try again.</p>
+  } @else {
+    <div class="cards">
+      @for (p of data.providers(); track p.id) {
+        <section class="card window" [attr.data-t]="p.id" [class.mine]="tool.selected() === p.id" [attr.aria-labelledby]="'prov-' + p.id">
+          <h2 class="title" [id]="'prov-' + p.id"><span aria-hidden="true">{{ glyph(p.id) }}</span> {{ p.product }}</h2>
+          <p class="by">by {{ p.name }}@if (tool.selected() === p.id) { <span class="you">your agent</span> }</p>
+          <p class="blurb">{{ p.summary }}</p>
+          <ul class="links">
+            @for (l of p.links; track l.url) {
+              <li>
+                <a [href]="l.url" target="_blank" rel="noopener noreferrer">
+                  <span class="kind">{{ kind(l) }}</span>
+                  <span class="label">{{ l.label }}</span>
+                  <span class="ext" aria-hidden="true">↗</span>
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            }
+          </ul>
+          @if (hasLearning(p.id)) {
+            <a class="more" [href]="pages.href('learn')">Free learning for {{ p.product }} →</a>
+          }
+        </section>
+      }
+    </div>
+  }
+</article>

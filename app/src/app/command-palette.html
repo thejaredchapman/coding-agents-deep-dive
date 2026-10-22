@@ -1,0 +1,48 @@
+<div class="overlay-backdrop" (click)="ui.paletteOpen.set(false)"></div>
+<div #dialog class="palette window" role="dialog" aria-modal="true" aria-label="Search and commands" (keydown)="onKey($event, dialog)">
+  <p class="title" aria-hidden="true">search</p>
+  <div class="field">
+    <span class="prompt" aria-hidden="true">›</span>
+    <input
+      #input
+      type="text"
+      role="combobox"
+      aria-expanded="true"
+      aria-controls="palette-list"
+      aria-autocomplete="list"
+      aria-label="Search slides or type a command"
+      placeholder="search slides or run a command"
+      autocomplete="off"
+      spellcheck="false"
+      [attr.aria-activedescendant]="rows().length ? 'opt-' + active() : null"
+      [value]="query()"
+      (input)="onInput($any($event.target).value)"
+    />
+    <kbd>esc</kbd>
+  </div>
+
+  <ul id="palette-list" role="listbox" aria-label="Results">
+    @for (row of rows(); track row.key; let i = $index) {
+      <li
+        role="option"
+        [id]="'opt-' + i"
+        [class.active]="i === active()"
+        [class.action]="row.kind === 'action'"
+        [attr.aria-selected]="i === active()"
+        (click)="choose(i)"
+        (mousemove)="active.set(i)"
+      >
+        <span class="label">{{ row.label }}</span>
+        <span class="hint">{{ row.hint }}</span>
+        @if (row.detail) {
+          <span class="detail">{{ row.detail }}</span>
+        }
+      </li>
+    } @empty {
+      <li class="none" role="presentation">Nothing matches “{{ query() }}”.</li>
+    }
+  </ul>
+
+  <p class="foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>enter</kbd> go</p>
+  <div class="sr-only" aria-live="polite">{{ rows().length }} results</div>
+</div>

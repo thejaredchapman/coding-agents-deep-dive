@@ -1,0 +1,2 @@
+# Allow the <p class="small"> footers in deck.md to render as HTML.
+html: true
